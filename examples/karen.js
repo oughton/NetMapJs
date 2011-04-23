@@ -317,8 +317,7 @@ function init(){
   ];
   // end
   // init ForceDirected
-  var fd;
-  fd = new $jit.NetworkMap({
+  var fd = new $jit.NetworkMap({
     //id of the visualization container
     injectInto: 'infovis',
     //Enable zooming and panning
@@ -379,46 +378,29 @@ function init(){
             positions.push({ id: node.id, x: node.pos.x, y: node.pos.y });
         });
         jQuery.post('../src/networkmap.php?method=savePositions', { positions: positions });
-        
-        // Build the right column relations list.
-        // This is done by traversing the clicked node connections.
-        var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
-            list = [];
-        node.eachAdjacency(function(adj){
-          list.push(adj.nodeTo.name);
-        });
-        //append connections information
-        //$jit.id('inner-details').innerHTML = html + list.join("</li><li>") + "</li></ul>";
       }
     },
     //Number of iterations for the FD algorithm
     iterations: 200,
     //Edge length
     levelDistance: 130,
-    // Add text to the labels. This method is only triggered
-    // on label creation and only for DOM labels (not native canvas ones).
-    onCreateLabel: function(domElement, node){
-      domElement.innerHTML = node.name;
-      var style = domElement.style;
-      style.fontSize = "0.8em";
-      style.color = "#ddd";
-    },
-    // Change node styles when DOM labels are placed
-    // or moved.
-    onPlaceLabel: function(domElement, node){
-      var style = domElement.style;
-      var left = parseInt(style.left);
-      var top = parseInt(style.top);
-      var w = domElement.offsetWidth;
-      style.left = (left - w / 2) + 'px';
-      style.top = (top + 10) + 'px';
-      style.display = '';
-    }
   });
+  
+  // set the initial positions
+  jQuery.each([{"id":"AKL","x":"-247","y":"6"},{"id":"PMR","x":"57","y":"77"},{"id":"NSH","x":"-332","y":"-33"},{"id":"HLZ","x":"-171","y":"-186"},{"id":"MTA","x":"-256","y":"280"},{"id":"LAX","x":"-439","y":"-304"},{"id":"WRK","x":"-404","y":"6"},{"id":"SYD","x":"-450","y":"281"},{"id":"ROT","x":"-50","y":"-187"},{"id":"TRG","x":"-69","y":"-259"},{"id":"NPE","x":"47","y":"-185"},{"id":"MUP","x":"51","y":"-130"},{"id":"GIS","x":"36","y":"-255"},{"id":"AVL","x":"184","y":"-155"},{"id":"NPL","x":"-26","y":"257"},{"id":"WAG","x":"120","y":"259"},{"id":"WLG","x":"213","y":"-52"},{"id":"DUD","x":"359","y":"-46"},{"id":"CHC","x":"281","y":"171"},{"id":"NSN","x":"217","y":"224"},{"id":"POR","x":"235","y":"-263"},{"id":"TPO","x":"282","y":"220"},{"id":"LCN","x":"354","y":"172"},{"id":"IVM","x":"441","y":"-208"},{"id":"IVC","x":"435","y":"105"}], function(index, val1) {
+ 
+    jQuery.each(json, function(index, val2) {
+      if (val2.id == val1.id) {
+        val2.data.pos = { x: Number(val1.x), y: Number(val1.y) };
+      }
+    });
+
+  });
+
   // load JSON data.
   fd.loadJSON(json);
   // compute positions incrementally and animate.
-  fd.computeIncremental({
+  /*fd.computeIncremental({
     iter: 40,
     property: 'end',
     onStep: function(perc){
@@ -430,7 +412,7 @@ function init(){
         duration: 2500
       });
     }
-  });
+  });*/
   fd.refresh();
   // end
 }

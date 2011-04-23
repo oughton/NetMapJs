@@ -16836,7 +16836,7 @@ $jit.Hypertree.$extend = true;
 })($jit.Hypertree);
 
 
-Layouts.NetworkMap = {};
+Layouts.NetworkMap = { ForceDirected: Layouts.ForceDirected };
 
 /*
  * Class: Layouts.ForceDirected
@@ -16882,13 +16882,11 @@ Layouts.NetworkMap.Static = new Class({
       $.each(prop, function(p) {
         var pos = n.getPos(p);
         if(pos.equals(Complex.KER) && n.data.pos) {
-          pos.x = n.data.pos.x;
-          pos.y = n.data.pos.y;
+          n.setPos(new $jit.Complex(n.data.pos.x, n.data.pos.y), p);
         }
       });
     });
   }
-
 });
 
 
@@ -17310,6 +17308,18 @@ $jit.NetworkMap.$extend = true;
     'none': {
       'render': $.empty,
       'contains': $.lambda(false)
+    },
+    'pop': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        this.nodeHelper.circle.render('fill', pos, dim, canvas);
+      },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        return this.nodeHelper.circle.contains(npos, pos, dim);
+      }
     },
     'circle': {
       'render': function(node, canvas){
