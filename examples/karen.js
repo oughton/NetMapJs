@@ -18,12 +18,62 @@ var labelType, useGradients, nativeTextSupport, animate;
 function init(){
   // init data
   var json = [
-
+      {
+        "id": "POP_AKL", "name": "Auckland POP",        "data": { "$type": "group" }
+      }, {
+        "id": "POP_NSH", "name": "North Shore POP",     "data": { "$type": "group" }
+      }, {
+        "id": "POP_WRK", "name": "Warkworth POP",       "data": { "$type": "group" }
+      }, {
+        "id": "POP_LAX", "name": "Las Angeles POP",     "data": { "$type": "group" }
+      }, {
+        "id": "POP_SYD", "name": "Sydney POP",          "data": { "$type": "group" }
+      }, {
+        "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group" }
+      }, {
+        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group" }
+      }, {
+        "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group" }
+      }, {
+        "id": "POP_TRG", "name": "Tauranga POP",        "data": { "$type": "group" }
+      }, {
+        "id": "POP_NPE", "name": "Napier POP",          "data": { "$type": "group" }
+      }, {
+        "id": "POP_GIS", "name": "Gisborne POP",        "data": { "$type": "group" }
+      }, {
+        "id": "POP_MUP", "name": "Massey POP",          "data": { "$type": "group" }
+      }, {
+        "id": "POP_PMR", "name": "Palmerston North POP","data": { "$type": "group" }
+      }, {
+        "id": "POP_NPL", "name": "New Plymouth POP",    "data": { "$type": "group" }
+      }, {
+        "id": "POP_WAG", "name": "Whanganui POP",       "data": { "$type": "group" }
+      }, {
+        "id": "POP_AVL", "name": "Avalon POP",          "data": { "$type": "group" }
+      }, {
+        "id": "POP_POR", "name": "Porirua POP",         "data": { "$type": "group" }
+      }, {
+        "id": "POP_WLG", "name": "Wellington POP",      "data": { "$type": "group" }
+      }, {
+        "id": "POP_NSN", "name": "Nelson POP",          "data": { "$type": "group" }
+      }, {
+        "id": "POP_TPO", "name": "Tekapo POP",          "data": { "$type": "group" }
+      }, {
+        "id": "POP_CHC", "name": "Christchurch POP",    "data": { "$type": "group" }
+      }, {
+        "id": "POP_LCN", "name": "Lincoln POP",         "data": { "$type": "group" }
+      }, {
+        "id": "POP_DUD", "name": "Dunedin POP",         "data": { "$type": "group" }
+      }, {
+        "id": "POP_IVM", "name": "Invermay POP",        "data": { "$type": "group" }
+      }, {
+        "id": "POP_IVC", "name": "Invercargill POP",    "data": { "$type": "group" }
+      },
       // POP --- Auckland
       {
         "id": "AKL",
         "name": "Auckland",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_AKL" },
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} },
             { "nodeTo": "NSH",                  "data": {} },
@@ -52,7 +102,7 @@ function init(){
       }, {
         "id": "LAX",
         "name": "Los Angeles",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_LAX" },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} }
         ]
@@ -61,7 +111,7 @@ function init(){
       }, {
         "id": "NSH",
         "name": "North Shore",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_NSH" },
         "adjacencies": [
             //{ "nodeTo": "MASSEY",               "data": {} },
             //{ "nodeTo": "REANNZNETSERVICES",    "data": {} },
@@ -74,7 +124,7 @@ function init(){
       }, {
         "id": "WRK",
         "name": "Warkworth",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_WRK" },
         "adjacencies": [
             { "nodeTo": "NSH",                  "data": {} },
             //{ "nodeTo": "AUT",                  "data": {} }
@@ -84,7 +134,7 @@ function init(){
       }, {
         "id": "SYD",
         "name": "Sydney",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_SYD" },
         "adjacencies": [
             //{ "nodeTo": "AKLINTERNATIONAL",     "data": {} },
             //{ "nodeTo": "EQUINIX",              "data": {} },
@@ -97,7 +147,7 @@ function init(){
       }, {
         "id": "MTA",
         "name": "Mount Albert",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_MTA" },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
             //{ "nodeTo": "PLANTANDFOODHR",       "data": {} },
@@ -109,19 +159,19 @@ function init(){
       }, {
         "id": "HLZ",
         "name": "Hamilton",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_HLZ" },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
-            //{ "nodeTo": "PLANTANDFOOD",         "data": {} },
-            //{ "nodeTo": "AGRESEARCH",           "data": {} },
-            //{ "nodeTo": "LANDCARE",             "data": {} },
-            //{ "nodeTo": "WINTEC",               "data": {} },
-            //{ "nodeTo": "LINCOLNRUAKURA",       "data": {} },
-            //{ "nodeTo": "UNIVERSITYOFWAIKATO",  "data": {} },
-            //{ "nodeTo": "NIWARUAKURA",          "data": {} },
-            //{ "nodeTo": "WANDPROBE",            "data": {} },
-            //{ "nodeTo": "ENDACE",               "data": {} },
-            //{ "nodeTo": "NIWA",                 "data": {} },
+            { "nodeTo": "PLANTANDFOOD",         "data": {} },
+            { "nodeTo": "AGRESEARCH",           "data": {} },
+            { "nodeTo": "LANDCARE",             "data": {} },
+            { "nodeTo": "WINTEC",               "data": {} },
+            { "nodeTo": "LINCOLNRUAKURA",       "data": {} },
+            { "nodeTo": "UNIVERSITYOFWAIKATO",  "data": {} },
+            { "nodeTo": "NIWARUAKURA",          "data": {} },
+            { "nodeTo": "WANDPROBE",            "data": {} },
+            { "nodeTo": "ENDACE",               "data": {} },
+            { "nodeTo": "NIWA",                 "data": {} },
             { "nodeTo": "ROT",                  "data": {} }
         ]
       
@@ -129,7 +179,7 @@ function init(){
       }, {
         "id": "ROT",
         "name": "Rotorua",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_ROT" },
         "adjacencies": [
             { "nodeTo": "HLZ",                  "data": {} },
             { "nodeTo": "TRG",                  "data": {} },
@@ -141,7 +191,7 @@ function init(){
       }, {
         "id": "TRG",
         "name": "Tauranga",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_TRG" },
         "adjacencies": [
             { "nodeTo": "ROT",                  "data": {} }
         ]
@@ -150,7 +200,7 @@ function init(){
       }, {
         "id": "NPE",
         "name": "Napier",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_NPE" },
         "adjacencies": [
             { "nodeTo": "GIS",                  "data": {} },
             { "nodeTo": "ROT",                  "data": {} },
@@ -161,7 +211,7 @@ function init(){
       }, {
         "id": "GIS",
         "name": "Gisborne",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_GIS" },
         "adjacencies": [
             { "nodeTo": "NPE",                  "data": {} }
         ]
@@ -170,7 +220,7 @@ function init(){
       }, {
         "id": "MUP",
         "name": "Massey",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_MUP" },
         "adjacencies": [
             { "nodeTo": "ROT",                  "data": {} },
             { "nodeTo": "NPE",                  "data": {} },
@@ -182,7 +232,7 @@ function init(){
       }, {
         "id": "PMR",
         "name": "Palmerston North",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_PMR" },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
             { "nodeTo": "NPL",                  "data": {} },
@@ -195,7 +245,7 @@ function init(){
       }, {
         "id": "NPL",
         "name": "New Plymouth",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_NPL" },
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} }
         ]
@@ -204,7 +254,7 @@ function init(){
       }, {
         "id": "WAG",
         "name": "Whanganui",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_WAG" },
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} }
         ]
@@ -213,7 +263,7 @@ function init(){
       }, {
         "id": "WLG",
         "name": "Wellington",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_WLG" },
         "adjacencies": [
             { "nodeTo": "AVL",                  "data": {} },
             { "nodeTo": "DUD",                  "data": {} },
@@ -226,7 +276,7 @@ function init(){
       }, {
         "id": "AVL",
         "name": "Avalon",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_AVL" },
         "adjacencies": [
             { "nodeTo": "MUP",                  "data": {} },
             { "nodeTo": "POR",                  "data": {} },
@@ -237,7 +287,7 @@ function init(){
       }, {
         "id": "POR",
         "name": "Porirua",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_POR" },
         "adjacencies": [
             { "nodeTo": "AVL",                  "data": {} }
         ]
@@ -246,7 +296,7 @@ function init(){
       }, {
         "id": "NSN",
         "name": "Nelson",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_NSN" },
         "adjacencies": [
             { "nodeTo": "WLG",                  "data": {} },
             { "nodeTo": "CHC",                  "data": {} }
@@ -256,7 +306,7 @@ function init(){
       }, {
         "id": "CHC",
         "name": "Christchurch",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_CHC" },
         "adjacencies": [
             { "nodeTo": "WLG",                  "data": {} },
             { "nodeTo": "NSN",                  "data": {} },
@@ -268,7 +318,7 @@ function init(){
       }, {
         "id": "TPO",
         "name": "Tekapo",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_TPO" },
         "adjacencies": [
             { "nodeTo": "CHC",                  "data": {} }
         ]
@@ -277,7 +327,7 @@ function init(){
       }, {
         "id": "LCN",
         "name": "Lincoln",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_LCN" },
         "adjacencies": [
             { "nodeTo": "CHC",                  "data": {} },
             { "nodeTo": "DUD",                  "data": {} }
@@ -287,7 +337,7 @@ function init(){
       }, {
         "id": "DUD",
         "name": "Dunedin",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_DUD" },
         "adjacencies": [
             { "nodeTo": "WLG",                  "data": {} },
             { "nodeTo": "IVM",                  "data": {} },
@@ -300,7 +350,7 @@ function init(){
       }, {
         "id": "IVM",
         "name": "Ivermay",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_IVM" },
         "adjacencies": [
             { "nodeTo": "DUD",                  "data": {} }
         ]
@@ -309,7 +359,7 @@ function init(){
       }, {
         "id": "IVC",
         "name": "Invercargill",
-        "data": { "$type": "pop" },
+        "data": { "$type": "circle", "parentID": "POP_IVC" },
         "adjacencies": [
             { "nodeTo": "DUD",                  "data": {} }
         ]
@@ -335,7 +385,8 @@ function init(){
     // with dollar prefixed data-properties in the
     // JSON structure.
     Node: {
-      overridable: true
+      overridable: true,
+      dim: 15
     },
     Edge: {
       overridable: true,
@@ -344,7 +395,7 @@ function init(){
     },
     //Native canvas text styling
     Label: {
-      type: labelType, //Native or HTML
+      type: 'HTML', //Native or HTML
       size: 10,
       style: 'bold'
     },
@@ -384,10 +435,29 @@ function init(){
     iterations: 200,
     //Edge length
     levelDistance: 130,
+    // Add text to the labels. This method is only triggered
+    // on label creation and only for DOM labels (not native canvas ones).
+    onCreateLabel: function(domElement, node){
+      domElement.innerHTML = node.name;
+      var style = domElement.style;
+      style.fontSize = "0.8em";
+      style.color = "#ddd";
+    },
+    // Change node styles when DOM labels are placed
+    // or moved.
+    onPlaceLabel: function(domElement, node){
+      var style = domElement.style;
+      var left = parseInt(style.left);
+      var top = parseInt(style.top);
+      var w = domElement.offsetWidth;
+      style.left = (left - w / 2) + 'px';
+      style.top = (top + 10) + 'px';
+      style.display = '';
+    }
   });
   
   // set the initial positions
-  jQuery.each([{"id":"AKL","x":"-247","y":"6"},{"id":"PMR","x":"57","y":"77"},{"id":"NSH","x":"-332","y":"-33"},{"id":"HLZ","x":"-171","y":"-186"},{"id":"MTA","x":"-256","y":"280"},{"id":"LAX","x":"-439","y":"-304"},{"id":"WRK","x":"-404","y":"6"},{"id":"SYD","x":"-450","y":"281"},{"id":"ROT","x":"-50","y":"-187"},{"id":"TRG","x":"-69","y":"-259"},{"id":"NPE","x":"47","y":"-185"},{"id":"MUP","x":"51","y":"-130"},{"id":"GIS","x":"36","y":"-255"},{"id":"AVL","x":"184","y":"-155"},{"id":"NPL","x":"-26","y":"257"},{"id":"WAG","x":"120","y":"259"},{"id":"WLG","x":"213","y":"-52"},{"id":"DUD","x":"359","y":"-46"},{"id":"CHC","x":"281","y":"171"},{"id":"NSN","x":"217","y":"224"},{"id":"POR","x":"235","y":"-263"},{"id":"TPO","x":"282","y":"220"},{"id":"LCN","x":"354","y":"172"},{"id":"IVM","x":"441","y":"-208"},{"id":"IVC","x":"435","y":"105"}], function(index, val1) {
+  jQuery.each([{"id":"POP_AKL","x":"-247","y":"6"},{"id":"POP_PMR","x":"57","y":"77"},{"id":"POP_NSH","x":"-332","y":"-33"},{"id":"POP_HLZ","x":"-171","y":"-186"},{"id":"POP_MTA","x":"-256","y":"280"},{"id":"POP_LAX","x":"-439","y":"-304"},{"id":"POP_WRK","x":"-404","y":"6"},{"id":"POP_SYD","x":"-450","y":"281"},{"id":"POP_ROT","x":"-50","y":"-187"},{"id":"POP_TRG","x":"-69","y":"-259"},{"id":"POP_NPE","x":"47","y":"-185"},{"id":"POP_MUP","x":"51","y":"-130"},{"id":"POP_GIS","x":"36","y":"-255"},{"id":"POP_AVL","x":"184","y":"-155"},{"id":"POP_NPL","x":"-26","y":"257"},{"id":"POP_WAG","x":"120","y":"259"},{"id":"POP_WLG","x":"213","y":"-52"},{"id":"POP_DUD","x":"359","y":"-46"},{"id":"POP_CHC","x":"281","y":"171"},{"id":"POP_NSN","x":"217","y":"224"},{"id":"POP_POR","x":"235","y":"-263"},{"id":"POP_TPO","x":"282","y":"220"},{"id":"POP_LCN","x":"354","y":"172"},{"id":"POP_IVM","x":"441","y":"-208"},{"id":"POP_IVC","x":"435","y":"105"}], function(index, val1) {
  
     jQuery.each(json, function(index, val2) {
       if (val2.id == val1.id) {
@@ -397,6 +467,20 @@ function init(){
 
   });
 
+  var pops = ['LAX', 'NSH', 'WRK', 'AKL', 'SYD', 'MTA', 'HLZ', 'TGR', 'ROT', 'GIS', 'NPE', 'MUP', 
+    'PMR', 'NPL', 'WAG', 'AVL', 'POR', 'WLG', 'NSN', 'CHC', 'TPO', 'LCN', 'DUD', 'IVM', 'IVC'];
+
+  // create sub network nodes
+  jQuery.each(json, function (index, n) {
+    if (!n.adjacencies) return;
+
+    jQuery.each(n.adjacencies, function(index, adj) {
+      if (pops.indexOf(adj.nodeTo) === -1) {
+        json.push({ 'id': adj.nodeTo, 'name': adj.nodeTo, 'data': { parentID: n.data.parentID } });
+      }
+    });
+  });
+  
   // load JSON data.
   fd.loadJSON(json);
   // compute positions incrementally and animate.
@@ -413,6 +497,7 @@ function init(){
       });
     }
   });*/
+  console.log(fd);
   fd.refresh();
   // end
 }
