@@ -402,6 +402,8 @@ function init(){
     // Add node events
     Events: {
       enable: true,
+      onMouseWheel: function() {
+      },
       //Change cursor style when hovering a node
       onMouseEnter: function() {
         fd.canvas.getElement().style.cursor = 'move';
@@ -438,7 +440,12 @@ function init(){
     // Add text to the labels. This method is only triggered
     // on label creation and only for DOM labels (not native canvas ones).
     onCreateLabel: function(domElement, node){
-      domElement.innerHTML = node.name;
+      if (node.data.parentID) {
+        domElement.innerHTML = node.name;
+      } else {
+        domElement.innerHTML = node.id.substr(4);
+      }
+
       var style = domElement.style;
       style.fontSize = "0.8em";
       style.color = "#ddd";
@@ -452,21 +459,9 @@ function init(){
       var w = domElement.offsetWidth;
       style.left = (left - w / 2) + 'px';
       style.top = (top + 10) + 'px';
-      style.display = '';
     }
   });
   
-  // set the initial positions
-  jQuery.each([{"id":"POP_AKL","x":"-247","y":"6"},{"id":"POP_PMR","x":"57","y":"77"},{"id":"POP_NSH","x":"-332","y":"-33"},{"id":"POP_HLZ","x":"-171","y":"-186"},{"id":"POP_MTA","x":"-256","y":"280"},{"id":"POP_LAX","x":"-439","y":"-304"},{"id":"POP_WRK","x":"-404","y":"6"},{"id":"POP_SYD","x":"-450","y":"281"},{"id":"POP_ROT","x":"-50","y":"-187"},{"id":"POP_TRG","x":"-69","y":"-259"},{"id":"POP_NPE","x":"47","y":"-185"},{"id":"POP_MUP","x":"51","y":"-130"},{"id":"POP_GIS","x":"36","y":"-255"},{"id":"POP_AVL","x":"184","y":"-155"},{"id":"POP_NPL","x":"-26","y":"257"},{"id":"POP_WAG","x":"120","y":"259"},{"id":"POP_WLG","x":"213","y":"-52"},{"id":"POP_DUD","x":"359","y":"-46"},{"id":"POP_CHC","x":"281","y":"171"},{"id":"POP_NSN","x":"217","y":"224"},{"id":"POP_POR","x":"235","y":"-263"},{"id":"POP_TPO","x":"282","y":"220"},{"id":"POP_LCN","x":"354","y":"172"},{"id":"POP_IVM","x":"441","y":"-208"},{"id":"POP_IVC","x":"435","y":"105"}], function(index, val1) {
- 
-    jQuery.each(json, function(index, val2) {
-      if (val2.id == val1.id) {
-        val2.data.pos = { x: Number(val1.x), y: Number(val1.y) };
-      }
-    });
-
-  });
-
   var pops = ['LAX', 'NSH', 'WRK', 'AKL', 'SYD', 'MTA', 'HLZ', 'TGR', 'ROT', 'GIS', 'NPE', 'MUP', 
     'PMR', 'NPL', 'WAG', 'AVL', 'POR', 'WLG', 'NSN', 'CHC', 'TPO', 'LCN', 'DUD', 'IVM', 'IVC'];
 
@@ -481,6 +476,17 @@ function init(){
     });
   });
   
+  // set the initial positions
+  jQuery.each([{"id":"POP_AKL","x":"-247","y":"6"},{"id":"POP_NSH","x":"-332","y":"-33"},{"id":"POP_WRK","x":"-404","y":"6"},{"id":"POP_LAX","x":"-439","y":"-304"},{"id":"POP_SYD","x":"-450","y":"281"},{"id":"POP_MTA","x":"-256","y":"280"},{"id":"POP_HLZ","x":"-173.41241910275687","y":"-187.6474088780429"},{"id":"POP_ROT","x":"-50","y":"-187"},{"id":"POP_TRG","x":"-69","y":"-259"},{"id":"POP_NPE","x":"47","y":"-185"},{"id":"POP_GIS","x":"36","y":"-255"},{"id":"POP_MUP","x":"51","y":"-130"},{"id":"POP_PMR","x":"57","y":"77"},{"id":"POP_NPL","x":"-26","y":"257"},{"id":"POP_WAG","x":"120","y":"259"},{"id":"POP_AVL","x":"184","y":"-155"},{"id":"POP_POR","x":"235","y":"-263"},{"id":"POP_WLG","x":"213","y":"-52"},{"id":"POP_NSN","x":"217","y":"224"},{"id":"POP_TPO","x":"282","y":"220"},{"id":"POP_CHC","x":"281","y":"171"},{"id":"POP_LCN","x":"354","y":"172"},{"id":"POP_DUD","x":"359","y":"-46"},{"id":"POP_IVM","x":"441","y":"-208"},{"id":"POP_IVC","x":"435","y":"105"},{"id":"AKL","x":"-247","y":"6"},{"id":"PMR","x":"57","y":"77"},{"id":"NSH","x":"-332","y":"-33"},{"id":"HLZ","x":"-173.26349733782507","y":"-187.94525240790654"},{"id":"MTA","x":"-256","y":"280"},{"id":"LAX","x":"-439","y":"-304"},{"id":"WRK","x":"-404","y":"6"},{"id":"SYD","x":"-450","y":"281"},{"id":"PLANTANDFOOD","x":"-173.18903645535917","y":"-196.58271477395155"},{"id":"AGRESEARCH","x":"-167.23216585808672","y":"-193.3064359454517"},{"id":"LANDCARE","x":"-165.7429482087686","y":"-188.6898612325656"},{"id":"WINTEC","x":"-168.57246174247302","y":"-183.1797559300886"},{"id":"LINCOLNRUAKURA","x":"-174.52933233974545","y":"-181.24377298597503"},{"id":"UNIVERSITYOFWAIKATO","x":"-179.2203679350975","y":"-184.44559093200897"},{"id":"NIWARUAKURA","x":"-180.11389852468838","y":"-189.80677446955417"},{"id":"WANDPROBE","x":"-178.55021999290435","y":"-193.97658388764486"},{"id":"ENDACE","x":"-165.7429482087686","y":"-185.26466063913392"},{"id":"NIWA","x":"-168.79584438987075","y":"-197.029480068747"},{"id":"ROT","x":"-50","y":"-187"},{"id":"TRG","x":"-69","y":"-259"},{"id":"NPE","x":"47","y":"-185"},{"id":"MUP","x":"51","y":"-130"},{"id":"GIS","x":"36","y":"-255"},{"id":"AVL","x":"184","y":"-155"},{"id":"NPL","x":"-26","y":"257"},{"id":"WAG","x":"120","y":"259"},{"id":"WLG","x":"213","y":"-52"},{"id":"DUD","x":"359","y":"-46"},{"id":"CHC","x":"281","y":"171"},{"id":"NSN","x":"217","y":"224"},{"id":"POR","x":"235","y":"-263"},{"id":"TPO","x":"282","y":"220"},{"id":"LCN","x":"354","y":"172"},{"id":"IVM","x":"441","y":"-208"},{"id":"IVC","x":"435","y":"105"}], function(index, val1) {
+ 
+    jQuery.each(json, function(index, val2) {
+      if (val2.id == val1.id) {
+        val2.data.pos = { x: Number(val1.x), y: Number(val1.y) };
+      }
+    });
+
+  });
+
   // load JSON data.
   fd.loadJSON(json);
   // compute positions incrementally and animate.
