@@ -19,55 +19,55 @@ function init(){
   // init data
   var json = [
       {
-        "id": "POP_AKL", "name": "Auckland POP",        "data": { "$type": "group" }
+        "id": "POP_AKL", "name": "Auckland POP",        "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_NSH", "name": "North Shore POP",     "data": { "$type": "group" }
+        "id": "POP_NSH", "name": "North Shore POP",     "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_WRK", "name": "Warkworth POP",       "data": { "$type": "group" }
+        "id": "POP_WRK", "name": "Warkworth POP",       "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_LAX", "name": "Las Angeles POP",     "data": { "$type": "group" }
+        "id": "POP_LAX", "name": "Las Angeles POP",     "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_SYD", "name": "Sydney POP",          "data": { "$type": "group" }
+        "id": "POP_SYD", "name": "Sydney POP",          "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group" }
+        "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group" }
+        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group", "layout": "ForceDirected" }
       }, {
-        "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group" }
+        "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_TRG", "name": "Tauranga POP",        "data": { "$type": "group" }
+        "id": "POP_TRG", "name": "Tauranga POP",        "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_NPE", "name": "Napier POP",          "data": { "$type": "group" }
+        "id": "POP_NPE", "name": "Napier POP",          "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_GIS", "name": "Gisborne POP",        "data": { "$type": "group" }
+        "id": "POP_GIS", "name": "Gisborne POP",        "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_MUP", "name": "Massey POP",          "data": { "$type": "group" }
+        "id": "POP_MUP", "name": "Massey POP",          "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_PMR", "name": "Palmerston North POP","data": { "$type": "group" }
+        "id": "POP_PMR", "name": "Palmerston North POP","data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_NPL", "name": "New Plymouth POP",    "data": { "$type": "group" }
+        "id": "POP_NPL", "name": "New Plymouth POP",    "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_WAG", "name": "Whanganui POP",       "data": { "$type": "group" }
+        "id": "POP_WAG", "name": "Whanganui POP",       "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_AVL", "name": "Avalon POP",          "data": { "$type": "group" }
+        "id": "POP_AVL", "name": "Avalon POP",          "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_POR", "name": "Porirua POP",         "data": { "$type": "group" }
+        "id": "POP_POR", "name": "Porirua POP",         "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_WLG", "name": "Wellington POP",      "data": { "$type": "group" }
+        "id": "POP_WLG", "name": "Wellington POP",      "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_NSN", "name": "Nelson POP",          "data": { "$type": "group" }
+        "id": "POP_NSN", "name": "Nelson POP",          "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_TPO", "name": "Tekapo POP",          "data": { "$type": "group" }
+        "id": "POP_TPO", "name": "Tekapo POP",          "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_CHC", "name": "Christchurch POP",    "data": { "$type": "group" }
+        "id": "POP_CHC", "name": "Christchurch POP",    "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_LCN", "name": "Lincoln POP",         "data": { "$type": "group" }
+        "id": "POP_LCN", "name": "Lincoln POP",         "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_DUD", "name": "Dunedin POP",         "data": { "$type": "group" }
+        "id": "POP_DUD", "name": "Dunedin POP",         "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_IVM", "name": "Invermay POP",        "data": { "$type": "group" }
+        "id": "POP_IVM", "name": "Invermay POP",        "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_IVC", "name": "Invercargill POP",    "data": { "$type": "group" }
+        "id": "POP_IVC", "name": "Invercargill POP",    "data": { "$type": "group", "layout": "Static" }
       },
       // POP --- Auckland
       {
