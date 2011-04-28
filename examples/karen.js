@@ -458,7 +458,7 @@ function init(){
       var top = parseInt(style.top);
       var w = domElement.offsetWidth;
       style.left = (left - w / 2) + 'px';
-      style.top = (top + 10) + 'px';
+      style.top = top + 'px';
     }
   });
   

@@ -17005,7 +17005,7 @@ Layouts.NetworkMap.Static = new Class({
     var prop = property || ['current', 'start', 'end'];
     var that = this;
 
-    NodeDim.compute(that.vis.graph, prop, that.vis.config);
+    //NodeDim.compute(that.vis.graph, prop, that.vis.config);
     $.each(group.nodes, function(n) {
       // fill in the nodes position for each property
       $.each(prop, function(p) {
@@ -17117,19 +17117,33 @@ $jit.NetworkMap = new Class( {
   },
 
   computeDimensions: function(group) {
-    // set the node size and edge width to reflect depth
+    // part of a group
     if (group.owner) {
+      
+      // set the node size and edge width to reflect depth
       $.each(group.nodes, function(n) { 
         // nodes
         var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
-        n.setData('dim', 0.1 * dim / ownerDim * (1 + ownerDim / 2));
+        var newDim = 0.1 * dim / ownerDim * (1 + ownerDim / 2);
+        n.setData('dim', newDim);
+        n.setData('height', newDim);
+        n.setData('width', newDim);
+        //n.setLabelData('size', 1);
 
         // edges
         n.eachAdjacency(function(adj) {
           if (adj.nodeTo.data.parentID == adj.nodeFrom.data.parentID) {
-            adj.setData('lineWidth', n.getData('dim') / dim * group.owner.Edge.lineWidth);
+            adj.setData('lineWidth', newDim / dim * group.owner.Edge.lineWidth);
           }
         });
+      });
+      
+    // not part of a group
+    } else {
+      $.each(group.nodes, function(n) {
+        var dim = n.getData('dim');
+        n.setData('width', dim);
+        n.setData('height', dim);
       });
     }
   },
@@ -17356,7 +17370,22 @@ $jit.NetworkMap.$extend = true;
 
   */
   NetworkMap.Label.Native = new Class( {
-    Implements: Graph.Label.Native
+    Implements: Graph.Label.Native,
+
+    initialize: function(viz) {
+      this.viz = viz;
+    },
+
+    renderLabel: function(canvas, node, controller) {
+      var ctx = canvas.getCtx();
+      var pos = node.pos.getc(true),
+          sx = canvas.scaleOffsetX,
+          sy = canvas.scaleOffsetY;
+
+      if (sx > 4 && node.data.parentID || !node.data.parentID) {
+        ctx.fillText(node.name, pos.x, pos.y + node.getData("height"));
+      }
+    }
   });
 
   /*
@@ -17445,6 +17474,7 @@ $jit.NetworkMap.$extend = true;
      */
     placeLabel: function(tag, node, controller) {
       var pos = node.pos.getc(true), 
+          height = node.getData('height');
           canvas = this.viz.canvas,
           ox = canvas.translateOffsetX,
           oy = canvas.translateOffsetY,
@@ -17453,7 +17483,7 @@ $jit.NetworkMap.$extend = true;
           radius = canvas.getSize();
       var labelPos = {
         x: Math.round(pos.x * sx + ox + radius.width / 2),
-        y: Math.round(pos.y * sy + oy + radius.height / 2)
+        y: Math.round((pos.y + height) * sy + oy + radius.height / 2)
       };
       var style = tag.style;
       style.left = labelPos.x + 'px';
@@ -17462,7 +17492,7 @@ $jit.NetworkMap.$extend = true;
 
       if (canvas.scaleOffsetX < 4 && node.data.parentID) {
         style.display = 'none';
-      };
+      }
 
       controller.onPlaceLabel(tag, node);
     }
