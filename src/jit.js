@@ -16838,7 +16838,6 @@ $jit.Hypertree.$extend = true;
 
 Layouts.NetworkMap = {};
 
-
 /*
  * Class: Layouts.NetworkMap.ForceDirected
  */
@@ -17002,32 +17001,16 @@ Layouts.NetworkMap.Static = new Class({
     this.vis = vis;
   },
 
-  mapInto: function(parent, pos) {
-    var pdim = parent.getData('dim'), pp = parent.pos;
-    var bb = { x: pp.x - pdim / 2, y: pp.y - pdim / 2, width: pdim, height: pdim };
-
-    //TODO: Implement
-    return $C(parent.pos.x, parent.pos.y);
-  },
-
   compute: function(group, property, incremental) {
-    var prop = ['current', 'start', 'end'];
+    var prop = property || ['current', 'start', 'end'];
     var that = this;
 
-    //NodeDim.compute(graph, prop, that.config);
+    NodeDim.compute(that.vis.graph, prop, that.vis.config);
     $.each(group.nodes, function(n) {
-      //$.each(prop, function(p) {
-        var pos;
-        
-        if (n.data.pos) pos = $C(n.data.pos.x, n.data.pos.y);
-        
-        if (group.owner)  {
-          //pos = that.mapInto(group.owner, pos);
-          n.setData('dim', 0.1 * n.getData('dim') / group.owner.getData('dim') * (1 + group.owner.getData('dim') / 2));
-        }
-
-        if(pos) n.setPos(pos, 'current');
-      //});
+      // fill in the nodes position for each property
+      $.each(prop, function(p) {
+        if (n.data.pos) n.setPos($C(n.data.pos.x, n.data.pos.y));
+      });
     });
   }
 });
@@ -17133,6 +17116,24 @@ $jit.NetworkMap = new Class( {
     };
   },
 
+  computeDimensions: function(group) {
+    // set the node size and edge width to reflect depth
+    if (group.owner) {
+      $.each(group.nodes, function(n) { 
+        // nodes
+        var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
+        n.setData('dim', 0.1 * dim / ownerDim * (1 + ownerDim / 2));
+
+        // edges
+        n.eachAdjacency(function(adj) {
+          if (adj.nodeTo.data.parentID == adj.nodeFrom.data.parentID) {
+            adj.setData('lineWidth', n.getData('dim') / dim * group.owner.Edge.lineWidth);
+          }
+        });
+      });
+    }
+  },
+
   computeLayouts: function(property, incremental) {
     var groups = {}, that = this;
 
@@ -17150,6 +17151,7 @@ $jit.NetworkMap = new Class( {
 
     // dispatch top group
     if (groups._TOP && groups._TOP.length !== 0) {
+      this.computeDimensions(groups._TOP);
       this.layouts[this.config.layout].compute(groups._TOP, property, incremental);
     }
     
@@ -17160,6 +17162,7 @@ $jit.NetworkMap = new Class( {
       if (group == '_TOP') return;
       
       if (group.owner) {
+        that.computeDimensions(group);
         layout = group.owner.data.layout || that.config.layout;
         that.layouts[layout].compute(group, property, incremental);
       }

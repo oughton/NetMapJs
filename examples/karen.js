@@ -31,7 +31,7 @@ function init(){
       }, {
         "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group", "layout": "ForceDirected" }
+        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group", "layout": "Static" }
       }, {
         "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group", "layout": "Static" }
       }, {
@@ -376,7 +376,7 @@ function init(){
       enable: true,
       //Enable panning events only if we're dragging the empty
       //canvas (and not a node).
-      panning: 'avoid nodes',
+      panning: true, //'avoid nodes',
       zooming: 40 //zoom speed. higher is more sensible
     },
     // Change node and edge styles such as
@@ -391,7 +391,7 @@ function init(){
     Edge: {
       overridable: true,
       color: '#23A4FF',
-      lineWidth: 0.4
+      lineWidth: 0.8
     },
     //Native canvas text styling
     Label: {
@@ -413,9 +413,9 @@ function init(){
       },
       //Update node positions when dragged
       onDragMove: function(node, eventInfo, e) {
-          var pos = eventInfo.getPos();
-          node.pos.setc(pos.x, pos.y);
-          fd.plot();
+          //var pos = eventInfo.getPos();
+          //node.pos.setc(pos.x, pos.y);
+          //fd.plot();
       },
       //Implement the same handler for touchscreens
       onTouchMove: function(node, eventInfo, e) {
