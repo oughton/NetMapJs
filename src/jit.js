@@ -16991,6 +16991,52 @@ Layouts.NetworkMap.ForceDirected = new Class({
   }
 });
 
+/*
+ * Class: Layouts.NetworkMap.Star
+ */
+Layouts.NetworkMap.Star = new Class({
+
+  initialize: function(vis) {
+    this.vis = vis;
+  },
+
+  compute: function(group, property, incremental) {
+    var prop = property || ['current', 'start', 'end'];
+    var that = this, i = 0, n, circlePoints;
+
+    n = group.root ? group.nodes.length - 1 : group.nodes.length;
+
+    circlePoints = this.getPointsOnCircle(group.owner.pos, group.owner.getData('dim') / 2, n);
+
+    //NodeDim.compute(that.vis.graph, prop, that.vis.config);
+    $.each(group.nodes, function(n) {
+      var pt;
+
+      // draw the root in the center if there is one
+      if (n === group.root) {
+        n.setPos(group.owner.pos);
+        return;
+      }
+
+      pt = circlePoints[i++];
+
+      // fill in the nodes position for each property
+      $.each(prop, function(p) {
+        n.setPos($C(pt.x, pt.y));
+      });
+    });
+  },
+
+  getPointsOnCircle: function(center, radius, n) {
+    var alpha = 2 * Math.PI / n, points = [], i = -1;
+    
+    while (++i < n) {
+      points.push(center.add($C(Math.cos( alpha * i ) * radius, Math.sin( alpha * i ) * radius)));
+    }
+
+    return points;
+  }
+});
 
 /*
  * Class: Layouts.NetworkMap.Static
@@ -17070,6 +17116,7 @@ $jit.NetworkMap = new Class( {
     var $NetworkMap = $jit.NetworkMap;
 
     var config = {
+      debug: false,
       iterations: 50,
       levelDistance: 50,
       layout: 'Static'
@@ -17112,7 +17159,8 @@ $jit.NetworkMap = new Class( {
 
     this.layouts = {
       'Static': new Layouts.NetworkMap.Static(this),
-      'ForceDirected': new Layouts.NetworkMap.ForceDirected(this)
+      'ForceDirected': new Layouts.NetworkMap.ForceDirected(this),
+      'Star': new Layouts.NetworkMap.Star(this)
     };
   },
 
@@ -17126,8 +17174,8 @@ $jit.NetworkMap = new Class( {
         var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
         var newDim = 0.1 * dim / ownerDim * (1 + ownerDim / 2);
         n.setData('dim', newDim);
-        n.setData('height', newDim);
-        n.setData('width', newDim);
+        n.setData('height', newDim * 2);
+        n.setData('width', newDim * 2);
         //n.setLabelData('size', 1);
 
         // edges
@@ -17142,8 +17190,8 @@ $jit.NetworkMap = new Class( {
     } else {
       $.each(group.nodes, function(n) {
         var dim = n.getData('dim');
-        n.setData('width', dim);
-        n.setData('height', dim);
+        n.setData('width', dim * 2);
+        n.setData('height', dim * 2);
       });
     }
   },
@@ -17156,11 +17204,21 @@ $jit.NetworkMap = new Class( {
       var group = n.data.parentID || '_TOP';
       
       if (!groups[group]) {
-        //TODO: currently sets the root to the first node in the group encountered
-        groups[group] = { owner: that.graph.getNode(group), nodes: [], root: n };
+        groups[group] = { owner: that.graph.getNode(group), nodes: [] };
       }
       
       groups[group].nodes.push(n);
+    });
+
+    // set the roots
+    jQuery.each(groups, function(id, group) {
+      var root;
+      
+      jQuery.each(group.nodes, function(index, n) {
+        if (n.data.root) root = n;
+      });
+
+      group.root = root;
     });
 
     // dispatch top group
@@ -17476,6 +17534,7 @@ $jit.NetworkMap.$extend = true;
       var pos = node.pos.getc(true), 
           height = node.getData('height');
           canvas = this.viz.canvas,
+          ctx = canvas.getCtx(),
           ox = canvas.translateOffsetX,
           oy = canvas.translateOffsetY,
           sx = canvas.scaleOffsetX,
@@ -17483,7 +17542,7 @@ $jit.NetworkMap.$extend = true;
           radius = canvas.getSize();
       var labelPos = {
         x: Math.round(pos.x * sx + ox + radius.width / 2),
-        y: Math.round((pos.y + height) * sy + oy + radius.height / 2)
+        y: Math.round((pos.y + height / 2) * sy + oy + radius.height / 2)
       };
       var style = tag.style;
       style.left = labelPos.x + 'px';

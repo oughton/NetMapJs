@@ -31,7 +31,7 @@ function init(){
       }, {
         "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group", "layout": "Static" }
       }, {
-        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group", "layout": "Star" }
       }, {
         "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group", "layout": "Static" }
       }, {
@@ -73,7 +73,7 @@ function init(){
       {
         "id": "AKL",
         "name": "Auckland",
-        "data": { "$type": "circle", "parentID": "POP_AKL" },
+        "data": { "$type": "circle", "parentID": "POP_AKL", "root": true },
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} },
             { "nodeTo": "NSH",                  "data": {} },
@@ -102,7 +102,7 @@ function init(){
       }, {
         "id": "LAX",
         "name": "Los Angeles",
-        "data": { "$type": "circle", "parentID": "POP_LAX" },
+        "data": { "$type": "circle", "parentID": "POP_LAX", "root": true },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} }
         ]
@@ -111,7 +111,7 @@ function init(){
       }, {
         "id": "NSH",
         "name": "North Shore",
-        "data": { "$type": "circle", "parentID": "POP_NSH" },
+        "data": { "$type": "circle", "parentID": "POP_NSH", "root": true },
         "adjacencies": [
             //{ "nodeTo": "MASSEY",               "data": {} },
             //{ "nodeTo": "REANNZNETSERVICES",    "data": {} },
@@ -124,7 +124,7 @@ function init(){
       }, {
         "id": "WRK",
         "name": "Warkworth",
-        "data": { "$type": "circle", "parentID": "POP_WRK" },
+        "data": { "$type": "circle", "parentID": "POP_WRK", "root": true },
         "adjacencies": [
             { "nodeTo": "NSH",                  "data": {} },
             //{ "nodeTo": "AUT",                  "data": {} }
@@ -134,7 +134,7 @@ function init(){
       }, {
         "id": "SYD",
         "name": "Sydney",
-        "data": { "$type": "circle", "parentID": "POP_SYD" },
+        "data": { "$type": "circle", "parentID": "POP_SYD", "root": true },
         "adjacencies": [
             //{ "nodeTo": "AKLINTERNATIONAL",     "data": {} },
             //{ "nodeTo": "EQUINIX",              "data": {} },
@@ -147,7 +147,7 @@ function init(){
       }, {
         "id": "MTA",
         "name": "Mount Albert",
-        "data": { "$type": "circle", "parentID": "POP_MTA" },
+        "data": { "$type": "circle", "parentID": "POP_MTA", "root": true },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
             //{ "nodeTo": "PLANTANDFOODHR",       "data": {} },
@@ -159,7 +159,7 @@ function init(){
       }, {
         "id": "HLZ",
         "name": "Hamilton",
-        "data": { "$type": "circle", "parentID": "POP_HLZ" },
+        "data": { "$type": "circle", "parentID": "POP_HLZ", "root": true },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
             { "nodeTo": "PLANTANDFOOD",         "data": {} },
@@ -179,7 +179,7 @@ function init(){
       }, {
         "id": "ROT",
         "name": "Rotorua",
-        "data": { "$type": "circle", "parentID": "POP_ROT" },
+        "data": { "$type": "circle", "parentID": "POP_ROT", "root": true },
         "adjacencies": [
             { "nodeTo": "HLZ",                  "data": {} },
             { "nodeTo": "TRG",                  "data": {} },
@@ -191,7 +191,7 @@ function init(){
       }, {
         "id": "TRG",
         "name": "Tauranga",
-        "data": { "$type": "circle", "parentID": "POP_TRG" },
+        "data": { "$type": "circle", "parentID": "POP_TRG", "root": true },
         "adjacencies": [
             { "nodeTo": "ROT",                  "data": {} }
         ]
@@ -200,7 +200,7 @@ function init(){
       }, {
         "id": "NPE",
         "name": "Napier",
-        "data": { "$type": "circle", "parentID": "POP_NPE" },
+        "data": { "$type": "circle", "parentID": "POP_NPE", "root": true },
         "adjacencies": [
             { "nodeTo": "GIS",                  "data": {} },
             { "nodeTo": "ROT",                  "data": {} },
@@ -211,7 +211,7 @@ function init(){
       }, {
         "id": "GIS",
         "name": "Gisborne",
-        "data": { "$type": "circle", "parentID": "POP_GIS" },
+        "data": { "$type": "circle", "parentID": "POP_GIS", "root": true },
         "adjacencies": [
             { "nodeTo": "NPE",                  "data": {} }
         ]
@@ -220,7 +220,7 @@ function init(){
       }, {
         "id": "MUP",
         "name": "Massey",
-        "data": { "$type": "circle", "parentID": "POP_MUP" },
+        "data": { "$type": "circle", "parentID": "POP_MUP", "root": true },
         "adjacencies": [
             { "nodeTo": "ROT",                  "data": {} },
             { "nodeTo": "NPE",                  "data": {} },
@@ -232,7 +232,7 @@ function init(){
       }, {
         "id": "PMR",
         "name": "Palmerston North",
-        "data": { "$type": "circle", "parentID": "POP_PMR" },
+        "data": { "$type": "circle", "parentID": "POP_PMR", "root": true },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
             { "nodeTo": "NPL",                  "data": {} },
@@ -245,7 +245,7 @@ function init(){
       }, {
         "id": "NPL",
         "name": "New Plymouth",
-        "data": { "$type": "circle", "parentID": "POP_NPL" },
+        "data": { "$type": "circle", "parentID": "POP_NPL", "root": true },
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} }
         ]
@@ -254,7 +254,7 @@ function init(){
       }, {
         "id": "WAG",
         "name": "Whanganui",
-        "data": { "$type": "circle", "parentID": "POP_WAG" },
+        "data": { "$type": "circle", "parentID": "POP_WAG", "root": true },
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} }
         ]
@@ -263,7 +263,7 @@ function init(){
       }, {
         "id": "WLG",
         "name": "Wellington",
-        "data": { "$type": "circle", "parentID": "POP_WLG" },
+        "data": { "$type": "circle", "parentID": "POP_WLG", "root": true },
         "adjacencies": [
             { "nodeTo": "AVL",                  "data": {} },
             { "nodeTo": "DUD",                  "data": {} },
@@ -276,7 +276,7 @@ function init(){
       }, {
         "id": "AVL",
         "name": "Avalon",
-        "data": { "$type": "circle", "parentID": "POP_AVL" },
+        "data": { "$type": "circle", "parentID": "POP_AVL", "root": true },
         "adjacencies": [
             { "nodeTo": "MUP",                  "data": {} },
             { "nodeTo": "POR",                  "data": {} },
@@ -287,7 +287,7 @@ function init(){
       }, {
         "id": "POR",
         "name": "Porirua",
-        "data": { "$type": "circle", "parentID": "POP_POR" },
+        "data": { "$type": "circle", "parentID": "POP_POR", "root": true },
         "adjacencies": [
             { "nodeTo": "AVL",                  "data": {} }
         ]
@@ -296,7 +296,7 @@ function init(){
       }, {
         "id": "NSN",
         "name": "Nelson",
-        "data": { "$type": "circle", "parentID": "POP_NSN" },
+        "data": { "$type": "circle", "parentID": "POP_NSN", "root": true },
         "adjacencies": [
             { "nodeTo": "WLG",                  "data": {} },
             { "nodeTo": "CHC",                  "data": {} }
@@ -306,7 +306,7 @@ function init(){
       }, {
         "id": "CHC",
         "name": "Christchurch",
-        "data": { "$type": "circle", "parentID": "POP_CHC" },
+        "data": { "$type": "circle", "parentID": "POP_CHC", "root": true },
         "adjacencies": [
             { "nodeTo": "WLG",                  "data": {} },
             { "nodeTo": "NSN",                  "data": {} },
@@ -318,7 +318,7 @@ function init(){
       }, {
         "id": "TPO",
         "name": "Tekapo",
-        "data": { "$type": "circle", "parentID": "POP_TPO" },
+        "data": { "$type": "circle", "parentID": "POP_TPO", "root": true },
         "adjacencies": [
             { "nodeTo": "CHC",                  "data": {} }
         ]
@@ -327,7 +327,7 @@ function init(){
       }, {
         "id": "LCN",
         "name": "Lincoln",
-        "data": { "$type": "circle", "parentID": "POP_LCN" },
+        "data": { "$type": "circle", "parentID": "POP_LCN", "root": true },
         "adjacencies": [
             { "nodeTo": "CHC",                  "data": {} },
             { "nodeTo": "DUD",                  "data": {} }
@@ -337,7 +337,7 @@ function init(){
       }, {
         "id": "DUD",
         "name": "Dunedin",
-        "data": { "$type": "circle", "parentID": "POP_DUD" },
+        "data": { "$type": "circle", "parentID": "POP_DUD", "root": true },
         "adjacencies": [
             { "nodeTo": "WLG",                  "data": {} },
             { "nodeTo": "IVM",                  "data": {} },
@@ -350,7 +350,7 @@ function init(){
       }, {
         "id": "IVM",
         "name": "Ivermay",
-        "data": { "$type": "circle", "parentID": "POP_IVM" },
+        "data": { "$type": "circle", "parentID": "POP_IVM", "root": true },
         "adjacencies": [
             { "nodeTo": "DUD",                  "data": {} }
         ]
@@ -359,7 +359,7 @@ function init(){
       }, {
         "id": "IVC",
         "name": "Invercargill",
-        "data": { "$type": "circle", "parentID": "POP_IVC" },
+        "data": { "$type": "circle", "parentID": "POP_IVC", "root": true },
         "adjacencies": [
             { "nodeTo": "DUD",                  "data": {} }
         ]
@@ -435,6 +435,8 @@ function init(){
     },
     //Number of iterations for the FD algorithm
     iterations: 200,
+    // debugging enabled/disabled
+    debug: true,
     //Edge length
     levelDistance: 130,
     // Add text to the labels. This method is only triggered
