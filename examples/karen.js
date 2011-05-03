@@ -19,55 +19,55 @@ function init(){
   // init data
   var json = [
       {
-        "id": "POP_AKL", "name": "Auckland POP",        "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_AKL", "name": "Auckland POP",        "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_NSH", "name": "North Shore POP",     "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_NSH", "name": "North Shore POP",     "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_WRK", "name": "Warkworth POP",       "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_WRK", "name": "Warkworth POP",       "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_LAX", "name": "Las Angeles POP",     "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_LAX", "name": "Las Angeles POP",     "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_SYD", "name": "Sydney POP",          "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_SYD", "name": "Sydney POP",          "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_MTA", "name": "Mount Albert POP",    "data": { "$type": "group", "layout": "Star" }
       }, {
         "id": "POP_HLZ", "name": "Hamilton POP",        "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_ROT", "name": "Rotorua POP",         "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_TRG", "name": "Tauranga POP",        "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_TRG", "name": "Tauranga POP",        "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_NPE", "name": "Napier POP",          "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_NPE", "name": "Napier POP",          "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_GIS", "name": "Gisborne POP",        "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_GIS", "name": "Gisborne POP",        "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_MUP", "name": "Massey POP",          "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_MUP", "name": "Massey POP",          "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_PMR", "name": "Palmerston North POP","data": { "$type": "group", "layout": "Static" }
+        "id": "POP_PMR", "name": "Palmerston North POP","data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_NPL", "name": "New Plymouth POP",    "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_NPL", "name": "New Plymouth POP",    "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_WAG", "name": "Whanganui POP",       "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_WAG", "name": "Whanganui POP",       "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_AVL", "name": "Avalon POP",          "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_AVL", "name": "Avalon POP",          "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_POR", "name": "Porirua POP",         "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_POR", "name": "Porirua POP",         "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_WLG", "name": "Wellington POP",      "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_WLG", "name": "Wellington POP",      "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_NSN", "name": "Nelson POP",          "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_NSN", "name": "Nelson POP",          "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_TPO", "name": "Tekapo POP",          "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_TPO", "name": "Tekapo POP",          "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_CHC", "name": "Christchurch POP",    "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_CHC", "name": "Christchurch POP",    "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_LCN", "name": "Lincoln POP",         "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_LCN", "name": "Lincoln POP",         "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_DUD", "name": "Dunedin POP",         "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_DUD", "name": "Dunedin POP",         "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_IVM", "name": "Invermay POP",        "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_IVM", "name": "Invermay POP",        "data": { "$type": "group", "layout": "Star" }
       }, {
-        "id": "POP_IVC", "name": "Invercargill POP",    "data": { "$type": "group", "layout": "Static" }
+        "id": "POP_IVC", "name": "Invercargill POP",    "data": { "$type": "group", "layout": "Star" }
       },
       // POP --- Auckland
       {
@@ -77,25 +77,24 @@ function init(){
         "adjacencies": [
             { "nodeTo": "PMR",                  "data": {} },
             { "nodeTo": "NSH",                  "data": {} },
-            //{ "nodeTo": "AUCKLANDDISTRIBUTION", "data": {} },
-            //{ "nodeTo": "ANR1-AKL",             "data": {} },
-            //{ "nodeTo": "UNIVERSITYOFOTAGO",    "data": {} },
-            //{ "nodeTo": "MASSEYALBANY",         "data": {} },
-            //{ "nodeTo": "FXNETWORKS",           "data": {} },
-            //{ "nodeTo": "LANDCARE",             "data": {} },
-            //{ "nodeTo": "NIWA",                 "data": {} },
-            //{ "nodeTo": "AKLINTERNATIONAL",     "data": {} },
+            { "nodeTo": "AUCKLANDDISTRIBUTION", "data": {} },
+            { "nodeTo": "ANR1-AKL",             "data": {} },
+            { "nodeTo": "UNIVERSITYOFOTAGO",    "data": {} },
+            { "nodeTo": "MASSEYALBANY",         "data": {} },
+            { "nodeTo": "FXNETWORKS",           "data": {} },
+            { "nodeTo": "LANDCARE",             "data": {} },
+            { "nodeTo": "NIWA",                 "data": {} },
+            { "nodeTo": "AKLINTERNATIONAL",     "data": {} },
             { "nodeTo": "HLZ",                  "data": {} },
-            //{ "nodeTo": "AKUNIVERSITY",         "data": {} },
-            //{ "nodeTo": "MASSEYSHORECENTRE",    "data": {} },
-            //{ "nodeTo": "NATIONALLIBRARY",      "data": {} },
-            //{ "nodeTo": "TELSTRACLEAR",         "data": {} },
-            //{ "nodeTo": "WANDPROBE",            "data": {} },
-            //{ "nodeTo": "ENDACE",               "data": {} },
-            //{ "nodeTo": "AUT",                  "data": {} },
+            { "nodeTo": "AKUNIVERSITY",         "data": {} },
+            { "nodeTo": "MASSEYSHORECENTRE",    "data": {} },
+            { "nodeTo": "NATIONALLIBRARY",      "data": {} },
+            { "nodeTo": "TELSTRACLEAR",         "data": {} },
+            { "nodeTo": "WANDPROBE",            "data": {} },
+            { "nodeTo": "ENDACE",               "data": {} },
+            { "nodeTo": "AUT",                  "data": {} },
             { "nodeTo": "MTA",                  "data": {} },
             { "nodeTo": "LAX",                  "data": {} }
-
         ]
 
       // POP --- Los Angeles
@@ -137,9 +136,9 @@ function init(){
         "data": { "$type": "circle", "parentID": "POP_SYD", "root": true },
         "adjacencies": [
             //{ "nodeTo": "AKLINTERNATIONAL",     "data": {} },
-            //{ "nodeTo": "EQUINIX",              "data": {} },
-            //{ "nodeTo": "AUCKLANDDISTRIBUTION", "data": {} },
-            //{ "nodeTo": "AARNET",               "data": {} }
+            { "nodeTo": "EQUINIX",              "data": {} },
+            { "nodeTo": "AUCKLANDDISTRIBUTION", "data": {} },
+            { "nodeTo": "AARNET",               "data": {} },
             { "nodeTo": "AKL",                  "data": {} }
         ]
       
@@ -164,14 +163,14 @@ function init(){
             { "nodeTo": "AKL",                  "data": {} },
             { "nodeTo": "PLANTANDFOOD",         "data": {} },
             { "nodeTo": "AGRESEARCH",           "data": {} },
-            { "nodeTo": "LANDCARE",             "data": {} },
+            { "nodeTo": "LANDCARE_HAM",         "data": {} },
             { "nodeTo": "WINTEC",               "data": {} },
             { "nodeTo": "LINCOLNRUAKURA",       "data": {} },
             { "nodeTo": "UNIVERSITYOFWAIKATO",  "data": {} },
             { "nodeTo": "NIWARUAKURA",          "data": {} },
-            { "nodeTo": "WANDPROBE",            "data": {} },
-            { "nodeTo": "ENDACE",               "data": {} },
-            { "nodeTo": "NIWA",                 "data": {} },
+            { "nodeTo": "WANDPROBE_HAM",        "data": {} },
+            { "nodeTo": "ENDACE_HAM",           "data": {} },
+            { "nodeTo": "NIWA_HAM",             "data": {} },
             { "nodeTo": "ROT",                  "data": {} }
         ]
       
@@ -363,6 +362,24 @@ function init(){
         "adjacencies": [
             { "nodeTo": "DUD",                  "data": {} }
         ]
+      
+      // POP_ALK.AUCKLANDDISTRIBUTION
+      }, {
+       "id": "POP_AKL.AUCKLANDDISTRIBUTION", 
+       "name": "Auckland Distribution", 
+       "data": { "$type": "group", "parentID": "POP_AKL", "layout": "Star" }
+
+      // POP_ALK.AUCKLANDDISTRIBUTION
+      }, {
+        "id": "AUCKLANDDISTRIBUTION",
+        "name": "Auckland Distribution",
+        "data": { "$type": "circle", "parentID": "POP_AKL.AUCKLANDDISTRIBUTION", "root": true },
+        "adjacencies": [
+            { "nodeTo": "Te Wananaga o Raukawa","data": { "parentID": "POP_AKL.AUCKLANDDISTRIBUTION" } },
+            { "nodeTo": "NEN CaSP",             "data": { "parentID": "POP_AKL.AUCKLANDDISTRIBUTION" } },
+            { "nodeTo": "MIT",                  "data": { "parentID": "POP_AKL.AUCKLANDDISTRIBUTION" } },
+            { "nodeTo": "Correspondence School","data": { "parentID": "POP_AKL.AUCKLANDDISTRIBUTION" } }
+        ]
       }
   ];
   // end
@@ -413,9 +430,9 @@ function init(){
       },
       //Update node positions when dragged
       onDragMove: function(node, eventInfo, e) {
-          //var pos = eventInfo.getPos();
-          //node.pos.setc(pos.x, pos.y);
-          //fd.plot();
+          var pos = eventInfo.getPos();
+          node.pos.setc(pos.x, pos.y);
+          fd.plot();
       },
       //Implement the same handler for touchscreens
       onTouchMove: function(node, eventInfo, e) {
@@ -505,7 +522,6 @@ function init(){
       });
     }
   });*/
-  console.log(fd);
   fd.refresh();
   // end
 }

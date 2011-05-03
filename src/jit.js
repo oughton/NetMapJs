@@ -17167,12 +17167,13 @@ $jit.NetworkMap = new Class( {
   computeDimensions: function(group) {
     // part of a group
     if (group.owner) {
-      
+
       // set the node size and edge width to reflect depth
       $.each(group.nodes, function(n) { 
         // nodes
         var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
-        var newDim = 0.1 * dim / ownerDim * (1 + ownerDim / 2);
+        //var newDim = 0.1 * dim / ownerDim * (1 + ownerDim / 2);
+        var newDim = ownerDim / 20;
         n.setData('dim', newDim);
         n.setData('height', newDim * 2);
         n.setData('width', newDim * 2);
@@ -17182,6 +17183,8 @@ $jit.NetworkMap = new Class( {
         n.eachAdjacency(function(adj) {
           if (adj.nodeTo.data.parentID == adj.nodeFrom.data.parentID) {
             adj.setData('lineWidth', newDim / dim * group.owner.Edge.lineWidth);
+          } else {
+            adj.setData('lineWidth', (newDim / dim * group.owner.Edge.lineWidth) * 20);
           }
         });
       });
@@ -17196,22 +17199,78 @@ $jit.NetworkMap = new Class( {
     }
   },
 
-  computeLayouts: function(property, incremental) {
-    var groups = {}, that = this;
+  buildGroups: function() {
+    var raw = {}, groups = {}, nodes = [], flat = [], flatten, that = this;
 
-    // find and build all groups
+    var computeLevels = function(groups, nodes, parentID, depth) {
+      var group = { id: parentID, nodes: [], depth: depth, subgroups: {} };
+      var more = [];
+
+      // get the nodes that belong to this group
+      jQuery.each(nodes, function(index, n) {
+        var npid = n.data.parentID;
+
+        // does this node belong to the current group
+        if (!npid || npid == parentID) {
+          group.nodes.push(n);
+          n.data.depth = depth;
+
+        // otherwise process it later
+        } else {
+          more.push(n);
+        }
+      });
+
+      depth++;
+      
+      // build sub groups
+      jQuery.each(group.nodes, function(index, n) {
+        if (groups[n.id]) {
+          group.subgroups[n.id] = computeLevels(groups, more, n.id, depth);
+        }
+      });
+
+      return group;
+    };
+
     this.graph.eachNode(function(n) {
       var group = n.data.parentID || '_TOP';
-      
-      if (!groups[group]) {
-        groups[group] = { owner: that.graph.getNode(group), nodes: [] };
-      }
-      
-      groups[group].nodes.push(n);
+      nodes.push(n);
+      if (!groups[group]) groups[group] = {};
     });
 
+    raw = computeLevels(groups, nodes, '_TOP', 0);
+
+    // create flat array of groups
+    flatten = function(obj, arr) {
+      if (obj.subgroups.length < 1) return;
+      arr.push({ depth: obj.depth, id: obj.id, nodes: obj.nodes, owner: that.graph.getNode(obj.id) });
+      jQuery.each(obj.subgroups, function(key, val) {
+        flatten(val, arr);
+      });
+    };
+
+    flatten(raw, flat);
+
+    // sort by depth
+    flat.sort(function(a, b) {
+      if (a.depth < b.depth) return -1;
+      else if (a.depth == b.depth) return 0;
+      else return 1;
+    });
+
+    this.graph.groups = flat;;
+  },
+
+  computeLayouts: function(property, incremental) {
+    var groups = this.graph.groups, that = this;
+    
+    // find and build all groups
+    this.buildGroups();
+    groups = this.graph.groups
+
     // set the roots
-    jQuery.each(groups, function(id, group) {
+    jQuery.each(groups, function(index, group) {
       var root;
       
       jQuery.each(group.nodes, function(index, n) {
@@ -17221,23 +17280,11 @@ $jit.NetworkMap = new Class( {
       group.root = root;
     });
 
-    // dispatch top group
-    if (groups._TOP && groups._TOP.length !== 0) {
-      this.computeDimensions(groups._TOP);
-      this.layouts[this.config.layout].compute(groups._TOP, property, incremental);
-    }
-    
-    // dispatch other groups
-    jQuery.each(groups, function(groupID, group) {
-      var layout;
-
-      if (group == '_TOP') return;
-      
-      if (group.owner) {
-        that.computeDimensions(group);
-        layout = group.owner.data.layout || that.config.layout;
-        that.layouts[layout].compute(group, property, incremental);
-      }
+    // dispatch the groups
+    jQuery.each(groups, function(index, group) {
+      var layout = group.owner && group.owner.data.layout || that.config.layout;
+      that.computeDimensions(group);
+      that.layouts[layout].compute(group, property, incremental);
     });
   },
 
@@ -17549,7 +17596,8 @@ $jit.NetworkMap.$extend = true;
       style.top = labelPos.y + 'px';
       style.display = this.fitsInCanvas(labelPos, canvas) ? '' : 'none';
 
-      if (canvas.scaleOffsetX < 4 && node.data.parentID) {
+      // TODO: this won't work for deep levels because exponential scaling?
+      if (Math.sqrt(canvas.scaleOffsetX) < 4 * node.data.depth && node.data.parentID) {
         style.display = 'none';
       }
 
@@ -17590,8 +17638,16 @@ $jit.NetworkMap.$extend = true;
     'group': {
       'render': function(node, canvas){
         var pos = node.pos.getc(true), 
-            dim = node.getData('dim');
-        this.nodeHelper.circle.render('stroke', pos, dim, canvas);
+            dim = node.getData('dim'),
+            ctx = canvas.getCtx();
+
+      ctx.beginPath();
+      ctx.lineWidth = node.getData('lineWidth') / (node.data.depth * 20); // TODO: get rid of magic number (20)
+      ctx.fillStyle = "rgba(255,0,0,0.5)";
+      ctx.arc(pos.x, pos.y, dim, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.stroke();
+        //this.nodeHelper.circle.render('stroke', pos, dim, canvas);
       },
       'contains': function(node, pos){
         var npos = node.pos.getc(true), 
