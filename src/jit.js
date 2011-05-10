@@ -17061,111 +17061,14 @@ Layouts.NetworkMap.Static = new Class({
   }
 });
 
-
 /*
- * File: ForceDirected.js
+ * Node groups interface
+ *
+ * Mixes in group handling functionality.
  */
-
-/*
-   Class: ForceDirected
-      
-   A visualization that lays graphs using a Force-Directed layout algorithm.
-   
-   Inspired by:
-  
-   Force-Directed Drawing Algorithms (Stephen G. Kobourov) <http://www.cs.brown.edu/~rt/gdhandbook/chapters/force-directed.pdf>
-   
-  Implements:
-  
-  All <Loader> methods
-  
-   Constructor Options:
-   
-   Inherits options from
-   
-   - <Options.Canvas>
-   - <Options.Controller>
-   - <Options.Node>
-   - <Options.Edge>
-   - <Options.Label>
-   - <Options.Events>
-   - <Options.Tips>
-   - <Options.NodeStyles>
-   - <Options.Navigation>
-   
-   Additionally, there are two parameters
-   
-   levelDistance - (number) Default's *50*. The natural length desired for the edges.
-   iterations - (number) Default's *50*. The number of iterations for the spring layout simulation. Depending on the browser's speed you could set this to a more 'interesting' number, like *200*. 
-     
-   Instance Properties:
-
-   canvas - Access a <Canvas> instance.
-   graph - Access a <Graph> instance.
-   op - Access a <ForceDirected.Op> instance.
-   fx - Access a <ForceDirected.Plot> instance.
-   labels - Access a <ForceDirected.Label> interface implementation.
-
-*/
-
-$jit.NetworkMap = new Class( {
-
-  Implements: [ Loader, Extras ],
-
-  initialize: function(controller) {
-    var $NetworkMap = $jit.NetworkMap;
-
-    var config = {
-      debug: false,
-      iterations: 50,
-      levelDistance: 50,
-      layout: 'Static'
-    };
-
-    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
-        "Fx", "Tips", "NodeStyles", "Events", "Navigation", "Controller", "Label"), config, controller);
-
-    var canvasConfig = this.config;
-    if(canvasConfig.useCanvas) {
-      this.canvas = canvasConfig.useCanvas;
-      this.config.labelContainer = this.canvas.id + '-label';
-    } else {
-      if(canvasConfig.background) {
-        canvasConfig.background = $.merge({
-          type: 'Circles'
-        }, canvasConfig.background);
-      }
-      this.canvas = new Canvas(this, canvasConfig);
-      this.config.labelContainer = (typeof canvasConfig.injectInto == 'string'? canvasConfig.injectInto : canvasConfig.injectInto.id) + '-label';
-    }
-
-    this.graphOptions = {
-      'complex': true,
-      'Node': {
-        'selected': false,
-        'exist': true,
-        'drawn': true
-      }
-    };
-    this.graph = new Graph(this.graphOptions, this.config.Node,
-        this.config.Edge);
-    this.labels = new $NetworkMap.Label[canvasConfig.Label.type](this);
-    this.fx = new $NetworkMap.Plot(this, $NetworkMap);
-    this.op = new $NetworkMap.Op(this);
-    this.json = null;
-    this.busy = false;
-    // initialize extras
-    this.initializeExtras();
-
-    this.layouts = {
-      'Static': new Layouts.NetworkMap.Static(this),
-      'ForceDirected': new Layouts.NetworkMap.ForceDirected(this),
-      'Star': new Layouts.NetworkMap.Star(this)
-    };
-  },
-
+var Groups = {
   computeDimensions: function(group) {
-    // part of a group
+    // group is not the top group
     if (group.owner) {
 
       // set the node size and edge width to reflect depth
@@ -17189,7 +17092,7 @@ $jit.NetworkMap = new Class( {
         });
       });
       
-    // not part of a group
+    // the top group
     } else {
       $.each(group.nodes, function(n) {
         var dim = n.getData('dim');
@@ -17259,15 +17162,18 @@ $jit.NetworkMap = new Class( {
       else return 1;
     });
 
-    this.graph.groups = flat;;
+    this.graph.groups = flat;
   },
 
   computeLayouts: function(property, incremental) {
-    var groups = this.graph.groups, that = this;
+    var groups, that = this;
     
-    // find and build all groups
-    this.buildGroups();
-    groups = this.graph.groups
+    // find and build all groups if they don't exist
+    if (!this.graph.groups) {
+      this.buildGroups();
+    }
+
+    groups = this.graph.groups;
 
     // set the roots
     jQuery.each(groups, function(index, group) {
@@ -17286,6 +17192,94 @@ $jit.NetworkMap = new Class( {
       that.computeDimensions(group);
       that.layouts[layout].compute(group, property, incremental);
     });
+  }
+}
+
+/*
+  Network Map
+
+  Implements:
+  
+  All <Loader> methods
+  
+   Constructor Options:
+   
+   Inherits options from
+   
+   - <Options.Canvas>
+   - <Options.Controller>
+   - <Options.Node>
+   - <Options.Edge>
+   - <Options.Label>
+   - <Options.Events>
+   - <Options.Tips>
+   - <Options.NodeStyles>
+   - <Options.Navigation>
+     
+   Instance Properties:
+
+   canvas - Access a <Canvas> instance.
+   graph - Access a <Graph> instance.
+   op - Access a <ForceDirected.Op> instance.
+   fx - Access a <ForceDirected.Plot> instance.
+   labels - Access a <ForceDirected.Label> interface implementation.
+
+*/
+
+$jit.NetworkMap = new Class( {
+
+  Implements: [ Loader, Extras, Groups ],
+
+  initialize: function(controller) {
+    var $NetworkMap = $jit.NetworkMap;
+
+    var config = {
+      debug: false,
+      iterations: 50,
+      levelDistance: 50,
+      layout: 'Static'
+    };
+
+    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
+        "Fx", "Tips", "NodeStyles", "Events", "Navigation", "Controller", "Label"), config, controller);
+
+    var canvasConfig = this.config;
+    if(canvasConfig.useCanvas) {
+      this.canvas = canvasConfig.useCanvas;
+      this.config.labelContainer = this.canvas.id + '-label';
+    } else {
+      if(canvasConfig.background) {
+        canvasConfig.background = $.merge({
+          type: 'Circles'
+        }, canvasConfig.background);
+      }
+      this.canvas = new Canvas(this, canvasConfig);
+      this.config.labelContainer = (typeof canvasConfig.injectInto == 'string'? canvasConfig.injectInto : canvasConfig.injectInto.id) + '-label';
+    }
+
+    this.graphOptions = {
+      'complex': true,
+      'Node': {
+        'selected': false,
+        'exist': true,
+        'drawn': true
+      }
+    };
+    this.graph = new Graph(this.graphOptions, this.config.Node,
+        this.config.Edge);
+    this.labels = new $NetworkMap.Label[canvasConfig.Label.type](this);
+    this.fx = new $NetworkMap.Plot(this, $NetworkMap);
+    this.op = new $NetworkMap.Op(this);
+    this.json = null;
+    this.busy = false;
+    // initialize extras
+    this.initializeExtras();
+
+    this.layouts = {
+      'Static': new Layouts.NetworkMap.Static(this),
+      'ForceDirected': new Layouts.NetworkMap.ForceDirected(this),
+      'Star': new Layouts.NetworkMap.Star(this)
+    };
   },
 
   /* 
