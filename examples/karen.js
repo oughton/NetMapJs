@@ -112,11 +112,11 @@ function init(){
         "name": "North Shore",
         "data": { "$type": "circle", "parentID": "POP_NSH", "root": true },
         "adjacencies": [
-            //{ "nodeTo": "MASSEY",               "data": {} },
-            //{ "nodeTo": "REANNZNETSERVICES",    "data": {} },
+            { "nodeTo": "MASSEY",               "data": {} },
+            { "nodeTo": "REANNZNETSERVICES",    "data": {} },
             { "nodeTo": "WRK",                  "data": {} },
             { "nodeTo": "AKL",                  "data": {} },
-            //{ "nodeTo": "KRISTINSCHOOL",        "data": {} }
+            { "nodeTo": "KRISTINSCHOOL",        "data": {} }
         ]
       
       // POP --- Warkworth
@@ -149,9 +149,9 @@ function init(){
         "data": { "$type": "circle", "parentID": "POP_MTA", "root": true },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
-            //{ "nodeTo": "PLANTANDFOODHR",       "data": {} },
-            //{ "nodeTo": "PLANTANDFOODCF",       "data": {} },
-            //{ "nodeTo": "ESR",                  "data": {} }
+            { "nodeTo": "PLANTANDFOODHR",       "data": {} },
+            { "nodeTo": "PLANTANDFOODCF",       "data": {} },
+            { "nodeTo": "ESR",                  "data": {} }
         ]
       
       // POP --- Hamilton
@@ -183,7 +183,9 @@ function init(){
             { "nodeTo": "HLZ",                  "data": {} },
             { "nodeTo": "TRG",                  "data": {} },
             { "nodeTo": "NPE",                  "data": {} },
-            { "nodeTo": "MUP",                  "data": {} }
+            { "nodeTo": "MUP",                  "data": {} },
+            { "nodeTo": "Napier 450 Switch",    "data": {} },
+            { "nodeTo": "Scion",                "data": {} }
         ]
       
       // POP --- Tauranga
@@ -192,7 +194,8 @@ function init(){
         "name": "Tauranga",
         "data": { "$type": "circle", "parentID": "POP_TRG", "root": true },
         "adjacencies": [
-            { "nodeTo": "ROT",                  "data": {} }
+            { "nodeTo": "ROT",                  "data": {} },
+            { "nodeTo": "Bop Polytech",         "data": {} }
         ]
       
       // POP --- Napier
@@ -408,17 +411,28 @@ function init(){
     Edge: {
       overridable: true,
       color: '#23A4FF',
-      lineWidth: 0.8
+      lineWidth: 0.8,
+      type: 'dblarrow'
     },
     //Native canvas text styling
     Label: {
       type: 'HTML', //Native or HTML
+      // TODO: can't move nodes properly with HTML labels - may need to overide navigation class
       size: 10,
       style: 'bold'
     },
     // Add node events
     Events: {
       enable: true,
+      type: 'Native', // use the default events system
+      onMouseMove: function(node, eventInfo, e) {
+        if (!eventInfo.getEdge()) return;
+        var edge = eventInfo.getEdge(),
+            to = edge.nodeTo;
+
+        //console.log(to);
+
+      },
       onMouseWheel: function() {
       },
       //Change cursor style when hovering a node
@@ -430,14 +444,14 @@ function init(){
       },
       //Update node positions when dragged
       onDragMove: function(node, eventInfo, e) {
-          var pos = eventInfo.getPos();
-          node.pos.setc(pos.x, pos.y);
-          fd.plot();
+        //var pos = eventInfo.getPos();  
+        //node.pos.setc(pos.x, pos.y);  
+        //fd.plot();  
       },
       //Implement the same handler for touchscreens
       onTouchMove: function(node, eventInfo, e) {
-        $jit.util.event.stop(e); //stop default touchmove event
-        this.onDragMove(node, eventInfo, e);
+        //$jit.util.event.stop(e); //stop default touchmove event
+        //this.onDragMove(node, eventInfo, e);
       },
       //Add also a click handler to nodes
       onClick: function(node) {

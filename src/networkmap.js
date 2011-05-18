@@ -944,6 +944,34 @@ $jit.NetworkMap.$extend = true;
             to = adj.nodeTo.pos.getc(true);
         return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
       }
+    },
+    'dblarrow': {
+      'render': function(adj, canvas) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true),
+            dim = adj.getData('lineWidth') * 10,
+            direction = adj.data.$direction,
+            inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id),
+            graph = this.viz.graph,
+            otherAdj = graph.getAdjacence(adj.nodeTo.id, adj.nodeFrom.id),
+            midpt;
+        
+        // check if there is another adj in the ther direction
+        if (otherAdj) {
+          // find the midpoint of the line
+          midpt = new Complex((to.x + from.x) / 2, (to.y + from.y) / 2);
+
+          this.edgeHelper.arrow.render(from, midpt, dim, inv, canvas);
+          this.edgeHelper.arrow.render(to, midpt, dim, inv, canvas);
+        } else {
+          this.edgeHelper.arrow.render(from, to, dim, inv, canvas);
+        }
+      },
+      'contains': function(adj, pos) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true);
+        return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
+      }
     }
   });
 
