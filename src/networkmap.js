@@ -577,7 +577,7 @@ $jit.NetworkMap = new Class( {
      return true;
   },
 
-  followEdge: function(fromNode, toNode, speed) {
+  followEdge: function(fromNode, toNode, t, fps) {
   // TODO: center node in the middle on the canvas
     var that = this,
         interval,
@@ -588,10 +588,12 @@ $jit.NetworkMap = new Class( {
         m = (to.y - from.y) / (to.x - from .x);
         c = from.y - m * from.x,
         axis = (Math.abs(from.x - to.x) > Math.abs(from.y - to.y)) ? 'x' : 'y',
-        dir = pt[axis] < to[axis];
-
+        dir = pt[axis] < to[axis],
+        ms = fps ? (1000 / fps) : 40,
+        delta = ( Math.abs(from[axis] - to[axis]) ) / ( t * (1000 / ms) );
+   
     interval = setInterval(function() {
-      var delta = {},
+      var move = {},
           interp;
       
       // stop moving when the direction changes
@@ -601,25 +603,25 @@ $jit.NetworkMap = new Class( {
       }
 
       if (pt[axis] < to[axis]) {
-        pt[axis] += 1 * speed;
-        delta[axis] = -1 * speed;
+        pt[axis] += delta;
+        move[axis] = -delta;
       } else {
-        pt[axis] -= 1 * speed;
-        delta[axis] = 1 * speed;
+        pt[axis] -= delta;
+        move[axis] = delta;
       }
         
       if (axis == 'x') {
         interp = m * pt[axis] + c;
-        delta['y'] = pt.y - interp;
+        move['y'] = pt.y - interp;
         pt['y'] = interp;
       } else {
         interp = (pt[axis] - c) / m;
-        delta['x'] = pt.x - interp; 
+        move['x'] = pt.x - interp; 
         pt['x'] = interp;
       }
       
-      canvas.translate(delta.x, delta.y);
-    }, 60);
+      canvas.translate(move.x, move.y);
+    }, ms);
   }
 });
 

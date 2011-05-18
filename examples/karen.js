@@ -459,14 +459,13 @@ function init(){
             n2f = fd.fitsInCanvas(fd.p2c(n2.getPos()));
         
         if (n1f && n2f || !n1f && !n2f) {
-          console.log('no fit');
           return;
         }
 
         var from = n1f ? n1 : n2;
         var to = n1f ? n2 : n1;
 
-        fd.followEdge(from, to, 10);
+        fd.followEdge(from, to, 2);
 
         if(!node) return;
         
