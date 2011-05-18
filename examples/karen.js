@@ -426,12 +426,6 @@ function init(){
       enable: true,
       type: 'Native', // use the default events system
       onMouseMove: function(node, eventInfo, e) {
-        if (!eventInfo.getEdge()) return;
-        var edge = eventInfo.getEdge(),
-            to = edge.nodeTo;
-
-        //console.log(to);
-
       },
       onMouseWheel: function() {
       },
@@ -454,7 +448,26 @@ function init(){
         //this.onDragMove(node, eventInfo, e);
       },
       //Add also a click handler to nodes
-      onClick: function(node) {
+      onClick: function(node, eventInfo, e) {
+        var edge = eventInfo.getEdge();
+        
+        if (!edge) return;
+
+        var n1 = edge.nodeFrom,
+            n2 = edge.nodeTo,
+            n1f = fd.fitsInCanvas(fd.p2c(n1.getPos())),
+            n2f = fd.fitsInCanvas(fd.p2c(n2.getPos()));
+        
+        if (n1f && n2f || !n1f && !n2f) {
+          console.log('no fit');
+          return;
+        }
+
+        var from = n1f ? n1 : n2;
+        var to = n1f ? n2 : n1;
+
+        fd.followEdge(from, to, 10);
+
         if(!node) return;
         
         var positions = [];

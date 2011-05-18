@@ -553,6 +553,73 @@ $jit.NetworkMap = new Class( {
     this.fx.animate($.merge( {
       modes: [ 'linear' ]
     }, opt || {}));
+  },
+
+  p2c: function(pos) {
+    var canvas = this.canvas,
+        ctx = canvas.getCtx(),
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY,
+        radius = canvas.getSize();
+    
+    return new Complex(
+      pos.x * sx + ox + radius.width / 2,
+      pos.y * sy + oy + radius.height / 2
+    );
+  },
+
+  fitsInCanvas: function(pos) {
+    var size = this.canvas.getSize();
+    if(pos.x >= size.width || pos.x < 0
+       || pos.y >= size.height || pos.y < 0) return false;
+     return true;
+  },
+
+  followEdge: function(fromNode, toNode, speed) {
+  // TODO: center node in the middle on the canvas
+    var that = this,
+        interval,
+        canvas = this.canvas;
+        from = fromNode.getPos(),
+        to = toNode.getPos(),
+        pt = new Complex(from.x, from.y);
+        m = (to.y - from.y) / (to.x - from .x);
+        c = from.y - m * from.x,
+        axis = (Math.abs(from.x - to.x) > Math.abs(from.y - to.y)) ? 'x' : 'y',
+        dir = pt[axis] < to[axis];
+
+    interval = setInterval(function() {
+      var delta = {},
+          interp;
+      
+      // stop moving when the direction changes
+      if (dir != pt[axis] < to[axis]) {
+        clearInterval(interval);
+        return;
+      }
+
+      if (pt[axis] < to[axis]) {
+        pt[axis] += 1 * speed;
+        delta[axis] = -1 * speed;
+      } else {
+        pt[axis] -= 1 * speed;
+        delta[axis] = 1 * speed;
+      }
+        
+      if (axis == 'x') {
+        interp = m * pt[axis] + c;
+        delta['y'] = pt.y - interp;
+        pt['y'] = interp;
+      } else {
+        interp = (pt[axis] - c) / m;
+        delta['x'] = pt.x - interp; 
+        pt['x'] = interp;
+      }
+      
+      canvas.translate(delta.x, delta.y);
+    }, 60);
   }
 });
 
