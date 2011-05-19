@@ -185,7 +185,7 @@ Layouts.NetworkMap.Star = new Class({
 
       // fill in the nodes position for each property
       $.each(prop, function(p) {
-        n.setPos($C(pt.x, pt.y));
+        n.setPos($C(pt.x, pt.y), p);
       });
     });
   },
@@ -218,7 +218,7 @@ Layouts.NetworkMap.Static = new Class({
     $.each(group.nodes, function(n) {
       // fill in the nodes position for each property
       $.each(prop, function(p) {
-        if (n.data.pos) n.setPos($C(n.data.pos.x, n.data.pos.y));
+        if (n.data.pos) n.setPos($C(n.data.pos.x, n.data.pos.y), p);
       });
     });
   }
@@ -239,7 +239,7 @@ var Groups = {
         // nodes
         var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
         //var newDim = 0.1 * dim / ownerDim * (1 + ownerDim / 2);
-        var newDim = ownerDim / 20;
+        var newDim = dim / Math.pow(20, n.data.depth);
         n.setData('dim', newDim);
         n.setData('height', newDim * 2);
         n.setData('width', newDim * 2);
@@ -324,7 +324,7 @@ var Groups = {
       else if (a.depth == b.depth) return 0;
       else return 1;
     });
-
+    
     this.graph.groups = flat;
   },
 
@@ -355,6 +355,40 @@ var Groups = {
       that.computeDimensions(group);
       that.layouts[layout].compute(group, property, incremental);
     });
+  },
+
+  showGroups: function() {
+    var that = this,
+        groups = this.graph.groups,
+        sx = this.canvas.scaleOffsetX,
+        size = this.canvas.getSize();
+    
+    this.graph.eachNode(function(n) {
+      var par = n.data.parentID;
+      
+      if (!n.data.hideNeighbours) return;
+
+      // for each adj within the common group
+      n.eachAdjacency(function(adj) {
+        var otherNode;
+        if (adj.nodeFrom.data.parentID == par && adj.nodeTo.data.parentID == par) {
+          otherNode = (adj.nodeFrom != n) ? adj.nodeFrom : adj.nodeTo;
+          if ((otherNode.getData('height') * sx) / size.height < 0.01) {
+            otherNode.drawn = false;
+          } else {
+            otherNode.drawn = true;
+            otherNode.setPos(otherNode.getPos(), 'end');
+            otherNode.setPos(n.getPos(), 'start');
+            //otherNode.setPos(n.getPos());
+          }
+        }
+      });
+
+    });
+
+    //this.fx.animate($.merge( {
+    //  modes: [ 'linear' ]
+    //}, {} || {}));
   }
 }
 
@@ -665,9 +699,53 @@ $jit.NetworkMap.$extend = true;
   */
   NetworkMap.Plot = new Class( {
 
-    Implements: Graph.Plot
+    Implements: Graph.Plot,
 
-  });
+    plot: function(opt, animating) {
+      var viz = this.viz, 
+          aGraph = viz.graph, 
+          canvas = viz.canvas, 
+          id = viz.root, 
+          that = this, 
+          ctx = canvas.getCtx(), 
+          min = Math.min,
+          opt = opt || this.viz.controller;
+      
+      opt.clearCanvas && canvas.clear();
+        
+      var root = aGraph.getNode(id);
+      if(!root) return;
+
+      // added to allow group computation before plotting
+      this.viz.showGroups();
+
+      var T = !!root.visited;
+      aGraph.eachNode(function(node) {
+        var nodeAlpha = node.getData('alpha');
+        node.eachAdjacency(function(adj) {
+          var nodeTo = adj.nodeTo;
+          if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+            !animating && opt.onBeforePlotLine(adj);
+            that.plotLine(adj, canvas, animating);
+            !animating && opt.onAfterPlotLine(adj);
+          }
+        });
+        if(node.drawn) {
+          !animating && opt.onBeforePlotNode(node);
+          that.plotNode(node, canvas, animating);
+          !animating && opt.onAfterPlotNode(node);
+        }
+        if(!that.labelsHidden && opt.withLabels) {
+          if(node.drawn && nodeAlpha >= 0.95) {
+            that.labels.plotLabel(canvas, node, opt);
+          } else {
+            that.labels.hideLabel(node, false);
+          }
+        }
+        node.visited = !T;
+      });
+     },
+   });
 
   /*
     Class: ForceDirected.Label
@@ -822,8 +900,8 @@ $jit.NetworkMap.$extend = true;
       style.top = labelPos.y + 'px';
       style.display = this.fitsInCanvas(labelPos, canvas) ? '' : 'none';
 
-      // TODO: this won't work for deep levels because exponential scaling?
-      if (Math.sqrt(canvas.scaleOffsetX) < 4 * node.data.depth && node.data.parentID) {
+      // use % of screen realestate to decide when to show labels
+      if ((height * sy) / radius.height < 0.02 && node.data.parentID) {
         style.display = 'none';
       }
 
@@ -866,7 +944,7 @@ $jit.NetworkMap.$extend = true;
         var pos = node.pos.getc(true), 
             dim = node.getData('dim'),
             ctx = canvas.getCtx();
-
+      
       ctx.beginPath();
       ctx.lineWidth = node.getData('lineWidth') / (node.data.depth * 20); // TODO: get rid of magic number (20)
       ctx.fillStyle = "rgba(255,0,0,0.5)";
