@@ -464,6 +464,27 @@ function init(){
       enable: true,
       type: 'Native', // use the default events system
       onMouseMove: function(node, eventInfo, e) {
+        var edge = eventInfo.getEdge();
+
+        if (this.current) this.current.remove();
+        if (!edge) return;
+
+        var n1 = edge.nodeFrom,
+            n2 = edge.nodeTo,
+            n1f = fd.fitsInCanvas(fd.p2c(n1.getPos())),
+            n2f = fd.fitsInCanvas(fd.p2c(n2.getPos()));
+        
+        if (n1f && n2f || !n1f && !n2f) {
+          return;
+        }
+
+        var to = n1f ? n2 : n1;
+        var from = n1f ? n1 : n2;
+
+        this.current = jQuery('<div>To ' + to.name + '</div>')
+          .css({ position: 'absolute', left: e.clientX, top: e.clientY - 30, color: '#ddd' })
+          .appendTo(document.body);
+        
       },
       onMouseWheel: function() {
       },

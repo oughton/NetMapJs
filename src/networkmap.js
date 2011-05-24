@@ -896,14 +896,20 @@ $jit.NetworkMap.$extend = true;
         y: Math.round((pos.y + height / 2) * sy + oy + radius.height / 2)
       };
       var style = tag.style;
-      style.left = labelPos.x + 'px';
-      style.top = labelPos.y + 'px';
-      style.display = this.fitsInCanvas(labelPos, canvas) ? '' : 'none';
 
-      // use % of screen realestate to decide when to show labels
-      if ((height * sy) / radius.height < 0.02 && node.data.parentID) {
+      if (this.fitsInCanvas(labelPos, canvas)) {
+        style.display = '';
+
+        // use % of screen realestate to decide when to show labels
+        if ((height * sy) / radius.height < 0.02 && node.data.parentID) {
+          style.display = 'none';
+        }
+      } else {
         style.display = 'none';
       }
+      
+      style.left = labelPos.x + 'px';
+      style.top = labelPos.y + 'px';
 
       controller.onPlaceLabel(tag, node);
     }
