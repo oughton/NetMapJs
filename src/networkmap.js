@@ -604,6 +604,21 @@ $jit.NetworkMap = new Class( {
     );
   },
 
+  c2p: function(pos) {
+    var canvas = this.canvas,
+        ctx = canvas.getCtx(),
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY,
+        radius = canvas.getSize();
+
+    return new Complex(
+      (pos.x - ox - radius.width / 2) / sx,
+      (pos.y - oy - radius.height / 2) / sy
+    );
+  },
+
   fitsInCanvas: function(pos) {
     var size = this.canvas.getSize();
     if(pos.x >= size.width || pos.x < 0
@@ -611,21 +626,31 @@ $jit.NetworkMap = new Class( {
      return true;
   },
 
-  followEdge: function(fromNode, toNode, t, fps) {
-  // TODO: center node in the middle on the canvas
+  followEdge: function(fromNode, toNode, t, fps, center) {
     var that = this,
         interval,
-        canvas = this.canvas;
+        canvas = this.canvas,
+        radius = canvas.getSize(),
+        ms = fps ? (1000 / fps) : 40,
         from = fromNode.getPos(),
         to = toNode.getPos(),
-        pt = new Complex(from.x, from.y);
-        m = (to.y - from.y) / (to.x - from .x);
-        c = from.y - m * from.x,
-        axis = (Math.abs(from.x - to.x) > Math.abs(from.y - to.y)) ? 'x' : 'y',
-        dir = pt[axis] < to[axis],
-        ms = fps ? (1000 / fps) : 40,
-        delta = ( Math.abs(from[axis] - to[axis]) ) / ( t * (1000 / ms) );
-   
+        center = (center == undefined) ? true : center,
+        pt, m, c, axis, dir, center, delta, centerPt;
+
+    // should we apply centering?
+    if (center) {
+      centerPt = this.c2p(new Complex(radius.width / 2, radius.height / 2));
+      to = new Complex(to.x + (from.x - centerPt.x), to.y + (from.y - centerPt.y));
+    }
+
+    pt = new Complex(from.x, from.y);
+    m = (to.y - from.y) / (to.x - from .x);
+    c = from.y - m * from.x;
+    axis = (Math.abs(from.x - to.x) > Math.abs(from.y - to.y)) ? 'x' : 'y';
+    dir = pt[axis] < to[axis];
+    delta = ( Math.abs(from[axis] - to[axis]) ) / ( t * (1000 / ms) );
+
+    // animation interval
     interval = setInterval(function() {
       var move = {},
           interp;
