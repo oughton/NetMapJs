@@ -159,8 +159,8 @@ Layouts.NetworkMap.ForceDirected = new Class({
  */
 Layouts.NetworkMap.Star = new Class({
 
-  initialize: function(vis) {
-    this.vis = vis;
+  initialize: function(viz) {
+    this.viz = viz;
   },
 
   compute: function(group, property, incremental) {
@@ -177,7 +177,9 @@ Layouts.NetworkMap.Star = new Class({
 
       // draw the root in the center if there is one
       if (n === group.root) {
-        n.setPos(group.owner.pos);
+        $.each(prop, function(p) {
+          n.setPos(group.owner.pos, p);
+        });
         return;
       }
 
@@ -206,8 +208,8 @@ Layouts.NetworkMap.Star = new Class({
  */
 Layouts.NetworkMap.Static = new Class({
 
-  initialize: function(vis) {
-    this.vis = vis;
+  initialize: function(viz) {
+    this.viz = viz;
   },
 
   compute: function(group, property, incremental) {
@@ -361,7 +363,8 @@ var Groups = {
     var that = this,
         groups = this.graph.groups,
         sx = this.canvas.scaleOffsetX,
-        size = this.canvas.getSize();
+        size = this.canvas.getSize(),
+        changed = false;
     
     this.graph.eachNode(function(n) {
       var par = n.data.parentID;
@@ -374,23 +377,48 @@ var Groups = {
         if (adj.nodeFrom.data.parentID == par && adj.nodeTo.data.parentID == par) {
           otherNode = (adj.nodeFrom != n) ? adj.nodeFrom : adj.nodeTo;
           if ((otherNode.getData('height') * sx) / size.height < 0.01) {
+            // check if this node should be animated out
+            if (otherNode.drawn) {
+              otherNode.setPos(n.getPos(), 'end');
+              changed = true;
+            }
+            
             otherNode.drawn = false;
           } else {
+            // check if this node should be animated in
+            if (!otherNode.drawn) {
+              otherNode.setPos(otherNode.getPos('start'), 'end');
+              otherNode.setPos(n.getPos());
+              changed = true;
+            }
+            
             otherNode.drawn = true;
-            otherNode.setPos(otherNode.getPos(), 'end');
-            otherNode.setPos(n.getPos(), 'start');
-            //otherNode.setPos(n.getPos());
           }
         }
       });
 
     });
 
-    //this.fx.animate($.merge( {
-    //  modes: [ 'linear' ]
-    //}, {} || {}));
+    return changed;
   }
 }
+
+var Loops = {};
+Loops.NetworkMap = {};
+
+Loops.NetworkMap.Detail = new Class({
+
+  initialize: function(viz) {
+    this.viz = viz;
+  },
+
+  run: function() {
+    if (this.viz.showGroups()) {
+      this.viz.animate();
+    }
+  }
+
+});
 
 /*
   Network Map
@@ -429,6 +457,7 @@ $jit.NetworkMap = new Class( {
 
   initialize: function(controller) {
     var $NetworkMap = $jit.NetworkMap;
+    var that = this;
 
     var config = {
       debug: false,
@@ -477,6 +506,13 @@ $jit.NetworkMap = new Class( {
       'ForceDirected': new Layouts.NetworkMap.ForceDirected(this),
       'Star': new Layouts.NetworkMap.Star(this)
     };
+
+    // setup update loop
+    this.loop = [new Loops.NetworkMap.Detail(this)];
+    
+    setInterval(function() { 
+      jQuery.each(that.loop, function(index, val) { val.run(); });
+    }, 100);
   },
 
   /* 
@@ -742,7 +778,7 @@ $jit.NetworkMap.$extend = true;
       if(!root) return;
 
       // added to allow group computation before plotting
-      this.viz.showGroups();
+      //this.viz.showGroups();
 
       var T = !!root.visited;
       aGraph.eachNode(function(node) {

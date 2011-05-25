@@ -608,5 +608,6 @@ function init(){
     }
   });*/
   fd.refresh();
+  fd.animate();
   // end
 }
