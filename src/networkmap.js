@@ -805,6 +805,15 @@ $jit.NetworkMap.$extend = true;
         }
         node.visited = !T;
       });
+
+      // TODO: dirty hack to draw edges under nodes
+      aGraph.eachNode(function(node) {
+        if(node.drawn) {
+          !animating && opt.onBeforePlotNode(node);
+          that.plotNode(node, canvas, animating);
+          !animating && opt.onAfterPlotNode(node);
+        }
+      }); 
      },
    });
 
@@ -1011,13 +1020,16 @@ $jit.NetworkMap.$extend = true;
         var pos = node.pos.getc(true), 
             dim = node.getData('dim'),
             ctx = canvas.getCtx();
-      
+     
+      ctx.save();
       ctx.beginPath();
       ctx.lineWidth = node.getData('lineWidth') / (node.data.depth * 20); // TODO: get rid of magic number (20)
-      ctx.fillStyle = "rgba(255,0,0,0.5)";
+      ctx.fillStyle = "rgba(0,0,0,1)";
       ctx.arc(pos.x, pos.y, dim, 0, Math.PI * 2, true);
       ctx.closePath();
+      ctx.fill();
       ctx.stroke();
+      ctx.restore();
         //this.nodeHelper.circle.render('stroke', pos, dim, canvas);
       },
       'contains': function(node, pos){
@@ -1179,6 +1191,95 @@ $jit.NetworkMap.$extend = true;
           this.edgeHelper.arrow.render(to, midpt, dim, inv, canvas);
         } else {
           this.edgeHelper.arrow.render(from, to, dim, inv, canvas);
+        }
+      },
+      'contains': function(adj, pos) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true);
+        return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
+      }
+    },
+    'arrowpipe': {
+      'render': function(adj, canvas) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true),
+            dim = adj.getData('lineWidth') * 10,
+            direction = adj.data.$direction,
+            inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id),
+            graph = this.viz.graph,
+            otherAdj = graph.getAdjacence(adj.nodeTo.id, adj.nodeFrom.id),
+            midpt,
+            ctx = canvas.getCtx();            
+
+        // perform a rotated drawing by a given number of radians
+        var drawRotated = function(rad, pos, size, callback) {
+          ctx.save();
+          ctx.translate(pos.x, pos.y);
+          ctx.rotate(rad);
+          ctx.translate(-size.width / 2, -size.height / 2);
+
+          callback();
+
+          ctx.restore();
+        };
+
+        var drawArrow = function(x, width, height, dir) {
+            if (dir != 'right') height *= -1;
+
+            ctx.beginPath();
+            ctx.moveTo(x - height, 0);
+            ctx.lineTo(x, width / 2);
+            ctx.lineTo(x - height, width);
+            ctx.lineTo(x - height, 0);
+            ctx.closePath();
+        };
+
+        if (adj.nodeFrom.data.parentID && adj.nodeFrom.data.parentID) {
+          from = graph.getNode(adj.nodeFrom.data.parentID).pos.getc(true);
+          to = graph.getNode(adj.nodeTo.data.parentID).pos.getc(true);
+        }
+
+        // check if there is another adj in the ther direction
+        if (otherAdj) {
+          midpt = new Complex((to.x + from.x) / 2, (to.y + from.y) / 2);
+          
+          // draw double sided pipe
+          var h1 = 15;
+          var h2 = 10;
+          var as = 5;
+
+          var cp = $C((from.x + to.x) / 2, (from.y + to.y) / 2);
+          var width = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
+          var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
+          var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
+          if (width <= 0) return;
+         
+          drawRotated(rot, cp, { width: width, height: h1 }, function() {
+            ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.strokeRect(0, 0, width / 2, h1);
+
+            ctx.fillStyle = 'rgb(0,255,0)';
+            ctx.fillRect(0, 0, width / 4 - as + 0.5, h1);
+            
+            // draw arrow head
+            drawArrow(width / 4, h1, as, 'right');
+            ctx.fill();
+          });
+
+          drawRotated(rot, cp, { width: width, height: h2 }, function() {
+            ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
+            
+            ctx.fillStyle = 'rgb(0,255,0)';
+            ctx.fillRect(width - width / 4 + as - 0.5, 0, width / 4, h2);
+            
+            // draw arrow head
+            drawArrow(width - width / 4, h2, as, 'left');
+            ctx.fill();
+          });
+
+        } else {
+          // draw one sided pipe
         }
       },
       'contains': function(adj, pos) {
