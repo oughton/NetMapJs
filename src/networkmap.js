@@ -403,21 +403,31 @@ var Groups = {
   }
 }
 
+var Loop = new Class({
+  initialize: function(viz, delay) {
+    this.viz = viz;
+    this.delay = delay;
+  },
+
+  start: function() {
+    var that = this;
+    setInterval(function() {
+      that.run();
+    }, this.delay);
+  }
+});
+
 var Loops = {};
 Loops.NetworkMap = {};
 
 Loops.NetworkMap.Detail = new Class({
-
-  initialize: function(viz) {
-    this.viz = viz;
-  },
+  Implements: [ Loop ],
 
   run: function() {
     if (this.viz.showGroups()) {
       this.viz.animate();
     }
   }
-
 });
 
 /*
@@ -508,11 +518,9 @@ $jit.NetworkMap = new Class( {
     };
 
     // setup update loop
-    this.loop = [new Loops.NetworkMap.Detail(this)];
+    this.loops = [new Loops.NetworkMap.Detail(this, 100)];
     
-    setInterval(function() { 
-      jQuery.each(that.loop, function(index, val) { val.run(); });
-    }, 100);
+    jQuery.each(that.loops, function(index, val) { val.start(val.delay); });
   },
 
   /* 
@@ -969,7 +977,7 @@ $jit.NetworkMap.$extend = true;
 
       if (this.fitsInCanvas(labelPos, canvas)) {
         style.display = '';
-
+        
         // use % of screen realestate to decide when to show labels
         if ((height * sy) / radius.height < 0.02 && node.data.parentID) {
           style.display = 'none';
