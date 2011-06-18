@@ -813,7 +813,7 @@ $jit.NetworkMap.$extend = true;
           that.plotNode(node, canvas, animating);
           !animating && opt.onAfterPlotNode(node);
         }
-      }); 
+      });
      },
    });
 
@@ -1234,7 +1234,8 @@ $jit.NetworkMap.$extend = true;
             ctx.closePath();
         };
 
-        if (adj.nodeFrom.data.parentID && adj.nodeFrom.data.parentID) {
+        if (adj.nodeFrom.data.parentID && adj.nodeFrom.data.parentID
+              && adj.nodeFrom.data.parentID !== adj.nodeFrom.data.parentID) {
           from = graph.getNode(adj.nodeFrom.data.parentID).pos.getc(true);
           to = graph.getNode(adj.nodeTo.data.parentID).pos.getc(true);
         }
@@ -1244,18 +1245,19 @@ $jit.NetworkMap.$extend = true;
           midpt = new Complex((to.x + from.x) / 2, (to.y + from.y) / 2);
           
           // draw double sided pipe
-          var h1 = 15;
-          var h2 = 10;
-          var as = 5;
+          var h1 = 10 / canvas.scaleOffsetY;
+          var h2 = 5 / canvas.scaleOffsetY;
+          var as = 3 / canvas.scaleOffsetY;
 
           var cp = $C((from.x + to.x) / 2, (from.y + to.y) / 2);
           var width = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
           var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
-          if (width <= 0) return;
+          var parDim = graph.getNode(adj.nodeFrom.data.parentID).getData('dim');
          
           drawRotated(rot, cp, { width: width, height: h1 }, function() {
             ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
 
             ctx.fillStyle = 'rgb(0,255,0)';
@@ -1268,6 +1270,7 @@ $jit.NetworkMap.$extend = true;
 
           drawRotated(rot, cp, { width: width, height: h2 }, function() {
             ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
             ctx.fillStyle = 'rgb(0,255,0)';
