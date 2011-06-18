@@ -1261,7 +1261,7 @@ $jit.NetworkMap.$extend = true;
             ctx.strokeRect(0, 0, width / 2, h1);
 
             ctx.fillStyle = 'rgb(0,255,0)';
-            ctx.fillRect(0, 0, width / 4 - as + 0.5, h1);
+            ctx.fillRect(0, 0, width / 4 - as + 0.5 / canvas.scaleOffsetY, h1);
             
             // draw arrow head
             drawArrow(width / 4, h1, as, 'right');
@@ -1274,7 +1274,7 @@ $jit.NetworkMap.$extend = true;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
             ctx.fillStyle = 'rgb(0,255,0)';
-            ctx.fillRect(width - width / 4 + as - 0.5, 0, width / 4, h2);
+            ctx.fillRect(width - width / 4 + as - 0.5 / canvas.scaleOffsetY, 0, width / 4, h2);
             
             // draw arrow head
             drawArrow(width - width / 4, h2, as, 'left');
