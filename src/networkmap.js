@@ -634,6 +634,14 @@ $jit.NetworkMap = new Class( {
     }, opt || {}));
   },
 
+  detailLevel: function(zoom) {
+    var levels = [ 0, 6.5, 130 ];
+
+    for (var i = 0; i < levels.length; i++) {
+      if (!levels[i + 1] || zoom < levels[i + 1]) return i;
+    }
+  },
+
   p2c: function(pos) {
     var canvas = this.canvas,
         ctx = canvas.getCtx(),
@@ -796,6 +804,7 @@ $jit.NetworkMap.$extend = true;
           var nodeTo = adj.nodeTo;
           if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
             !animating && opt.onBeforePlotLine(adj);
+            //TODO: add .drawn property to edges?
             that.plotLine(adj, canvas, animating);
             !animating && opt.onAfterPlotLine(adj);
           }
@@ -816,13 +825,13 @@ $jit.NetworkMap.$extend = true;
       });
 
       // TODO: dirty hack to draw edges under nodes
-      aGraph.eachNode(function(node) {
+      /*aGraph.eachNode(function(node) {
         if(node.drawn) {
           !animating && opt.onBeforePlotNode(node);
           that.plotNode(node, canvas, animating);
           !animating && opt.onAfterPlotNode(node);
         }
-      });
+      });*/
      },
    });
 
@@ -1221,6 +1230,8 @@ $jit.NetworkMap.$extend = true;
             metrics = { from: adj.data.metrics },
             dimFrom = 0, dimTo = 0,
             h1, h2, as, w1, w2;
+
+        // should we display this edge at all?
         
         // find the edge in the other direction
         adj.nodeTo.eachAdjacency(function(a) {
@@ -1274,24 +1285,30 @@ $jit.NetworkMap.$extend = true;
           var width = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
           var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
-          var offset = dimFrom - dimTo;
+          var offset = 0;
          
-          // determine where to join edges to
-          if (!adj.nodeFrom.data.hideNeighbours) {
-            width = width - dimFrom;
-          }
-          if (!adj.nodeTo.data.hideNeighbours) {
-            width = width - dimTo;
-          }
-          if (adj.nodeTo.data.hideNeighbours && adj.nodeFrom.data.hideNeighbours) {
-            width = width - dimTo - dimFrom;
-            offset = 0;
-          } else if (adj.nodeTo.data.hideNeighbours || adj.nodeFrom.data.hideNeighbours) {
+          if (Math.max(adj.nodeFrom.data.depth, adj.nodeTo.data.depth) 
+                > this.viz.detailLevel(canvas.scaleOffsetX)) {
+            // shorten edges
+            // determine where to join edges to
+            if (!adj.nodeFrom.data.hideNeighbours) {
+              width = width - dimFrom;
+              offset = dimFrom - dimTo;
+            }
+            if (!adj.nodeTo.data.hideNeighbours) {
+              width = width - dimTo;
+              offset = dimFrom - dimTo;
+            }
+            if (adj.nodeTo.data.hideNeighbours && adj.nodeFrom.data.hideNeighbours) {
+              width = width - dimTo - dimFrom;
+              offset = 0;
+            } else if (adj.nodeTo.data.hideNeighbours || adj.nodeFrom.data.hideNeighbours) {
 
-            if (adj.nodeFrom.data.hideNeighbours) {
-              offset = -dimTo;
-            } else {
-              offset = dimFrom;
+              if (adj.nodeFrom.data.hideNeighbours) {
+                offset = -dimTo;
+              } else {
+                offset = dimFrom;
+              }
             }
           }
 
