@@ -162,7 +162,7 @@ function init(){
         "adjacencies": [
             //{ "nodeTo": "AKLINTERNATIONAL",     "data": {} },
             { "nodeTo": "EQUINIX",              "data": {} },
-            { "nodeTo": "AUCKLANDDISTRIBUTION", "data": {} },
+            //{ "nodeTo": "AUCKLANDDISTRIBUTION", "data": {} },
             { "nodeTo": "AARNET",               "data": {} },
             { "nodeTo": "AKL",                  "data": {} }
         ]
@@ -450,7 +450,7 @@ function init(){
       overridable: true,
       color: '#23A4FF',
       lineWidth: 1,
-      type: 'dblarrow'
+      type: 'arrowpipe'
     },
     //Native canvas text styling
     Label: {
@@ -607,7 +607,13 @@ function init(){
       });
     }
   });*/
+  $NetworkMap.Utils.Metrics.updateMetrics(fd);
   fd.refresh();
-  fd.animate();
   // end
+
+  // update metrics test
+  setInterval(function() {
+    $NetworkMap.Utils.Metrics.updateMetrics(fd);
+    fd.plot();
+  }, 1000);
 }
