@@ -1036,7 +1036,7 @@ $jit.NetworkMap.$extend = true;
       ctx.fillStyle = "rgba(0,0,0,1)";
       ctx.arc(pos.x, pos.y, dim, 0, Math.PI * 2, true);
       ctx.closePath();
-      ctx.fill();
+      //ctx.fill();
       ctx.stroke();
       ctx.restore();
         //this.nodeHelper.circle.render('stroke', pos, dim, canvas);
@@ -1212,7 +1212,6 @@ $jit.NetworkMap.$extend = true;
       'render': function(adj, canvas) {
         var from = adj.nodeFrom.pos.getc(true),
             to = adj.nodeTo.pos.getc(true),
-            dim = adj.getData('lineWidth') * 10,
             direction = adj.data.$direction,
             inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id),
             graph = this.viz.graph,
@@ -1220,6 +1219,7 @@ $jit.NetworkMap.$extend = true;
             midpt,
             ctx = canvas.getCtx(),
             metrics = { from: adj.data.metrics },
+            dimFrom = 0, dimTo = 0,
             h1, h2, as, w1, w2;
         
         // find the edge in the other direction
@@ -1252,10 +1252,19 @@ $jit.NetworkMap.$extend = true;
             ctx.closePath();
         };
 
-        if (adj.nodeFrom.data.parentID && adj.nodeFrom.data.parentID
-              && adj.nodeFrom.data.parentID !== adj.nodeFrom.data.parentID) {
+        if (adj.nodeFrom.data.parentID && adj.nodeTo.data.parentID
+              && adj.nodeFrom.data.parentID !== adj.nodeTo.data.parentID) {
           from = graph.getNode(adj.nodeFrom.data.parentID).pos.getc(true);
           to = graph.getNode(adj.nodeTo.data.parentID).pos.getc(true);
+          dimFrom = graph.getNode(adj.nodeFrom.data.parentID).getData('dim');
+          dimTo = graph.getNode(adj.nodeTo.data.parentID).getData('dim');
+
+          // watch out for connections between levels
+          if (adj.nodeFrom.data.depth > adj.nodeTo.data.depth) {
+            dimTo = 0;
+          } else if (adj.nodeTo.data.depth > adj.nodeFrom.data.depth) {
+            dimFrom = 0;
+          }
         }
 
         // check if there is another adj in the ther direction
@@ -1265,8 +1274,27 @@ $jit.NetworkMap.$extend = true;
           var width = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
           var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
-          var parDim = graph.getNode(adj.nodeFrom.data.parentID).getData('dim');
-          
+          var offset = dimFrom - dimTo;
+         
+          // determine where to join edges to
+          if (!adj.nodeFrom.data.hideNeighbours) {
+            width = width - dimFrom;
+          }
+          if (!adj.nodeTo.data.hideNeighbours) {
+            width = width - dimTo;
+          }
+          if (adj.nodeTo.data.hideNeighbours && adj.nodeFrom.data.hideNeighbours) {
+            width = width - dimTo - dimFrom;
+            offset = 0;
+          } else if (adj.nodeTo.data.hideNeighbours || adj.nodeFrom.data.hideNeighbours) {
+
+            if (adj.nodeFrom.data.hideNeighbours) {
+              offset = -dimTo;
+            } else {
+              offset = dimFrom;
+            }
+          }
+
           // draw double sided pipe
           if (metrics.from == undefined || metrics.to == undefined) {
             h1 = 10 / canvas.scaleOffsetY;
@@ -1274,6 +1302,7 @@ $jit.NetworkMap.$extend = true;
             w1 = width / 2;
             w2 = width / 2;
           } else {
+            //width = width - dimFrom - dimTo;
             h1 = (metrics.from.capacity / 1500) * 10 / canvas.scaleOffsetY;
             h2 = (metrics.to.capacity / 1500) * 10 / canvas.scaleOffsetY;
             w1 = (metrics.from.bandwidth / metrics.from.capacity) * width / 2;
@@ -1282,11 +1311,11 @@ $jit.NetworkMap.$extend = true;
 
           as = 3 / canvas.scaleOffsetY;
 
-          drawRotated(rot, cp, { width: width, height: h1 }, function() {
+          drawRotated(rot, cp, { width: width + offset, height: h1 }, function() {
             ctx.strokeStyle = 'rgb(255,255,255)';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
-
+            
             ctx.fillStyle = 'rgb(0,255,0)';
             ctx.fillRect(0, 0, w1 - as + 0.5 / canvas.scaleOffsetY, h1);
             
@@ -1295,7 +1324,7 @@ $jit.NetworkMap.$extend = true;
             ctx.fill();
           });
 
-          drawRotated(rot, cp, { width: width, height: h2 }, function() {
+          drawRotated(rot, cp, { width: width + offset, height: h2 }, function() {
             ctx.strokeStyle = 'rgb(255,255,255)';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
