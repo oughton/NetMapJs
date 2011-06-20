@@ -1,3 +1,4 @@
+$NetworkMap = {};
 
 Layouts.NetworkMap = {};
 
@@ -1217,8 +1218,17 @@ $jit.NetworkMap.$extend = true;
             graph = this.viz.graph,
             otherAdj = graph.getAdjacence(adj.nodeTo.id, adj.nodeFrom.id),
             midpt,
-            ctx = canvas.getCtx();            
-
+            ctx = canvas.getCtx(),
+            metrics = { from: adj.data.metrics },
+            h1, h2, as, w1, w2;
+        
+        // find the edge in the other direction
+        adj.nodeTo.eachAdjacency(function(a) {
+          if (a.nodeTo.ID == adj.nodeFrom.ID) {
+            metrics.to = a.data.metrics;
+          }
+        });
+        
         // perform a rotated drawing by a given number of radians
         var drawRotated = function(rad, pos, size, callback) {
           ctx.save();
@@ -1251,28 +1261,37 @@ $jit.NetworkMap.$extend = true;
         // check if there is another adj in the ther direction
         if (otherAdj) {
           midpt = new Complex((to.x + from.x) / 2, (to.y + from.y) / 2);
-          
-          // draw double sided pipe
-          var h1 = 10 / canvas.scaleOffsetY;
-          var h2 = 5 / canvas.scaleOffsetY;
-          var as = 3 / canvas.scaleOffsetY;
-
           var cp = $C((from.x + to.x) / 2, (from.y + to.y) / 2);
           var width = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
           var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
           var parDim = graph.getNode(adj.nodeFrom.data.parentID).getData('dim');
-         
+          
+          // draw double sided pipe
+          if (metrics.from == undefined || metrics.to == undefined) {
+            h1 = 10 / canvas.scaleOffsetY;
+            h2 = 10 / canvas.scaleOffsetY;
+            w1 = width / 2;
+            w2 = width / 2;
+          } else {
+            h1 = (metrics.from.capacity / 1500) * 10 / canvas.scaleOffsetY;
+            h2 = (metrics.to.capacity / 1500) * 10 / canvas.scaleOffsetY;
+            w1 = (metrics.from.bandwidth / metrics.from.capacity) * width / 2;
+            w2 = (metrics.to.bandwidth / metrics.to.capacity) * width / 2;
+          }
+
+          as = 3 / canvas.scaleOffsetY;
+
           drawRotated(rot, cp, { width: width, height: h1 }, function() {
             ctx.strokeStyle = 'rgb(255,255,255)';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
 
             ctx.fillStyle = 'rgb(0,255,0)';
-            ctx.fillRect(0, 0, width / 4 - as + 0.5 / canvas.scaleOffsetY, h1);
+            ctx.fillRect(0, 0, w1 - as + 0.5 / canvas.scaleOffsetY, h1);
             
             // draw arrow head
-            drawArrow(width / 4, h1, as, 'right');
+            drawArrow(w1, h1, as, 'right');
             ctx.fill();
           });
 
@@ -1282,10 +1301,10 @@ $jit.NetworkMap.$extend = true;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
             ctx.fillStyle = 'rgb(0,255,0)';
-            ctx.fillRect(width - width / 4 + as - 0.5 / canvas.scaleOffsetY, 0, width / 4, h2);
+            ctx.fillRect(width - w2 + as - 0.5 / canvas.scaleOffsetY, 0, w2, h2);
             
             // draw arrow head
-            drawArrow(width - width / 4, h2, as, 'left');
+            drawArrow(width - w2, h2, as, 'left');
             ctx.fill();
           });
 
