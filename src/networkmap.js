@@ -1372,7 +1372,7 @@ $jit.NetworkMap.$extend = true;
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
             
-            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.to.capacity * 100);
+            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.from.capacity * 100);
             ctx.fillRect(0, 0, w1 - as + 0.5 / canvas.scaleOffsetY, h1);
             
             // draw arrow head
@@ -1385,7 +1385,7 @@ $jit.NetworkMap.$extend = true;
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
-            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.to.capacity * 100);
+            ctx.fillStyle = getColour(metrics.to.bandwidth / metrics.to.capacity * 100);
             ctx.fillRect(width - w2 + as - 0.5 / canvas.scaleOffsetY, 0, w2, h2);
             
             // draw arrow head
