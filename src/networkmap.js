@@ -276,7 +276,7 @@ var CanvasHelper = new Class({
  *
  * Mixes in group handling functionality.
  */
-var Groups = {
+var Groups = new Class({
   detailLevel: function(zoom) {
     var levels = [ 0, 6.5, 130 ];
 
@@ -469,7 +469,7 @@ var Groups = {
 
     return changed;
   }
-}
+});
 
 var Loop = new Class({
   initialize: function(viz, delay) {
@@ -1012,7 +1012,7 @@ $jit.NetworkMap.$extend = true;
         style.display = '';
         
         // use % of screen realestate to decide when to show labels
-        if ((height * sy) / radius.height < 0.02 && node.data.parentID) {
+        if (!this.viz.showAtLevel(sx, node.data.depth)) {  
           style.display = 'none';
         }
       } else {
