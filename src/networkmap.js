@@ -307,8 +307,19 @@ var Groups = {
       nodes.push(n);
       if (!groups[group]) groups[group] = {};
     });
-
+    
     raw = computeLevels(groups, nodes, '_TOP', 0);
+
+    // fill in adjacencies
+    this.graph.eachNode(function(n) {
+      n.eachAdjacency(function(adj) {
+        var from = adj.nodeFrom, to = adj.nodeTo;
+        adj.data.depth = Math.max(from.data.depth, to.data.depth);
+        if (from.data.parentID != to.data.parentID) {
+          adj.data.depth--;
+        }
+      });
+    });
 
     // create flat array of groups
     flatten = function(obj, arr) {
@@ -642,6 +653,10 @@ $jit.NetworkMap = new Class( {
     }
   },
 
+  showAtLevel: function(zoom, level) {
+    return this.detailLevel(zoom) >= level;
+  },
+
   p2c: function(pos) {
     var canvas = this.canvas,
         ctx = canvas.getCtx(),
@@ -804,8 +819,9 @@ $jit.NetworkMap.$extend = true;
           var nodeTo = adj.nodeTo;
           if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
             !animating && opt.onBeforePlotLine(adj);
-            //TODO: add .drawn property to edges?
-            that.plotLine(adj, canvas, animating);
+            if (that.viz.showAtLevel(canvas.scaleOffsetX, adj.data.depth)) {
+              that.plotLine(adj, canvas, animating);
+            }
             !animating && opt.onAfterPlotLine(adj);
           }
         });
@@ -1287,8 +1303,7 @@ $jit.NetworkMap.$extend = true;
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
           var offset = 0;
          
-          if (Math.max(adj.nodeFrom.data.depth, adj.nodeTo.data.depth) 
-                > this.viz.detailLevel(canvas.scaleOffsetX)) {
+          if (adj.data.depth >= this.viz.detailLevel(canvas.scaleOffsetX)) {
             // shorten edges
             // determine where to join edges to
             if (!adj.nodeFrom.data.hideNeighbours) {
