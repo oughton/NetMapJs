@@ -1262,6 +1262,23 @@ $jit.NetworkMap.$extend = true;
             metrics.to = a.data.metrics;
           }
         });
+
+        var getColour = function(p) {
+          var c;
+          
+          if      (p <= 20)   c = 'rgb(0,255,0)';
+          else if (p <= 70)   c = 'rgb(255,255,0)';
+          else                c = 'rgb(255,0,0)';
+
+          // karens colour scheme
+          /*if      (p <= 1)  c = 'rgb(0,111,141)';
+          else if (p <= 10) c = 'rgb(69,164,69)';
+          else if (p <= 20) c = 'rgb(194,196,9)';
+          else if (p <= 30) c = 'rgb(255,144,0)';
+          else              c = 'rgb(196,15,45)';*/
+
+          return c;
+        };
         
         // perform a rotated drawing by a given number of radians
         var drawRotated = function(rad, pos, size, callback) {
@@ -1355,7 +1372,7 @@ $jit.NetworkMap.$extend = true;
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
             
-            ctx.fillStyle = 'rgb(0,255,0)';
+            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.to.capacity * 100);
             ctx.fillRect(0, 0, w1 - as + 0.5 / canvas.scaleOffsetY, h1);
             
             // draw arrow head
@@ -1368,7 +1385,7 @@ $jit.NetworkMap.$extend = true;
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
-            ctx.fillStyle = 'rgb(0,255,0)';
+            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.to.capacity * 100);
             ctx.fillRect(width - w2 + as - 0.5 / canvas.scaleOffsetY, 0, w2, h2);
             
             // draw arrow head
