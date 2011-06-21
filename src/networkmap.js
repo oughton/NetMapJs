@@ -228,11 +228,67 @@ Layouts.NetworkMap.Static = new Class({
 });
 
 /*
+ * Canvas Helper Class
+ */
+var CanvasHelper = new Class({
+  
+  p2c: function(pos) {
+    var canvas = this.canvas,
+        ctx = canvas.getCtx(),
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY,
+        radius = canvas.getSize();
+    
+    return new Complex(
+      pos.x * sx + ox + radius.width / 2,
+      pos.y * sy + oy + radius.height / 2
+    );
+  },
+
+  c2p: function(pos) {
+    var canvas = this.canvas,
+        ctx = canvas.getCtx(),
+        ox = canvas.translateOffsetX,
+        oy = canvas.translateOffsetY,
+        sx = canvas.scaleOffsetX,
+        sy = canvas.scaleOffsetY,
+        radius = canvas.getSize();
+
+    return new Complex(
+      (pos.x - ox - radius.width / 2) / sx,
+      (pos.y - oy - radius.height / 2) / sy
+    );
+  },
+
+  fitsInCanvas: function(pos) {
+    var size = this.canvas.getSize();
+    if(pos.x >= size.width || pos.x < 0
+       || pos.y >= size.height || pos.y < 0) return false;
+     return true;
+  }
+
+});
+
+/*
  * Node groups interface
  *
  * Mixes in group handling functionality.
  */
 var Groups = {
+  detailLevel: function(zoom) {
+    var levels = [ 0, 6.5, 130 ];
+
+    for (var i = 0; i < levels.length; i++) {
+      if (!levels[i + 1] || zoom < levels[i + 1]) return i;
+    }
+  },
+
+  showAtLevel: function(zoom, level) {
+    return this.detailLevel(zoom) >= level;
+  },
+
   computeDimensions: function(group) {
     // group is not the top group
     if (group.owner) {
@@ -475,7 +531,7 @@ Loops.NetworkMap.Detail = new Class({
 
 $jit.NetworkMap = new Class( {
 
-  Implements: [ Loader, Extras, Groups ],
+  Implements: [ Loader, Extras, Groups, CanvasHelper ],
 
   initialize: function(controller) {
     var $NetworkMap = $jit.NetworkMap;
@@ -643,55 +699,6 @@ $jit.NetworkMap = new Class( {
     this.fx.animate($.merge( {
       modes: [ 'linear' ]
     }, opt || {}));
-  },
-
-  detailLevel: function(zoom) {
-    var levels = [ 0, 6.5, 130 ];
-
-    for (var i = 0; i < levels.length; i++) {
-      if (!levels[i + 1] || zoom < levels[i + 1]) return i;
-    }
-  },
-
-  showAtLevel: function(zoom, level) {
-    return this.detailLevel(zoom) >= level;
-  },
-
-  p2c: function(pos) {
-    var canvas = this.canvas,
-        ctx = canvas.getCtx(),
-        ox = canvas.translateOffsetX,
-        oy = canvas.translateOffsetY,
-        sx = canvas.scaleOffsetX,
-        sy = canvas.scaleOffsetY,
-        radius = canvas.getSize();
-    
-    return new Complex(
-      pos.x * sx + ox + radius.width / 2,
-      pos.y * sy + oy + radius.height / 2
-    );
-  },
-
-  c2p: function(pos) {
-    var canvas = this.canvas,
-        ctx = canvas.getCtx(),
-        ox = canvas.translateOffsetX,
-        oy = canvas.translateOffsetY,
-        sx = canvas.scaleOffsetX,
-        sy = canvas.scaleOffsetY,
-        radius = canvas.getSize();
-
-    return new Complex(
-      (pos.x - ox - radius.width / 2) / sx,
-      (pos.y - oy - radius.height / 2) / sy
-    );
-  },
-
-  fitsInCanvas: function(pos) {
-    var size = this.canvas.getSize();
-    if(pos.x >= size.width || pos.x < 0
-       || pos.y >= size.height || pos.y < 0) return false;
-     return true;
   },
 
   followEdge: function(fromNode, toNode, t, fps, center) {
