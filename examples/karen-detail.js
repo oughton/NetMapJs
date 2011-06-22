@@ -586,8 +586,8 @@ function init(){
 
     jQuery.each(n.adjacencies, function(index, adj) {
       adj.data.links = [
-        { id: '1', nodeFrom: n.id, nodeTo: adj.nodeTo },
-        { id: '1', nodeFrom: adj.nodeTo, nodeTo: n.id }
+        new $NetworkMap.Utils.Links.link(n.id, adj.nodeTo, '1'),
+        new $NetworkMap.Utils.Links.link(adj.nodeTo, n.id, '1')
       ];
     });
   });

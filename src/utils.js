@@ -1,15 +1,23 @@
 $NetworkMap.Utils = {};
 
-$NetworkMap.Utils.Metrics = (function() {
-  
+$NetworkMap.Utils.Links = (function() {
   return {
-    data: function() {
-      return {
-        bandwidth: null,
-        capacity: null,
-        loss: null,
-        latency: null
-      }
+    link: function(nf, nt, id, m) {
+      this.nodeFrom = nf;
+      this.nodeTo = nt;
+      this.id = id;
+      this.metrics = m;
+    }
+  }
+})();
+
+$NetworkMap.Utils.Metrics = (function() {
+  return {
+    data: function(bandwidth, capacity, loss, latency) {
+      this.bandwidth = bandwidth;
+      this.capacity = capacity;
+      this.loss = loss;
+      this.latency = latency;
     },
 
     updateMetrics: function(viz, callback) {
