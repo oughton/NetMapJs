@@ -1300,8 +1300,11 @@ $jit.NetworkMap.$extend = true;
             ctx.closePath();
         };
 
-        if (adj.nodeFrom.data.parentID && adj.nodeTo.data.parentID
-              && adj.nodeFrom.data.parentID !== adj.nodeTo.data.parentID) {
+        if (adj.nodeFrom.data.parentID == adj.nodeTo.data.parentID) {
+          dimFrom = adj.nodeFrom.getData('dim');
+          dimTo = adj.nodeTo.getData('dim');
+
+        } else if (adj.nodeFrom.data.parentID && adj.nodeTo.data.parentID) {
           from = graph.getNode(adj.nodeFrom.data.parentID).pos.getc(true);
           to = graph.getNode(adj.nodeTo.data.parentID).pos.getc(true);
           dimFrom = graph.getNode(adj.nodeFrom.data.parentID).getData('dim');
@@ -1309,9 +1312,9 @@ $jit.NetworkMap.$extend = true;
 
           // watch out for connections between levels
           if (adj.nodeFrom.data.depth > adj.nodeTo.data.depth) {
-            dimTo = 0;
+            dimTo = adj.nodeTo.getData('dim');
           } else if (adj.nodeTo.data.depth > adj.nodeFrom.data.depth) {
-            dimFrom = 0;
+            dimFrom = adj.nodeFrom.getData('dim');
           }
         }
 
@@ -1330,11 +1333,11 @@ $jit.NetworkMap.$extend = true;
             // determine where to join edges to
             if (!adj.nodeFrom.data.hideNeighbours) {
               width = width - dimFrom;
-              offset = dimFrom - dimTo;
+              offset = dimTo - dimFrom;
             }
             if (!adj.nodeTo.data.hideNeighbours) {
               width = width - dimTo;
-              offset = dimFrom - dimTo;
+              offset = dimTo - dimFrom;
             }
             if (adj.nodeTo.data.hideNeighbours && adj.nodeFrom.data.hideNeighbours) {
               width = width - dimTo - dimFrom;
