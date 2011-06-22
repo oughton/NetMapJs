@@ -1250,26 +1250,23 @@ $jit.NetworkMap.$extend = true;
             otherAdj = graph.getAdjacence(adj.nodeTo.id, adj.nodeFrom.id),
             midpt,
             ctx = canvas.getCtx(),
-            metrics = { from: adj.data.metrics },
+            metrics = {},
             dimFrom = 0, dimTo = 0,
             h1, h2, as, w1, w2;
 
-        // should we display this edge at all?
-        
         // find the edge in the other direction
-        adj.nodeTo.eachAdjacency(function(a) {
-          if (a.nodeTo.ID == adj.nodeFrom.ID) {
-            metrics.to = a.data.metrics;
-          }
+        jQuery.each(adj.data.links, function(index, link) {
+          if (link.nodeFrom == adj.nodeFrom.id) metrics.from = link.data.metrics;
+          else metrics.to = link.data.metrics;
         });
 
-        var getColour = function(p) {
+        var getColour = function(p, a) {
           var c;
           
-          if      (p <= 20)   c = 'rgb(0,255,0)';
-          else if (p <= 70)   c = 'rgb(255,255,0)';
-          else                c = 'rgb(255,0,0)';
-
+          if      (p <= 20)   c = 'rgba(0,255,0,' + a + ')';
+          else if (p <= 70)   c = 'rgba(255,255,0,' + a + ')';
+          else                c = 'rgba(255,0,0,' + a + ')';
+          
           // karens colour scheme
           /*if      (p <= 1)  c = 'rgb(0,111,141)';
           else if (p <= 10) c = 'rgb(69,164,69)';
@@ -1326,6 +1323,7 @@ $jit.NetworkMap.$extend = true;
           var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
           var offset = 0;
+          var alpha = 1;
          
           if (adj.data.depth >= this.viz.detailLevel(canvas.scaleOffsetX)) {
             // shorten edges
@@ -1342,13 +1340,15 @@ $jit.NetworkMap.$extend = true;
               width = width - dimTo - dimFrom;
               offset = 0;
             } else if (adj.nodeTo.data.hideNeighbours || adj.nodeFrom.data.hideNeighbours) {
-
+              
               if (adj.nodeFrom.data.hideNeighbours) {
-                offset = -dimTo;
+                offset = +dimTo;
               } else {
-                offset = dimFrom;
+                offset = -dimFrom;
               }
             }
+          } else {
+            alpha = 0.35;
           }
 
           // draw double sided pipe
@@ -1368,11 +1368,11 @@ $jit.NetworkMap.$extend = true;
           as = 3 / canvas.scaleOffsetY;
 
           drawRotated(rot, cp, { width: width + offset, height: h1 }, function() {
-            ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.strokeStyle = 'rgba(255,255,255,' + alpha + ')';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
             
-            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.from.capacity * 100);
+            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.from.capacity * 100, alpha);
             ctx.fillRect(0, 0, w1 - as + 0.5 / canvas.scaleOffsetY, h1);
             
             // draw arrow head
@@ -1381,11 +1381,11 @@ $jit.NetworkMap.$extend = true;
           });
 
           drawRotated(rot, cp, { width: width + offset, height: h2 }, function() {
-            ctx.strokeStyle = 'rgb(255,255,255)';
+            ctx.strokeStyle = 'rgba(255,255,255,' + alpha + ')';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
-            ctx.fillStyle = getColour(metrics.to.bandwidth / metrics.to.capacity * 100);
+            ctx.fillStyle = getColour(metrics.to.bandwidth / metrics.to.capacity * 100, alpha);
             ctx.fillRect(width - w2 + as - 0.5 / canvas.scaleOffsetY, 0, w2, h2);
             
             // draw arrow head
