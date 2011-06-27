@@ -756,6 +756,16 @@ $jit.NetworkMap = new Class( {
       
       canvas.translate(move.x, move.y);
     }, ms);
+  },
+
+  renderFactory: function(entity, canvas, animating) {
+    var ctx = canvas.getCtx();
+
+    if (entity.data.depth >= this.detailLevel(canvas.scaleOffsetX)) {
+
+    } else {
+      ctx.globalAlpha = 0.35;
+    }
   }
 });
 
@@ -854,7 +864,45 @@ $jit.NetworkMap.$extend = true;
           !animating && opt.onAfterPlotNode(node);
         }
       });*/
-     },
+    },
+
+    /*
+       Method: plotLine
+    
+       Custom extension of <Graph.Plot>.
+
+       Parameters:
+
+       adj - (object) A <Graph.Adjacence>.
+       canvas - (object) A <Canvas> instance.
+
+    */
+    plotLine: function(adj, canvas, animating) {
+      var f = adj.getData('type'),
+          ctxObj = this.edge.CanvasStyles;
+      if(f != 'none') {
+        var width = adj.getData('lineWidth'),
+            color = adj.getData('color'),
+            ctx = canvas.getCtx(),
+            nodeFrom = adj.nodeFrom,
+            nodeTo = adj.nodeTo;
+        
+        ctx.save();
+        ctx.lineWidth = width;
+        ctx.fillStyle = ctx.strokeStyle = color;
+        ctx.globalAlpha = Math.min(nodeFrom.getData('alpha'), 
+            nodeTo.getData('alpha'), 
+            adj.getData('alpha'));
+        
+        for(var s in ctxObj) {
+          ctx[s] = adj.getCanvasStyle(s);
+        }
+
+        this.viz.renderFactory(adj, canvas, animating);
+        this.edgeTypes[f].render.call(this, adj, canvas, animating);
+        ctx.restore();
+      }
+    }    
    });
 
   /*
@@ -1325,7 +1373,6 @@ $jit.NetworkMap.$extend = true;
           var rot = Math.atan((to.y - cp.y) / (to.x - cp.x));
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
           var offset = 0;
-          var alpha = 1;
          
           if (adj.data.depth >= this.viz.detailLevel(canvas.scaleOffsetX)) {
             // shorten edges
@@ -1349,8 +1396,6 @@ $jit.NetworkMap.$extend = true;
                 offset = -dimFrom;
               }
             }
-          } else {
-            alpha = 0.35;
           }
 
           // draw double sided pipe
@@ -1370,11 +1415,11 @@ $jit.NetworkMap.$extend = true;
           as = 3 / canvas.scaleOffsetY;
 
           drawRotated(rot, cp, { width: width + offset, height: h1 }, function() {
-            ctx.strokeStyle = 'rgba(255,255,255,' + alpha + ')';
+            ctx.strokeStyle = 'rgb(255,255,255)';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0, 0, width / 2, h1);
             
-            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.from.capacity * 100, alpha);
+            ctx.fillStyle = getColour(metrics.from.bandwidth / metrics.from.capacity * 100, 1);
             ctx.fillRect(0, 0, w1 - as + 0.5 / canvas.scaleOffsetY, h1);
             
             // draw arrow head
@@ -1383,11 +1428,11 @@ $jit.NetworkMap.$extend = true;
           });
 
           drawRotated(rot, cp, { width: width + offset, height: h2 }, function() {
-            ctx.strokeStyle = 'rgba(255,255,255,' + alpha + ')';
+            ctx.strokeStyle = 'rgb(255,255,255)';
             ctx.lineWidth = 1 / canvas.scaleOffsetY;
             ctx.strokeRect(0 + width / 2, 0, width / 2, h2);
             
-            ctx.fillStyle = getColour(metrics.to.bandwidth / metrics.to.capacity * 100, alpha);
+            ctx.fillStyle = getColour(metrics.to.bandwidth / metrics.to.capacity * 100, 1);
             ctx.fillRect(width - w2 + as - 0.5 / canvas.scaleOffsetY, 0, w2, h2);
             
             // draw arrow head
