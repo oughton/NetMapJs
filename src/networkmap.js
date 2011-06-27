@@ -824,11 +824,10 @@ $jit.NetworkMap.$extend = true;
         var nodeAlpha = node.getData('alpha');
         node.eachAdjacency(function(adj) {
           var nodeTo = adj.nodeTo;
-          if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+          if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn 
+              && that.viz.showAtLevel(canvas.scaleOffsetX, adj.data.depth)) {
             !animating && opt.onBeforePlotLine(adj);
-            if (that.viz.showAtLevel(canvas.scaleOffsetX, adj.data.depth)) {
-              that.plotLine(adj, canvas, animating);
-            }
+            that.plotLine(adj, canvas, animating);
             !animating && opt.onAfterPlotLine(adj);
           }
         });
