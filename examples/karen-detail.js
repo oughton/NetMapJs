@@ -603,24 +603,36 @@ function init(){
 
   });
 
+  // overview test
+  var over = new $jit.NetworkMap({
+    injectInto: 'overview',
+    Node: {
+      overridable: true,
+      dim: 20,
+      lineWidth: 5
+    },
+    Edge: {
+      overridable: true,
+      color: '#23A4FF',
+      lineWidth: 3,
+      type: 'line'
+    },
+    Label: {
+      type: 'SVG'
+    }
+  });
+
   // load JSON data.
   fd.loadJSON(json);
-  // compute positions incrementally and animate.
-  /*fd.computeIncremental({
-    iter: 40,
-    property: 'end',
-    onStep: function(perc){
-    },
-    onComplete: function(){
-      fd.animate({
-        modes: ['linear'],
-        transition: $jit.Trans.Elastic.easeOut,
-        duration: 2500
-      });
-    }
-  });*/
+  over.loadJSON(json);
   $NetworkMap.Utils.Metrics.updateMetrics(fd);
+  $NetworkMap.Utils.Metrics.updateMetrics(over);
   fd.refresh();
+  over.refresh();
+  
+  over.canvas.resize(over.canvas.getSize().width, 150);
+  over.canvas.scale(0.20, 0.20);
+
   // end
 
   // update metrics test
