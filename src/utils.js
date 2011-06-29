@@ -25,7 +25,12 @@ $NetworkMap.Views = (function() {
       
       // setup overview visualisation
       var over = new $jit.NetworkMap(opts);
+      var vizSize = viz.canvas.getSize();
+      var overSize = over.canvas.getSize();
       over.loadJSON(jQuery.extend(true, [], viz.json));
+      
+      over.canvas.resize(overSize.width, 150);
+      over.canvas.scale(overSize.width / vizSize.width, overSize.width / vizSize.width);
       
       // add to listen for navigation
       jQuery(viz.canvas.getElement()).bind('redraw', function() {
