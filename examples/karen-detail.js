@@ -610,8 +610,6 @@ function init(){
   
   // overview test
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
-  over.viz.canvas.resize(over.viz.canvas.getSize().width, 150);
-  over.viz.canvas.scale(0.20, 0.20);
 
   // update metrics test
   //setInterval(function() {
