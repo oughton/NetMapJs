@@ -603,37 +603,15 @@ function init(){
 
   });
 
-  // overview test
-  var over = new $jit.NetworkMap({
-    injectInto: 'overview',
-    Node: {
-      overridable: true,
-      dim: 20,
-      lineWidth: 5
-    },
-    Edge: {
-      overridable: true,
-      color: '#23A4FF',
-      lineWidth: 3,
-      type: 'line'
-    },
-    Label: {
-      type: 'SVG'
-    }
-  });
-
   // load JSON data.
   fd.loadJSON(json);
-  over.loadJSON(json);
   $NetworkMap.Utils.Metrics.updateMetrics(fd);
-  $NetworkMap.Utils.Metrics.updateMetrics(over);
   fd.refresh();
-  over.refresh();
   
-  over.canvas.resize(over.canvas.getSize().width, 150);
-  over.canvas.scale(0.20, 0.20);
-
-  // end
+  // overview test
+  var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
+  over.viz.canvas.resize(over.viz.canvas.getSize().width, 150);
+  over.viz.canvas.scale(0.20, 0.20);
 
   // update metrics test
   //setInterval(function() {

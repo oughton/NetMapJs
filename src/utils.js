@@ -1,4 +1,59 @@
 $NetworkMap.Utils = {};
+$NetworkMap.Views = {};
+
+$NetworkMap.Views = (function() {
+
+  return {
+    Overview: function(viz, mapOpts) {
+      var opts = jQuery.extend(true, {
+        injectInto: 'overview',
+        Node: {
+          overridable: true,
+          dim: 20,
+          lineWidth: 5
+        },
+        Edge: {
+          overridable: true,
+          color: '#23A4FF',
+          lineWidth: 3,
+          type: 'line'
+        },
+        Label: {
+          type: 'SVG'
+        }
+      }, mapOpts);
+      
+      // setup overview visualisation
+      var over = new $jit.NetworkMap(opts);
+      over.loadJSON(jQuery.extend(true, [], viz.json));
+      
+      // add to listen for navigation
+      jQuery(viz.canvas.getElement()).bind('redraw', function() {
+        over.refresh();
+      });
+
+      jQuery(over.canvas.getElement()).bind('redraw', function() {
+        var ctx = over.canvas.getCtx(),
+            size = viz.canvas.getSize(), 
+            p1 = viz.c2p({ x: 0, y: 0 }),
+            p2 = viz.c2p({ x: size.width, y: size.height });
+
+        ctx.save();
+        ctx.strokeStyle = 'rgb(255,255,0)';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(p1.x, p1.y, Math.abs(p2.x - p1.x), Math.abs(p2.y - p1.y));
+      });
+
+      return {
+        viz: over,
+
+        translate: function(x, y) {
+          //TODO: implement moving of overview box
+        }
+      };
+    },
+  };
+})({});
 
 $NetworkMap.Utils.Links = (function() {
   return {

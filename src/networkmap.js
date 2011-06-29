@@ -825,10 +825,7 @@ $jit.NetworkMap.$extend = true;
         
       var root = aGraph.getNode(id);
       if(!root) return;
-
-      // added to allow group computation before plotting
-      //this.viz.showGroups();
-
+      
       var T = !!root.visited;
       aGraph.eachNode(function(node) {
         var nodeAlpha = node.getData('alpha');
@@ -864,6 +861,9 @@ $jit.NetworkMap.$extend = true;
           !animating && opt.onAfterPlotNode(node);
         }
       });*/
+      
+      // fire redraw event
+      jQuery(canvas.getElement()).trigger('redraw');
     },
 
     /*
