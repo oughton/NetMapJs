@@ -723,7 +723,7 @@ $jit.NetworkMap = new Class( {
     c = from.y - m * from.x;
     axis = (Math.abs(from.x - to.x) > Math.abs(from.y - to.y)) ? 'x' : 'y';
     dir = pt[axis] < to[axis];
-    delta = ( Math.abs(from[axis] - to[axis]) ) / ( t * (1000 / ms) );
+    delta = ( Math.abs(from[axis] - to[axis]) ) / ( t * (500 / ms) );
 
     // animation interval
     interval = setInterval(function() {
