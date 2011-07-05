@@ -1412,6 +1412,7 @@ $jit.NetworkMap.$extend = true;
             w2 = (metrics.to.bandwidth / metrics.to.capacity) * width / 2;
           }
 
+          adj.data.size = { width: Math.max(w1, w2), height: Math.max(h1, h2) };
           as = 3 / canvas.scaleOffsetY;
 
           drawRotated(rot, cp, { width: width + offset, height: h1 }, function() {
@@ -1445,9 +1446,29 @@ $jit.NetworkMap.$extend = true;
         }
       },
       'contains': function(adj, pos) {
-        var from = adj.nodeFrom.pos.getc(true),
-            to = adj.nodeTo.pos.getc(true);
-        return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
+        var posFrom = adj.nodeFrom.pos.getc(true),
+            posTo = adj.nodeTo.pos.getc(true),
+            min = Math.min, 
+            max = Math.max,
+            minPosX = min(posFrom.x, posTo.x),
+            maxPosX = max(posFrom.x, posTo.x),
+            minPosY = min(posFrom.y, posTo.y),
+            maxPosY = max(posFrom.y, posTo.y),
+            epsilon = this.edge.epsilon / this.viz.canvas.scaleOffsetX;
+
+        // TODO: a bit hacky
+        if (posTo.y - posFrom.y == 0) posTo.y += 0.0000001;
+        if (posTo.x - posFrom.x == 0) posTo.x += 0.0000001;
+
+        var a = (posTo.y - posFrom.y) / (posTo.x - posFrom.x),
+            c = posFrom.y - a * posFrom.x,
+            d = Math.abs(a * pos.x + -1 * pos.y + c) / Math.sqrt(Math.pow(a, 2) + 1);
+
+        if(pos.x >= minPosX - epsilon && pos.x <= maxPosX + epsilon
+            && pos.y >= minPosY - epsilon && pos.y <= maxPosY + epsilon) {
+          return adj.data.size && d <= adj.data.size.height;
+        }
+        return false;
       }
     }
   });
