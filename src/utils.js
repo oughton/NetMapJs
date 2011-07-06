@@ -7,6 +7,7 @@ $NetworkMap.Debug = (function() {
   return {
     GraphicalOutput: function(viz) {
       var _enabled = false;
+      var _redraw = false;
       var _container = jQuery(viz.canvas.getElement());
       var _debugBox = jQuery('<div></div>');
       var _c = viz.canvas;
@@ -17,6 +18,7 @@ $NetworkMap.Debug = (function() {
       // redraw debugging information
       _container.bind('redraw', function() {
         if (_enabled) output();
+        _redraw = true;
       });
 
       var output = function() {
@@ -49,8 +51,27 @@ $NetworkMap.Debug = (function() {
         // output depth info
         table.append('<tr><td class="debugSub">Groups</td></tr>');
         table.append('<tr><td>Current Depth:</td><td>' + viz.detailLevel(_c.scaleOffsetX) + '</tr>');
+
         _debugBox.html(html);
         _debugBox.append(table);
+
+        // draw things onto the canvas
+        if (_redraw) {
+          // draw node boxes
+          viz.graph.eachNode(function(n) {
+            var dim = n.getData('dim');
+            var pos = n.getPos();
+            var canvas = viz.canvas, ctx = canvas.getCtx();
+            
+            ctx.save();
+            ctx.strokeStyle = 'rgb(255,0,0)';
+            ctx.lineWidth = 1 / canvas.scaleOffsetX;
+            ctx.strokeRect(pos.x - dim, pos.y - dim, dim * 2, dim * 2);
+            ctx.restore();
+          });
+
+          _redraw = false;
+        }
       };
 
       var init = function() {
@@ -74,7 +95,7 @@ $NetworkMap.Debug = (function() {
             _fps = _frames;
             _frames = 0.0;
             _lastTime = nowTime;
-            _container.trigger('redraw');
+            output();
           }
 
           _frames++;
