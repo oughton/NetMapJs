@@ -297,12 +297,12 @@ var Groups = new Class({
       $.each(group.nodes, function(n) { 
         // nodes
         var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
-        //var newDim = 0.1 * dim / ownerDim * (1 + ownerDim / 2);
-        var newDim = dim / Math.pow(20, n.data.depth);
+        var newDim = dim / Math.pow(group.owner.data.originalDim, n.data.depth);
+        
+        n.data.originalDim = dim;
         n.setData('dim', newDim);
         n.setData('height', newDim * 2);
         n.setData('width', newDim * 2);
-        //n.setLabelData('size', 1);
 
         // edges
         n.eachAdjacency(function(adj) {
@@ -320,6 +320,7 @@ var Groups = new Class({
         var dim = n.getData('dim');
         n.setData('width', dim * 2);
         n.setData('height', dim * 2);
+        n.data.originalDim = dim;
       });
     }
   },
