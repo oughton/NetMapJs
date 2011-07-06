@@ -170,6 +170,8 @@ Layouts.NetworkMap.Star = new Class({
 
     n = group.root ? group.nodes.length - 1 : group.nodes.length;
 
+    if (!group.owner) throw 'Star layout only works with a central node';
+
     circlePoints = this.getPointsOnCircle(group.owner.pos, group.owner.getData('dim') / 2, n);
 
     //NodeDim.compute(that.vis.graph, prop, that.vis.config);
