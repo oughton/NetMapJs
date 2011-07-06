@@ -1,5 +1,96 @@
 $NetworkMap.Utils = {};
 $NetworkMap.Views = {};
+$NetworkMap.Debug = {};
+
+$NetworkMap.Debug = (function() {
+
+  return {
+    GraphicalOutput: function(viz) {
+      var _enabled = false;
+      var _container = jQuery(viz.canvas.getElement());
+      var _debugBox = jQuery('<div></div>');
+      var _c = viz.canvas;
+      var _frames = 0.0;
+      var _fps = 0;
+      var _lastTime = new Date();
+        
+      // redraw debugging information
+      _container.bind('redraw', function() {
+        if (_enabled) output();
+      });
+
+      var output = function() {
+        var html = '<h4>** Debugging Information **</h4>';
+        var table = jQuery('<table></table>');
+        var _preventDefault = function(evt) { evt.preventDefault(); };
+        
+        // setup styles
+        jQuery("<style type='text/css'> .debugSub{ color:#f00; font-weight:bold; text-decoration:underline;} </style>")
+          .appendTo('head');
+
+        // disable selection on div
+        _debugBox.bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
+
+        // output performance info
+        table.append('<tr><td class="debugSub">Performance</td></tr>');
+        table.append('<tr><td>Frame Rate:</td><td>' + _fps + '</td></tr>');
+
+        table.append('<tr><td></td></tr>');
+        
+        // output navigational info
+        table.append('<tr><td class="debugSub">Navigation</td>');
+        table.append('<tr><td>Scale Offset X:</td><td>' + _c.scaleOffsetX + '</td></tr>');
+        table.append('<tr><td>Scale Offset Y:</td><td>' + _c.scaleOffsetY + '</td></tr>');
+        table.append('<tr><td>Translate Offset X:</td><td>' + _c.translateOffsetX + '</td></tr>');
+        table.append('<tr><td>Translate Offset Y:</td><td>' + _c.translateOffsetY + '</td></tr>');
+
+        table.append('<tr><td></td></tr>');
+
+        // output depth info
+        table.append('<tr><td class="debugSub">Groups</td></tr>');
+        table.append('<tr><td>Current Depth:</td><td>' + viz.detailLevel(_c.scaleOffsetX) + '</tr>');
+        _debugBox.html(html);
+        _debugBox.append(table);
+      };
+
+      var init = function() {
+        var o = _container.offset();
+        var ms = 10;
+
+        _debugBox.css({
+          position: 'relative',
+          top: o.top,
+          left: o.left,
+          color: 'rgb(255,0,0)'
+        });
+
+        _container.append(_debugBox);
+
+        setInterval(function() {
+          var nowTime = new Date();
+          var diffTime = Math.ceil((nowTime.getTime() - _lastTime.getTime()));
+          
+          if (diffTime >= 1000) {
+            _fps = _frames;
+            _frames = 0.0;
+            _lastTime = nowTime;
+            _container.trigger('redraw');
+          }
+
+          _frames++;
+        }, ms);
+      };
+
+      init();
+
+      return {
+        enable: function() { _enabled = true; },
+        disable: function() { _enabled = false; },
+        isEnabled: function() { return _enabled; }
+      };
+    }
+  };
+})();
 
 $NetworkMap.Views = (function() {
 

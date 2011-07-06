@@ -611,6 +611,10 @@ function init(){
   // overview test
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
 
+  // debug test
+  var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+  debug.enable();
+
   // update metrics test
   //setInterval(function() {
   //  $NetworkMap.Utils.Metrics.updateMetrics(fd);
