@@ -17,13 +17,14 @@ $NetworkMap.Debug = (function() {
         
       // redraw debugging information
       _container.bind('redraw', function() {
-        if (_enabled) output();
         _redraw = true;
+        if (_enabled) output();
       });
 
       var output = function() {
         var html = '<h4>** Debugging Information **</h4>';
         var table = jQuery('<table></table>');
+        var str = '';
         var _preventDefault = function(evt) { evt.preventDefault(); };
         
         // setup styles
@@ -36,6 +37,13 @@ $NetworkMap.Debug = (function() {
         // output performance info
         table.append('<tr><td class="debugSub">Performance</td></tr>');
         table.append('<tr><td>Frame Rate:</td><td>' + _fps + '</td></tr>');
+        
+        table.append('<tr><td></td></tr>');
+        
+        // output viz info
+        table.append('<tr><td class="debugSub">State</td>');
+        table.append('<tr><td>Busy: </td><td>' + viz.busy + '</td></tr>');
+        table.append('<tr><td>Div id: </td><td>' + viz.config.injectInto + '</td></tr>');
 
         table.append('<tr><td></td></tr>');
         
@@ -51,7 +59,7 @@ $NetworkMap.Debug = (function() {
         // output depth info
         table.append('<tr><td class="debugSub">Groups</td></tr>');
         table.append('<tr><td>Current Depth:</td><td>' + viz.detailLevel(_c.scaleOffsetX) + '</tr>');
-
+        
         _debugBox.html(html);
         _debugBox.append(table);
 
@@ -87,7 +95,7 @@ $NetworkMap.Debug = (function() {
 
         _container.append(_debugBox);
 
-        setInterval(function() {
+        _container.bind('redraw', function() {
           var nowTime = new Date();
           var diffTime = Math.ceil((nowTime.getTime() - _lastTime.getTime()));
           
@@ -99,7 +107,7 @@ $NetworkMap.Debug = (function() {
           }
 
           _frames++;
-        }, ms);
+        });
       };
 
       init();
