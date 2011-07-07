@@ -13,13 +13,10 @@ Layouts.NetworkMap.ForceDirected = new Class({
   
   getOptions: function(group, width, height, random) {
     var w = width, h = height;
-    //count nodes
-    var count = 0;
-    $.each(group.nodes, function(n) { 
-      count++;
-    });
+    var count = group.nodes.length;
     var k2 = w * h / count, k = Math.sqrt(k2);
-    var l = 500;//this.vis.config.levelDistance;
+    var l = this.vis.config.levelDistance;
+    var root = group.root ? group.root : group.nodes[0]; 
     
     return {
       width: w,
@@ -27,7 +24,7 @@ Layouts.NetworkMap.ForceDirected = new Class({
       tstart: w * 0.1,
       nodef: function(x) { return k2 / (x || 1); },
       edgef: function(x) { return /* x * x / k; */ k * (x - l); },
-      root: group.root.id
+      root: root.id
     };
   },
   
@@ -37,11 +34,6 @@ Layouts.NetworkMap.ForceDirected = new Class({
     NodeDim.compute(this.vis.graph, prop, this.vis.config);
     this.vis.graph.computeLevels(opt.root, 0, "ignore");
     $.each(group.nodes, function(n) {
-      if (group.owner)  {
-        //pos = that.mapInto(group.owner, pos);
-        n.setData('dim', 0.1 * n.getData('dim') / group.owner.getData('dim') * (1 + group.owner.getData('dim') / 2));
-      }
-
       $.each(prop, function(p) {
         var pos = n.getPos(p);
         if(pos.equals(Complex.KER)) {
@@ -56,17 +48,19 @@ Layouts.NetworkMap.ForceDirected = new Class({
       });
     });
     this.computePositions(group, prop, opt, incremental);
-
-    // map positions into parent nodes area
-    $.each(group.nodes, function(n) {
-      $.each(prop, function(p) {
-        var p = n.getPos(p), dim = group.owner.getData('dim') / 2;
-        p.x = Math.min(dim, Math.max(-dim, p.x));
-        p.y = Math.min(dim, Math.max(-dim, p.y));
-        p.x += group.owner.pos.x;
-        p.y += group.owner.pos.y;
+    
+    if (group.id != '_TOP') {
+      // map positions into parent nodes area
+      $.each(group.nodes, function(n) {
+        $.each(prop, function(p) {
+          var p = n.getPos(p), dim = group.owner.getData('dim') / 2;
+          p.x = Math.min(dim, Math.max(-dim, p.x));
+          p.y = Math.min(dim, Math.max(-dim, p.y));
+          p.x += group.owner.pos.x;
+          p.y += group.owner.pos.y;
+        });
       });
-    });
+    }
   },
   
   computePositions: function(group, property, opt, incremental) {
@@ -145,11 +139,10 @@ Layouts.NetworkMap.ForceDirected = new Class({
         var disp = u.disp[p];
         var norm = disp.norm() || 1;
         var p = u.getPos(p);
-        //p.$add($C(disp.x * min(Math.abs(disp.x), t) / norm, 
-        //    disp.y * min(Math.abs(disp.y), t) / norm));
-        //console.log(p.x, p.y);
-        //p.x = min(w2, max(-w2, p.x));
-        //p.y = min(h2, max(-h2, p.y));
+        p.$add($C(disp.x * min(Math.abs(disp.x), t) / norm, 
+            disp.y * min(Math.abs(disp.y), t) / norm));
+        p.x = min(w2, max(-w2, p.x));
+        p.y = min(h2, max(-h2, p.y));
       });
     });
   }
@@ -1305,7 +1298,7 @@ $jit.NetworkMap.$extend = true;
             h1, h2, as, w1, w2;
 
         // find the edge in the other direction
-        jQuery.each(adj.data.links, function(index, link) {
+        adj.data.links && jQuery.each(adj.data.links, function(index, link) {
           if (link.nodeFrom == adj.nodeFrom.id) metrics.from = link.data.metrics;
           else metrics.to = link.data.metrics;
         });
@@ -1401,19 +1394,18 @@ $jit.NetworkMap.$extend = true;
             }
           }
 
-          // draw double sided pipe
-          if (metrics.from == undefined || metrics.to == undefined) {
-            h1 = 10 / canvas.scaleOffsetY;
-            h2 = 10 / canvas.scaleOffsetY;
-            w1 = width / 2;
-            w2 = width / 2;
-          } else {
-            //width = width - dimFrom - dimTo;
-            h1 = (metrics.from.capacity / 1500) * 10 / canvas.scaleOffsetY;
-            h2 = (metrics.to.capacity / 1500) * 10 / canvas.scaleOffsetY;
-            w1 = (metrics.from.bandwidth / metrics.from.capacity) * width / 2;
-            w2 = (metrics.to.bandwidth / metrics.to.capacity) * width / 2;
+          // make sure we have metrics
+          if (metrics.from == undefined) {
+            metrics.from =  new $NetworkMap.Utils.Metrics.data(0, 1000, 0, 0);
           }
+          if (metrics.to == undefined) {
+            metrics.to = new $NetworkMap.Utils.Metrics.data(0, 1000, 0, 0);
+          }
+
+          h1 = (metrics.from.capacity / 1500) * 10 / canvas.scaleOffsetY;
+          h2 = (metrics.to.capacity / 1500) * 10 / canvas.scaleOffsetY;
+          w1 = (metrics.from.bandwidth / metrics.from.capacity) * width / 2;
+          w2 = (metrics.to.bandwidth / metrics.to.capacity) * width / 2;
 
           adj.data.size = { width: Math.max(w1, w2), height: Math.max(h1, h2) };
           as = 3 / canvas.scaleOffsetY;
