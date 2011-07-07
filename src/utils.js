@@ -1,6 +1,22 @@
 $NetworkMap.Utils = {};
 $NetworkMap.Views = {};
 $NetworkMap.Debug = {};
+$NetworkMap.Json = {};
+
+$NetworkMap.Json = (function() {
+
+  return {
+    setStartPositions: function(json, positions) {
+      jQuery.each(positions, function(index, val1) {
+        jQuery.each(json, function(index, val2) {
+          if (val2.id == val1.id) {
+            val2.data.pos = { x: Number(val1.x), y: Number(val1.y) };
+          }
+        });
+      });
+    }
+  };
+})();
 
 $NetworkMap.Debug = (function() {
 
