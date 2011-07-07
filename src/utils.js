@@ -113,7 +113,7 @@ $NetworkMap.Debug = (function() {
       init();
 
       return {
-        enable: function() { _enabled = true; },
+        enable: function() { _enabled = true; output(); },
         disable: function() { _enabled = false; },
         isEnabled: function() { return _enabled; }
       };
