@@ -7,13 +7,14 @@ $NetworkMap.Debug = (function() {
   return {
     GraphicalOutput: function(viz) {
       var _enabled = false;
-      var _redraw = false;
+      var _redraw = true;
       var _container = jQuery(viz.canvas.getElement());
       var _debugBox = jQuery('<div></div>');
       var _c = viz.canvas;
       var _frames = 0.0;
       var _fps = 0;
       var _lastTime = new Date();
+      var _log = '';
         
       // redraw debugging information
       _container.bind('redraw', function() {
@@ -26,7 +27,7 @@ $NetworkMap.Debug = (function() {
         var table = jQuery('<table></table>');
         var str = '';
         var _preventDefault = function(evt) { evt.preventDefault(); };
-        
+
         // setup styles
         jQuery("<style type='text/css'> .debugSub{ color:#f00; font-weight:bold; text-decoration:underline;} </style>")
           .appendTo('head');
@@ -60,7 +61,7 @@ $NetworkMap.Debug = (function() {
         table.append('<tr><td class="debugSub">Groups</td></tr>');
         table.append('<tr><td>Current Depth:</td><td>' + viz.detailLevel(_c.scaleOffsetX) + '</tr>');
         
-        _debugBox.html(html);
+        _debugBox.html(html).append('<div>' + _log + '</div><p>');
         _debugBox.append(table);
 
         // draw things onto the canvas
@@ -115,7 +116,8 @@ $NetworkMap.Debug = (function() {
       return {
         enable: function() { _enabled = true; output(); },
         disable: function() { _enabled = false; },
-        isEnabled: function() { return _enabled; }
+        isEnabled: function() { return _enabled; },
+        logWrite: function(text) { _log = 'Log: ' + text; output(); }
       };
     }
   };
