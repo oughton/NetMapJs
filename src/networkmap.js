@@ -772,6 +772,25 @@ $jit.NetworkMap = new Class( {
     } else {
       ctx.globalAlpha = 0.35;
     }
+  },
+
+  getPositions: function() {
+    var pos = {};
+    $.each(this.graph.nodes, function(n) {
+      pos[n.id] = n.getPos('end');
+    });
+
+    return pos;
+  },
+
+  loadPositions: function(positions) {
+    $.each(this.graph.nodes, function(n) {
+      if (positions[n.id]) {
+        $.each(['start', 'current', 'end'], function(p) {
+          n.setPos(positions[n.id], p);
+        });
+      }
+    });
   }
 });
 

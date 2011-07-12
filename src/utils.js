@@ -181,8 +181,14 @@ $NetworkMap.Views = (function() {
       var init = function() {
         var vizSize = viz.canvas.getSize();
         var overSize = _over.canvas.getSize();
+        var json = jQuery.extend(true, [], viz.json);
         
-        _over.loadJSON(jQuery.extend(true, [], viz.json));
+        // remove position data from nodes
+        jQuery.each(json, function(index, n) {
+          delete n.data.pos;
+        });
+        
+        _over.loadJSON(json);
         _over.canvas.resize(overSize.width, 150);
         _over.canvas.scale(overSize.width / vizSize.width, overSize.width / vizSize.width);
         
@@ -201,6 +207,9 @@ $NetworkMap.Views = (function() {
           ctx.strokeStyle = 'rgb(255,255,0)';
           ctx.lineWidth = 10;
           ctx.strokeRect(p1.x, p1.y, Math.abs(p2.x - p1.x), Math.abs(p2.y - p1.y));
+          ctx.restore();
+
+          _over.loadPositions(viz.getPositions());
         });
 
         // setup mouse events
