@@ -7,16 +7,26 @@ Layouts.NetworkMap = {};
  */
 Layouts.NetworkMap.ForceDirected = new Class({
 
-  initialize: function(vis) {
-    this.vis = vis;
+  initialize: function(viz) {
+    this.viz = viz;
   },
   
   getOptions: function(group, width, height, random) {
-    var w = width, h = height;
+    var s = this.viz.canvas.getSize();
+    var w = s.width, h = s.height;
     var count = group.nodes.length;
     var k2 = w * h / count, k = Math.sqrt(k2);
-    var l = this.vis.config.levelDistance;
+    var l = this.viz.config.levelDistance;
     var root = group.root ? group.root : group.nodes[0]; 
+    var maxDim = 0;
+    
+   // adjust width and height to include node dims
+   $.each(group.nodes, function(n) {
+      maxDim = Math.max(n.getData('dim'), maxDim);
+    });
+    
+    w -= maxDim * 4;
+    h -= maxDim * 4;
     
     return {
       width: w,
@@ -31,8 +41,8 @@ Layouts.NetworkMap.ForceDirected = new Class({
   compute: function(group, property, incremental) {
     var prop = $.splat(property || ['current', 'start', 'end']);
     var opt = this.getOptions(group, 300, 300);
-    NodeDim.compute(this.vis.graph, prop, this.vis.config);
-    this.vis.graph.computeLevels(opt.root, 0, "ignore");
+    NodeDim.compute(this.viz.graph, prop, this.viz.config);
+    this.viz.graph.computeLevels(opt.root, 0, "ignore");
     $.each(group.nodes, function(n) {
       $.each(prop, function(p) {
         var pos = n.getPos(p);
@@ -64,7 +74,7 @@ Layouts.NetworkMap.ForceDirected = new Class({
   },
   
   computePositions: function(group, property, opt, incremental) {
-    var times = this.vis.config.iterations, i = 0, that = this;
+    var times = this.viz.config.iterations, i = 0, that = this;
     if(incremental) {
       (function iter() {
         for(var total=incremental.iter, j=0; j<total; j++) {
@@ -87,7 +97,7 @@ Layouts.NetworkMap.ForceDirected = new Class({
   },
   
   computePositionStep: function(group, property, opt) {
-    var graph = this.vis.graph;
+    var graph = this.viz.graph;
     var min = Math.min, max = Math.max;
     var dpos = $C(0, 0);
     //calculate repulsive forces
@@ -114,7 +124,7 @@ Layouts.NetworkMap.ForceDirected = new Class({
     $.each(group.nodes, function(node) {
       node.eachAdjacency(function(adj) {
         // only apply forces to those nodes within this group
-        if (group.nodes.indexOf(adj) === -1) {
+        if (adj.nodeFrom.data.parent !== adj.nodeTo.data.parent) {
           return;
         }
 
