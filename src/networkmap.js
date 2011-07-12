@@ -1033,6 +1033,24 @@ $jit.NetworkMap.$extend = true;
     initialize: function(viz) {
       this.viz = viz;
     },
+
+    plotLabel: function(canvas, node, controller) {
+      var id = this.viz.canvas.id + "." + node.id, tag = this.getLabel(id);
+      
+      if(!tag && !(tag = document.getElementById(id))) {
+        tag = document.createElement('div');
+        var container = this.getLabelContainer();
+        tag.id = id;
+        tag.className = 'node';
+        tag.style.position = 'absolute';
+        controller.onCreateLabel(tag, node);
+        container.appendChild(tag);
+        this.labels[node.id] = tag;
+      }
+
+      this.placeLabel(tag, node, controller);
+    },
+
     /* 
        placeLabel
 
