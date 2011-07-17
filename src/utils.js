@@ -184,7 +184,7 @@ $NetworkMap.Views = (function() {
         var json = jQuery.extend(true, [], viz.json);
         
         // remove position data from nodes
-        jQuery.each(json, function(index, n) {
+        viz.config.layout != 'Static' && jQuery.each(json, function(index, n) {
           delete n.data.pos;
         });
         
