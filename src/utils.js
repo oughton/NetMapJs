@@ -223,6 +223,8 @@ $NetworkMap.Views = (function() {
         _container.mousemove(function(e) {
           if (_mouse != null) _moveBox(e);
         });
+
+        _over.refresh();
       };
       
       init();
