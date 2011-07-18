@@ -256,6 +256,20 @@ $NetworkMap.Utils.Metrics = (function() {
       this.latency = latency;
     },
 
+    initJSON: function(json) {
+      // create links in both ways
+      jQuery.each(json, function(index, n) {
+        if (!n.adjacencies) return;
+        jQuery.each(n.adjacencies, function(index, adj) {
+          if (!adj.data) adj.data = {};
+          adj.data.links = [
+            new $NetworkMap.Utils.Links.link(n.id, adj.nodeTo, '1'),
+            new $NetworkMap.Utils.Links.link(adj.nodeTo, n.id, '1')
+          ];
+        });
+      });
+    },
+
     updateMetrics: function(viz, callback) {
       //TODO: get real data?
       var that = this;
