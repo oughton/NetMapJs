@@ -75,7 +75,7 @@ $NetworkMap.Debug = (function() {
 
         // output depth info
         table.append('<tr><td class="debugSub">Groups</td></tr>');
-        table.append('<tr><td>Current Depth:</td><td>' + viz.detailLevel(_c.scaleOffsetX) + '</tr>');
+        table.append('<tr><td>Current Depth:</td><td>' + viz.detailLevel(_c.scaleOffsetX, viz.config.groupLvls) + '</tr>');
         
         _debugBox.html(html).append('<div>' + _log + '</div><p>');
         _debugBox.append(table);

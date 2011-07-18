@@ -282,16 +282,14 @@ var CanvasHelper = new Class({
  * Mixes in group handling functionality.
  */
 var Groups = new Class({
-  detailLevel: function(zoom) {
-    var levels = [ 0, 6.5, 130 ];
-
+  detailLevel: function(zoom, levels) {
     for (var i = 0; i < levels.length; i++) {
       if (!levels[i + 1] || zoom < levels[i + 1]) return i;
     }
   },
 
-  showAtLevel: function(zoom, level) {
-    return this.detailLevel(zoom) >= level;
+  showAtLevel: function(zoom, level, levels) {
+    return this.detailLevel(zoom, levels) >= level;
   },
 
   computeDimensions: function(group) {
@@ -547,7 +545,9 @@ $jit.NetworkMap = new Class( {
       debug: false,
       iterations: 50,
       levelDistance: 50,
-      layout: 'Static'
+      layout: 'Static',
+      groupLvls: [ 0, 6.5, 130 ],
+      detailLvls: [ 0, 1.8 ]
     };
 
     this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
@@ -595,6 +595,56 @@ $jit.NetworkMap = new Class( {
     this.loops = [new Loops.NetworkMap.Detail(this, 100)];
     
     jQuery.each(that.loops, function(index, val) { val.start(val.delay); });
+  },
+
+  loadLayers: function(json) {
+    var useLayers = false,
+        layers = {}, layersArr = [],
+        graph;
+
+    // set up the base graph
+    this.loadJSON(json);
+    graph = this.graph;
+
+    // check for layers
+    jQuery.each(json, function(index, n) {
+      n.adjacencies && jQuery.each(n.adjacencies, function(index, adj) {
+        if (adj.data && adj.data.layers) {
+          useLayers = true;
+          return false;
+        }
+      });
+      if (useLayers = true) return false;
+    });
+    
+    // build layers
+    if (useLayers) {
+      
+      // init the layers
+      graph.eachNode(function(n) {
+        n.eachAdjacency(function(adj) {
+          adj.data.layers && jQuery.each(adj.data.layers, function(i, id) {
+            if (layers[id] == undefined) {
+              layers[id] = { id: id, json: jQuery.extend(true, {}, json) };
+            }
+          });
+        });
+      });
+      
+      // perform alterations on the layers
+      jQuery.each(layers, function(id, layer) {
+        jQuery.each(layer.json, function(index, node) {
+          jQuery.each(node.adjacencies, function(index, adj) {
+            if (adj.data && adj.data.layers.indexOf(id) != -1) {
+              adj.nodeTo = adj.data.layers[id].nodeTo;
+            }
+          });
+        });
+      });
+
+      // save the layer graphs
+      this.layers = layersArr;
+    }
   },
 
   /* 
@@ -765,13 +815,21 @@ $jit.NetworkMap = new Class( {
   },
 
   renderFactory: function(entity, canvas, animating) {
-    var ctx = canvas.getCtx();
+    var ctx = canvas.getCtx(),
+        zo = canvas.scaleOffsetX;
 
-    if (entity.data.depth >= this.detailLevel(canvas.scaleOffsetX)) {
+    if (entity.data.depth >= this.detailLevel(zo, this.config.groupLvls)) {
 
     } else {
       ctx.globalAlpha = 0.35;
     }
+    
+    if (entity.data.layers && 
+          entity.data.layers.indexOf(this.detailLevel(zo, this.config.detailLvls)) == -1) {
+      return false;
+    }
+
+    return true;
   },
 
   getPositions: function() {
@@ -857,7 +915,7 @@ $jit.NetworkMap.$extend = true;
         node.eachAdjacency(function(adj) {
           var nodeTo = adj.nodeTo;
           if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn 
-              && that.viz.showAtLevel(canvas.scaleOffsetX, adj.data.depth)) {
+              && that.viz.showAtLevel(canvas.scaleOffsetX, adj.data.depth, that.config.groupLvls)) {
             !animating && opt.onBeforePlotLine(adj);
             that.plotLine(adj, canvas, animating);
             !animating && opt.onAfterPlotLine(adj);
@@ -889,6 +947,40 @@ $jit.NetworkMap.$extend = true;
       
       // fire redraw event
       jQuery(canvas.getElement()).trigger('redraw');
+    },
+  
+    /*
+       Method: plotNode
+    
+       Plots a <Graph.Node>.
+
+       Parameters:
+       
+       node - (object) A <Graph.Node>.
+       canvas - (object) A <Canvas> element.
+
+    */
+    plotNode: function(node, canvas, animating) {
+        var f = node.getData('type'), 
+            ctxObj = this.node.CanvasStyles;
+        if(f != 'none') {
+          var width = node.getData('lineWidth'),
+              color = node.getData('color'),
+              alpha = node.getData('alpha'),
+              ctx = canvas.getCtx();
+          ctx.save();
+          ctx.lineWidth = width;
+          ctx.fillStyle = ctx.strokeStyle = color;
+          ctx.globalAlpha = alpha;
+          
+          for(var s in ctxObj) {
+            ctx[s] = node.getCanvasStyle(s);
+          }
+
+          this.viz.renderFactory(node, canvas, animating) &&
+            this.nodeTypes[f].render.call(this, node, canvas, animating);
+          ctx.restore();
+        }
     },
 
     /*
@@ -923,8 +1015,8 @@ $jit.NetworkMap.$extend = true;
           ctx[s] = adj.getCanvasStyle(s);
         }
 
-        this.viz.renderFactory(adj, canvas, animating);
-        this.edgeTypes[f].render.call(this, adj, canvas, animating);
+        this.viz.renderFactory(adj, canvas, animating) &&
+          this.edgeTypes[f].render.call(this, adj, canvas, animating);
         ctx.restore();
       }
     }    
@@ -1102,9 +1194,14 @@ $jit.NetworkMap.$extend = true;
         style.display = '';
         
         // use % of screen realestate to decide when to show labels
-        if (!this.viz.showAtLevel(sx, node.data.depth)) {  
+        if (!this.viz.showAtLevel(sx, node.data.depth, this.viz.config.groupLvls)) {
           style.display = 'none';
         }
+        
+        if (node.data.layers && node.data.layers.indexOf(this.viz.detailLevel(sx, this.viz.config.detailLvls)) == -1) {
+          style.display = 'none';
+        }
+
       } else {
         style.display = 'none';
       }
@@ -1417,7 +1514,7 @@ $jit.NetworkMap.$extend = true;
           var rp = $C(cp.x - width / 2, (from.y + to.y) / 2);
           var offset = 0;
          
-          if (adj.data.depth >= this.viz.detailLevel(canvas.scaleOffsetX)) {
+          if (adj.data.depth >= this.viz.detailLevel(canvas.scaleOffsetX, this.config.groupLvls)) {
             // shorten edges
             // determine where to join edges to
             if (!adj.nodeFrom.data.hideNeighbours) {
