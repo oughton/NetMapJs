@@ -35,7 +35,7 @@ $NetworkMap.Debug = (function() {
       // redraw debugging information
       _container.bind('redraw', function() {
         _redraw = true;
-        if (_enabled) output();
+        output();
       });
 
       var output = function() {
@@ -43,6 +43,8 @@ $NetworkMap.Debug = (function() {
         var table = jQuery('<table></table>');
         var str = '';
         var _preventDefault = function(evt) { evt.preventDefault(); };
+
+        if (!_enabled) return;
 
         // setup styles
         jQuery("<style type='text/css'> .debugSub{ color:#f00; font-weight:bold; text-decoration:underline;} </style>")
@@ -309,7 +311,6 @@ $NetworkMap.Utils.Metrics = (function() {
         });
       });
     }
-
   };
 
 })();
