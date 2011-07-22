@@ -196,7 +196,7 @@ $NetworkMap.Views = (function() {
         
         // add to listen for navigation
         jQuery(viz.canvas.getElement()).bind('redraw', function() {
-          _over.refresh();
+          _over.plot();
         });
 
         jQuery(_over.canvas.getElement()).bind('redraw', function() {
