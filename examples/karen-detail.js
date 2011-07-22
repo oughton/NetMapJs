@@ -535,14 +535,10 @@ function init(){
         jQuery.post('../src/networkmap.php?method=savePositions', { positions: positions });
       }
     },
-    //Number of iterations for the FD algorithm
     iterations: 200,
-    // debugging enabled/disabled
     debug: true,
-    //Edge length
     levelDistance: 130,
-    // Add text to the labels. This method is only triggered
-    // on label creation and only for DOM labels (not native canvas ones).
+    bgAlpha: 0.25,
     onCreateLabel: function(domElement, node){
       if (node.data.parentID) {
         domElement.innerHTML = node.name;
@@ -594,8 +590,8 @@ function init(){
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
 
   // debug test
-  var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-  debug.enable();
+  //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+  //debug.enable();
 
   // update metrics test
   //setInterval(function() {

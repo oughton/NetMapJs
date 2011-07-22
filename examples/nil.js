@@ -335,8 +335,8 @@ function init(){
     //Number of iterations for the FD algorithm
     iterations: 500,
     layout: 'Static',
-    //Edge length
     levelDistance: 130,
+    bgAlpha: 0.25,
     onCreateLabel: function(domElement, node){
       var _preventDefault = function(evt) { evt.preventDefault(); };
       var style = domElement.style;

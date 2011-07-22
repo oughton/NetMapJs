@@ -547,7 +547,8 @@ $jit.NetworkMap = new Class( {
       levelDistance: 50,
       layout: 'Static',
       groupLvls: [ 0, 6.5, 130 ],
-      detailLvls: [ 0, 1.8 ]
+      detailLvls: [ 0, 1.8 ],
+      bgAlpha: 1
     };
 
     this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
@@ -821,7 +822,7 @@ $jit.NetworkMap = new Class( {
     if (entity.data.depth >= this.detailLevel(zo, this.config.groupLvls)) {
 
     } else {
-      ctx.globalAlpha = 0.35;
+      ctx.globalAlpha = this.config.bgAlpha;
     }
     
     if (entity.data.layers && 
