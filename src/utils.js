@@ -166,6 +166,7 @@ $NetworkMap.Views = (function() {
       var _over = new $jit.NetworkMap(_opts);
       var _container = jQuery('#' + _opts.injectInto);
       var _mouse = null;
+      var _svg;
 
       // translate a main canvas in sync with overview box
       var _moveBox = function(e) {
@@ -181,9 +182,17 @@ $NetworkMap.Views = (function() {
       
       // setup overview visualisation
       var init = function() {
-        var vizSize = viz.canvas.getSize();
-        var overSize = _over.canvas.getSize();
-        var json = jQuery.extend(true, [], viz.json);
+        var o = _container.offset(),
+            vizSize = viz.canvas.getSize(),
+            overSize = { width: _over.canvas.getSize().width, height: 150 },
+            json = jQuery.extend(true, [], viz.json),
+            rect,
+            svgcont = jQuery('<div></div>')
+              .css({ top: o.top, left: o.left, position: 'absolute' })
+              .appendTo(document.body);
+        
+        _svg = Raphael(svgcont.get(0), overSize.width, overSize.height);
+        rect = _svg.rect(0, 0, 0, 0).attr({ stroke: 'rgb(255,255,0)' });
         
         // remove position data from nodes
         viz.config.layout != 'Static' && jQuery.each(json, function(index, n) {
@@ -191,38 +200,28 @@ $NetworkMap.Views = (function() {
         });
         
         _over.loadJSON(json);
-        _over.canvas.resize(overSize.width, 150);
+        _over.canvas.resize(overSize.width, overSize.height);
         _over.canvas.scale(overSize.width / vizSize.width, overSize.width / vizSize.width);
         
-        // add to listen for navigation
         jQuery(viz.canvas.getElement()).bind('redraw', function() {
-          _over.plot();
-        });
+          var size = viz.canvas.getSize(), 
+              p1 = _over.p2c(viz.c2p({ x: 0, y: 0 })),
+              p2 = _over.p2c(viz.c2p({ x: size.width, y: size.height }));
 
-        jQuery(_over.canvas.getElement()).bind('redraw', function() {
-          var ctx = _over.canvas.getCtx(),
-              size = viz.canvas.getSize(), 
-              p1 = viz.c2p({ x: 0, y: 0 }),
-              p2 = viz.c2p({ x: size.width, y: size.height });
-
-          ctx.save();
-          ctx.strokeStyle = 'rgb(255,255,0)';
-          ctx.lineWidth = 10;
-          ctx.strokeRect(p1.x, p1.y, Math.abs(p2.x - p1.x), Math.abs(p2.y - p1.y));
-          ctx.restore();
-
+          rect.attr({ x: p1.x, y: p1.y, width: Math.abs(p2.x - p1.x), height: Math.abs(p2.y - p1.y) });
           _over.loadPositions(viz.getPositions());
         });
 
         // setup mouse events
-        _container.mousedown(function(e) {
+        svgcont.mousedown(function(e) {
+          console.log('h');
           _moveBox(e);
           _mouse = e;
         });
-        _container.mouseup(function() {
+        svgcont.mouseup(function() {
           _mouse = null;
         });
-        _container.mousemove(function(e) {
+        svgcont.mousemove(function(e) {
           if (_mouse != null) _moveBox(e);
         });
 
