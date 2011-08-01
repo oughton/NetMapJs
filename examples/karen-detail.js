@@ -38,7 +38,7 @@ function init(){
         "data": { "$type": "group", "layout": "Star" }
       }, {
         "id": "POP_HLZ", "name": "Hamilton POP",        
-        "data": { "$type": "none", "layout": "Star", "$dim": 50 }
+        "data": { "$type": "group", "layout": "Star" }
       }, {
         "id": "POP_ROT", "name": "Rotorua POP",         
         "data": { "$type": "group", "layout": "Star" }
@@ -183,7 +183,7 @@ function init(){
       }, {
         "id": "HLZ",
         "name": "Hamilton",
-        "data": { "$type": "circle", "parentID": "POP_HLZ", "root": true, "$dim": 100, "hideNeighbours": true },
+        "data": { "$type": "circle", "parentID": "POP_HLZ", "root": true },
         "adjacencies": [
             { "nodeTo": "AKL",                  "data": {} },
             { "nodeTo": "PLANTANDFOOD",         "data": {} },
@@ -590,8 +590,8 @@ function init(){
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
 
   // debug test
-  //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-  //debug.enable();
+  var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+  debug.enable();
 
   // update metrics test
   //setInterval(function() {
