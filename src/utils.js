@@ -214,7 +214,6 @@ $NetworkMap.Views = (function() {
 
         // setup mouse events
         svgcont.mousedown(function(e) {
-          console.log('h');
           _moveBox(e);
           _mouse = e;
         });
