@@ -231,7 +231,9 @@ function init(){
         "adjacencies": [
             { "nodeTo": "GIS",                  "data": {} },
             { "nodeTo": "ROT",                  "data": {} },
-            { "nodeTo": "MUP",                  "data": {} }
+            { "nodeTo": "MUP",                  "data": {} },
+            { "nodeTo": "WAND PROBE",           "data": {} },
+            { "nodeTo": "PLANT AND FOOD HR",    "data": {} }
         ]
       
       // POP --- Gisborne
@@ -533,6 +535,9 @@ function init(){
             positions.push({ id: node.id, x: node.pos.x, y: node.pos.y });
         });
         jQuery.post('../src/networkmap.php?method=savePositions', { positions: positions });
+      },
+      onRightClick: function(node, eventInfo, e) {
+        if (node) fd.zoomNode(node); 
       }
     },
     iterations: 200,
@@ -590,8 +595,8 @@ function init(){
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
 
   // debug test
-  var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-  debug.enable();
+  //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+  //debug.enable();
 
   // update metrics test
   //setInterval(function() {

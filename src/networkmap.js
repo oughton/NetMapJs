@@ -758,6 +758,17 @@ $jit.NetworkMap = new Class( {
     }, opt || {}));
   },
 
+  zoomNode: function(node) {
+    var dim = node.getData('dim'),
+        pos = node.getPos(),
+        size = this.canvas.getSize(),
+        oz = this.canvas.scaleOffsetX;
+        cp = this.c2p(new Complex(size.width / 2, size.height / 2));
+
+    this.canvas.scale(size.width / (oz * dim * 4), size.width / (oz * dim * 4));
+    this.canvas.translate(cp.x - pos.x, cp.y - pos.y);
+  },
+
   followEdge: function(fromNode, toNode, t, fps, center) {
     var that = this,
         interval,
