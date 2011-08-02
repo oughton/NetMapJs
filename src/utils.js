@@ -164,7 +164,7 @@ $NetworkMap.Views = (function() {
       }, mapOpts);
 
       var _over = new $jit.NetworkMap(_opts);
-      var _container = jQuery('#' + _opts.injectInto);
+      var _container = jQuery('#' + _opts.injectInto).css({ position: 'relative' });
       var _mouse = null;
       var _svg;
 
@@ -188,15 +188,15 @@ $NetworkMap.Views = (function() {
             json = jQuery.extend(true, [], viz.json),
             rect,
             svgcont = jQuery('<div></div>')
-              .css({ top: o.top, left: o.left, position: 'absolute' })
-              .appendTo(document.body);
+              .css({ top: 0, left: 0, position: 'absolute' })
+              .appendTo(_container);
         
         _svg = Raphael(svgcont.get(0), overSize.width, overSize.height);
         rect = _svg.rect(0, 0, 0, 0).attr({ stroke: 'rgb(255,255,0)' });
         
         // remove position data from nodes
         viz.config.layout != 'Static' && jQuery.each(json, function(index, n) {
-          delete n.data.pos;
+            n.data.pos && delete n.data.pos;
         });
         
         _over.loadJSON(json);
