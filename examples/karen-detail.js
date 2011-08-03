@@ -537,7 +537,7 @@ function init(){
         jQuery.post('../src/networkmap.php?method=savePositions', { positions: positions });
       },
       onRightClick: function(node, eventInfo, e) {
-        if (node) fd.zoomNode(node); 
+        if (node) fd.zoomNode(node);
       }
     },
     iterations: 200,
