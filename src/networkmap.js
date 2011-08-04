@@ -801,6 +801,11 @@ $jit.NetworkMap = new Class( {
       // stop moving when the direction changes
       if (dir != pt[axis] < to[axis]) {
         clearInterval(interval);
+
+        // force centering at the end
+        centerPt = that.c2p(new Complex(radius.width / 2, radius.height / 2));
+        to = toNode.getPos();
+        canvas.translate(centerPt.x - to.x, centerPt.y - to.y);
         return;
       }
 
