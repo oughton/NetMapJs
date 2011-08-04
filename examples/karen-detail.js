@@ -233,7 +233,7 @@ function init(){
             { "nodeTo": "ROT",                  "data": {} },
             { "nodeTo": "MUP",                  "data": {} },
             { "nodeTo": "WAND PROBE",           "data": {} },
-            { "nodeTo": "PLANT AND FOOD HR",    "data": {} }
+            { "nodeTo": "PLANT AND FOOD, HR",    "data": {} }
         ]
       
       // POP --- Gisborne
@@ -254,7 +254,13 @@ function init(){
             { "nodeTo": "ROT",                  "data": {} },
             { "nodeTo": "NPE",                  "data": {} },
             { "nodeTo": "AVL",                  "data": {} },
-            { "nodeTo": "PMR",                  "data": {} }
+            { "nodeTo": "PMR",                  "data": {} },
+            { "nodeTo": "AG RESEARCH",          "data": {} },
+            { "nodeTo": "UCOL",                 "data": {} },
+            { "nodeTo": "MASSEY, TURITEA",      "data": {} },
+            { "nodeTo": "LANDCARE1",            "data": {} },
+            { "nodeTo": "PLANT AND FOOD, CF",   "data": {} },
+            { "nodeTo": "PLANT AND FOOD, HR1",  "data": {} }
         ]
       
       // POP --- Palmerston North
@@ -267,7 +273,9 @@ function init(){
             { "nodeTo": "NPL",                  "data": {} },
             { "nodeTo": "WAG",                  "data": {} },
             { "nodeTo": "WLG",                  "data": {} },
-            { "nodeTo": "MUP",                  "data": {} }
+            { "nodeTo": "MUP",                  "data": {} },
+            { "nodeTo": "MASSEY, HOKOWHITTU",   "data": {} },
+            { "nodeTo": "MASSEY, TURITEA1",      "data": {} }
         ]
       
       // POP --- New Plymouth
@@ -276,7 +284,8 @@ function init(){
         "name": "New Plymouth",
         "data": { "$type": "circle", "parentID": "POP_NPL", "root": true },
         "adjacencies": [
-            { "nodeTo": "PMR",                  "data": {} }
+            { "nodeTo": "PMR",                  "data": {} },
+            { "nodeTo": "WHITT",                "data": {} }
         ]
       
       // POP --- Whanganui
@@ -285,7 +294,8 @@ function init(){
         "name": "Whanganui",
         "data": { "$type": "circle", "parentID": "POP_WAG", "root": true },
         "adjacencies": [
-            { "nodeTo": "PMR",                  "data": {} }
+            { "nodeTo": "PMR",                  "data": {} },
+            { "nodeTo": "UCOL1",                 "data": {} }
         ]
       
       // POP --- Wellington
@@ -298,7 +308,25 @@ function init(){
             { "nodeTo": "DUD",                  "data": {} },
             { "nodeTo": "CHC",                  "data": {} },
             { "nodeTo": "NSN",                  "data": {} },
-            { "nodeTo": "PMR",                  "data": {} }
+            { "nodeTo": "MSI",                  "data": {} },
+            { "nodeTo": "TEC",                  "data": {} },
+            { "nodeTo": "LANDCARE2",            "data": {} },
+            { "nodeTo": "WAND PORBE1",          "data": {} },
+            { "nodeTo": "VICTORIA UNI",         "data": {} },
+            { "nodeTo": "WELLINGTON LOOP",      "data": {} },
+            { "nodeTo": "REANNZ NETSERVICES",   "data": {} },
+            { "nodeTo": "WHITIREIA WELLINGTON", "data": {} },
+            { "nodeTo": "ANR2-WLG",             "data": {} },
+            { "nodeTo": "ESR2",                 "data": {} },
+            { "nodeTo": "REANNZ1",              "data": {} },
+            { "nodeTo": "MASSEY UNI",           "data": {} },
+            { "nodeTo": "TELSTRACLEAR1",        "data": {} },
+            { "nodeTo": "WHITIERA WPAC",        "data": {} },
+            { "nodeTo": "NATIONAL LIBRARY",     "data": {} },
+            { "nodeTo": "OTAGO UNI, HOSPITAL",  "data": {} },
+            { "nodeTo": "MASSEY UNI, PRI",      "data": {} },
+            { "nodeTo": "OTAGO UNI, WESTPAC STADIUM", "data": {} },
+            { "nodeTo": "WELLINGTON DISTRIBUTION", "data": {} }
         ]
       
       // POP --- Avalon
@@ -309,7 +337,11 @@ function init(){
         "adjacencies": [
             { "nodeTo": "MUP",                  "data": {} },
             { "nodeTo": "POR",                  "data": {} },
-            { "nodeTo": "WLG",                  "data": {} }
+            { "nodeTo": "WLG",                  "data": {} },
+            { "nodeTo": "ESR1",                 "data": {} },
+            { "nodeTo": "GNS SCIENCE",          "data": {} },
+            { "nodeTo": "NIWA, GRETA POINT",    "data": {} },
+            { "nodeTo": "NIWA, MAHANGA BAY",    "data": {} }
         ]
       
       // POP --- Porirua
