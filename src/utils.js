@@ -144,9 +144,8 @@ $NetworkMap.Debug = (function() {
 $NetworkMap.Views = (function() {
 
   return {
-    Overview: function(viz, mapOpts) {
+    Overview: function(viz, mapOpts, level) {
       var _opts = jQuery.extend(true, {
-        injectInto: 'overview',
         Node: {
           overridable: true,
           dim: 20,
@@ -163,11 +162,25 @@ $NetworkMap.Views = (function() {
         }
       }, mapOpts);
 
-      var _over = new $jit.NetworkMap(_opts);
-      var _container = jQuery('#' + _opts.injectInto).css({ position: 'relative' });
-      var _mouse = null;
-      var _svg;
+      var _over = new $jit.NetworkMap(_opts),
+          _container = jQuery('#' + _opts.injectInto).css({ position: 'relative' }),
+          _svg, _rect,
+          _mouse = null;
 
+      // redraw the rectangle
+      var redraw = function() {
+        var size = viz.canvas.getSize(), 
+            p1 = _over.p2c(viz.c2p({ x: 0, y: 0 })),
+            p2 = _over.p2c(viz.c2p({ x: size.width, y: size.height }));
+
+        if (!_rect) {
+          _rect = _svg.rect(0, 0, 0, 0).attr({ stroke: 'rgb(255,255,0)' });
+        }
+          
+        _rect.attr({ x: p1.x, y: p1.y, width: Math.abs(p2.x - p1.x), height: Math.abs(p2.y - p1.y) });
+        _over.loadPositions(viz.getPositions());
+      };      
+      
       // translate a main canvas in sync with overview box
       var _moveBox = function(e) {
         var o = _container.offset(),
@@ -184,19 +197,17 @@ $NetworkMap.Views = (function() {
       var init = function() {
         var o = _container.offset(),
             vizSize = viz.canvas.getSize(),
-            overSize = { width: _over.canvas.getSize().width, height: 150 },
+            overSize = { width: _over.canvas.getSize().width, height: _over.canvas.getSize().height },
             json = jQuery.extend(true, [], viz.json),
-            rect,
             svgcont = jQuery('<div></div>')
               .css({ top: 0, left: 0, position: 'absolute' })
               .appendTo(_container);
         
         _svg = Raphael(svgcont.get(0), overSize.width, overSize.height);
-        rect = _svg.rect(0, 0, 0, 0).attr({ stroke: 'rgb(255,255,0)' });
-        
+
         // remove position data from nodes
         viz.config.layout != 'Static' && jQuery.each(json, function(index, n) {
-            n.data.pos && delete n.data.pos;
+            n.data && n.data.pos && delete n.data.pos;
         });
         
         _over.loadJSON(json);
@@ -204,12 +215,7 @@ $NetworkMap.Views = (function() {
         _over.canvas.scale(overSize.width / vizSize.width, overSize.width / vizSize.width);
         
         jQuery(viz.canvas.getElement()).bind('redraw', function() {
-          var size = viz.canvas.getSize(), 
-              p1 = _over.p2c(viz.c2p({ x: 0, y: 0 })),
-              p2 = _over.p2c(viz.c2p({ x: size.width, y: size.height }));
-
-          rect.attr({ x: p1.x, y: p1.y, width: Math.abs(p2.x - p1.x), height: Math.abs(p2.y - p1.y) });
-          _over.loadPositions(viz.getPositions());
+          redraw();
         });
 
         // setup mouse events
@@ -223,16 +229,35 @@ $NetworkMap.Views = (function() {
         svgcont.mousemove(function(e) {
           if (_mouse != null) _moveBox(e);
         });
-
+        
+        redraw();
         _over.refresh();
       };
-      
+
       init();
 
       return {
-        viz: _over
+        level: function() { return level; },
+        hide: function() { hideOver(); },
+        show: function() { showOver(); }
       };
     },
+
+    OverviewManager: function(viz, container) {
+      var _overviews = {};
+      
+      jQuery(viz.canvas.getElement()).bind('redraw', function() {
+        // TODO: implement
+
+        // check level
+         
+
+        // do we need to hide any overviews
+
+
+        // do we need to add any overviews
+      });
+    }
   };
 })({});
 

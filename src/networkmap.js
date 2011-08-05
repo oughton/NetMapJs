@@ -852,7 +852,7 @@ $jit.NetworkMap = new Class( {
   getPositions: function() {
     var pos = {};
     $.each(this.graph.nodes, function(n) {
-      pos[n.id] = n.getPos('end');
+      pos[n.id] = n.getPos();
     });
 
     return pos;
