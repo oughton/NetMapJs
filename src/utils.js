@@ -184,7 +184,7 @@ $NetworkMap.Views = (function() {
       // translate a main canvas in sync with overview box
       var _moveBox = function(e) {
         var o = _container.offset(),
-            x = e.clientX - o.left, y = e.clientY - o.top,
+            x = e.pageX - o.left, y = e.pageY - o.top,
             canvas = viz.canvas,
             size = canvas.getSize(),
             pt1 = _over.c2p({ x: x, y: y }),
@@ -246,14 +246,22 @@ $NetworkMap.Views = (function() {
     OverviewManager: function(viz, container) {
       var _overviews = {};
       
+      var createOverview = function(level) {
+        var id = viz.config.injectInto + '-overviewManager-over' + Math.round(level);
+        
+        jQuery('<div id="' + id + '"></div>').css({ width: 50, height: 50 }).appendTo(container);
+        return new $NetworkMap.Views.Overview(viz, { injectInto: id }, 0);
+      }
+      
       jQuery(viz.canvas.getElement()).bind('redraw', function() {
         // TODO: implement
 
         // check level
-         
+        jQuery.each(viz.config.groupLvls, function(index, level) {
+          if (!_overviews[level]) _overviews[level] = createOverview(level);
+        });
 
         // do we need to hide any overviews
-
 
         // do we need to add any overviews
       });
