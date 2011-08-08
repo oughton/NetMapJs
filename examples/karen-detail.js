@@ -573,7 +573,9 @@ function init(){
 
       var style = domElement.style;
       style.fontSize = "0.8em";
-      style.color = "#ddd";
+      style.color = "#000";
+      style.backgroundColor = "rgba(255,255,255,0.90)";
+      style.padding = "1px";
     },
     // Change node styles when DOM labels are placed
     // or moved.
