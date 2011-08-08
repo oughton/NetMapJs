@@ -299,8 +299,9 @@ var Groups = new Class({
       // set the node size and edge width to reflect depth
       $.each(group.nodes, function(n) { 
         // nodes
-        var dim = n.getData('dim'), ownerDim = group.owner.getData('dim');
-        var newDim = dim / Math.pow(group.owner.data.originalDim, n.data.depth);
+        var dim = n.data.originalDim || n.getData('dim'),
+            ownerDim = group.owner.getData('dim'),
+            newDim = dim / Math.pow(group.owner.data.originalDim, n.data.depth);
         
         n.data.originalDim = dim;
         n.setData('dim', newDim);
@@ -1392,7 +1393,10 @@ $jit.NetworkMap.$extend = true;
     'line': {
       'render': function(adj, canvas) {
         var from = adj.nodeFrom.pos.getc(true),
-            to = adj.nodeTo.pos.getc(true);
+            to = adj.nodeTo.pos.getc(true),
+            ctx = canvas.getCtx();
+        
+        ctx.lineWidth = 1 / canvas.scaleOffsetX;
         this.edgeHelper.line.render(from, to, canvas);
       },
       'contains': function(adj, pos) {

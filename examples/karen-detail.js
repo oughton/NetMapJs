@@ -445,18 +445,6 @@ function init(){
       }
   ];
 
-  //implement a new node type  
-  $jit.NetworkMap.Plot.NodeTypes.implement({  
-    'groups': {  
-      'render': function(node, canvas) {  
-        this.nodeHelper.circle.render 
-      },  
-      'contains': function(node, pos) {  
-        this.nodeHelper.circle.contains
-      }  
-    }  
-  });  
-
   // end
   // init ForceDirected
   var fd = new $jit.NetworkMap({
@@ -624,7 +612,7 @@ function init(){
   fd.refresh();
   
   // overview test
-  var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
+  var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150);
 
   // debug test
   //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);

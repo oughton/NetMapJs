@@ -146,6 +146,8 @@ $NetworkMap.Views = (function() {
   return {
     Overview: function(viz, mapOpts, level) {
       var _opts = jQuery.extend(true, {
+        bgAlpha: 0.25,
+        groupLvls: [ 0, 1, 2],
         Node: {
           overridable: true,
           dim: 20,
@@ -154,7 +156,7 @@ $NetworkMap.Views = (function() {
         Edge: {
           overridable: true,
           color: '#23A4FF',
-          lineWidth: 3,
+          lineWidth: 1,
           type: 'line'
         },
         Label: {
