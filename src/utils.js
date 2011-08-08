@@ -165,7 +165,8 @@ $NetworkMap.Views = (function() {
       var _over = new $jit.NetworkMap(_opts),
           _container = jQuery('#' + _opts.injectInto).css({ position: 'relative' }),
           _svg, _rect,
-          _mouse = null;
+          _mouse = null,
+          _level = level || 0;
 
       // redraw the rectangle
       var redraw = function() {
@@ -192,13 +193,22 @@ $NetworkMap.Views = (function() {
 
         canvas.translate(pt2.x - pt1.x, pt2.y - pt1.y);
       };
+
+      var hideOver = function() {
+        _container.hide();
+      };
+
+      var showOver = function() {
+        _container.show();
+      };
       
       // setup overview visualisation
       var init = function() {
         var o = _container.offset(),
             vizSize = viz.canvas.getSize(),
-            overSize = { width: _over.canvas.getSize().width, height: _over.canvas.getSize().height },
+            overSize = _over.canvas.getSize(),
             json = jQuery.extend(true, [], viz.json),
+            levelScale = viz.config.groupLvls[_level],
             svgcont = jQuery('<div></div>')
               .css({ top: 0, left: 0, position: 'absolute' })
               .appendTo(_container);
@@ -213,15 +223,28 @@ $NetworkMap.Views = (function() {
         _over.loadJSON(json);
         _over.canvas.resize(overSize.width, overSize.height);
         _over.canvas.scale(overSize.width / vizSize.width, overSize.width / vizSize.width);
+
+        // adjust zoom offset to match the level
+        if (_level != 0) {
+          _over.canvas.scale(levelScale, levelScale);
+        }
         
         jQuery(viz.canvas.getElement()).bind('redraw', function() {
+          var vizSize = viz.canvas.getSize(), overSize = _over.canvas.getSize(),
+              vizCp = viz.c2p({ x: vizSize.width / 2, y: vizSize.height / 2 }),
+              overCp = _over.c2p({ x: overSize.width / 2, y: overSize.height / 2});
+
+          if (_level != 0 && _mouse == null) {
+            _over.canvas.translate(overCp.x - vizCp.x, overCp.y - vizCp.y);
+          }
+          
           redraw();
         });
 
         // setup mouse events
         svgcont.mousedown(function(e) {
-          _moveBox(e);
           _mouse = e;
+          _moveBox(e);
         });
         svgcont.mouseup(function() {
           _mouse = null;
@@ -237,34 +260,47 @@ $NetworkMap.Views = (function() {
       init();
 
       return {
-        level: function() { return level; },
+        level: function() { return _level; },
         hide: function() { hideOver(); },
         show: function() { showOver(); }
       };
     },
 
-    OverviewManager: function(viz, container) {
+    OverviewManager: function(viz, container, width, height) {
       var _overviews = {};
       
       var createOverview = function(level) {
         var id = viz.config.injectInto + '-overviewManager-over' + Math.round(level);
         
-        jQuery('<div id="' + id + '"></div>').css({ width: 50, height: 50 }).appendTo(container);
-        return new $NetworkMap.Views.Overview(viz, { injectInto: id }, 0);
+        jQuery('<div id="' + id + '"></div>').css({ width: width, height: height }).appendTo(container);
+        return new $NetworkMap.Views.Overview(viz, { injectInto: id }, level);
       }
-      
-      jQuery(viz.canvas.getElement()).bind('redraw', function() {
-        // TODO: implement
 
-        // check level
-        jQuery.each(viz.config.groupLvls, function(index, level) {
-          if (!_overviews[level]) _overviews[level] = createOverview(level);
+      var updateLevel = function() {
+        jQuery.each(_overviews, function(l, over) {
+          if (viz.showAtLevel(viz.canvas.scaleOffsetX, over.level(), viz.config.groupLvls)) {
+            over.show();
+          } else {
+            over.hide();
+          }
+        }); 
+      };
+      
+      var init = function() {
+        // initialy create and hide overviews
+        for (var l = viz.config.groupLvls.length - 1; l >= 0; l--) {
+          _overviews[l] = createOverview(l);
+          _overviews[l].hide();
+        };
+        
+        jQuery(viz.canvas.getElement()).bind('redraw', function() {
+          updateLevel();
         });
 
-        // do we need to hide any overviews
+        updateLevel();
+      };
 
-        // do we need to add any overviews
-      });
+      init();
     }
   };
 })({});
