@@ -274,6 +274,7 @@ $NetworkMap.Views = (function() {
       var createOverview = function(level) {
         var id = viz.config.injectInto + '-overviewManager-over' + Math.round(level);
         
+        container.append('<hr />');
         jQuery('<div id="' + id + '"></div>').css({ width: width, height: height }).appendTo(container);
         return new $NetworkMap.Views.Overview(viz, { injectInto: id }, level);
       }
