@@ -576,6 +576,7 @@ function init(){
       style.color = "#000";
       style.backgroundColor = "rgba(255,255,255,0.90)";
       style.padding = "1px";
+      style.whiteSpace= "nowrap";
     },
     // Change node styles when DOM labels are placed
     // or moved.
@@ -612,6 +613,7 @@ function init(){
   fd.loadJSON(json);
   $NetworkMap.Utils.Metrics.updateMetrics(fd);
   fd.refresh();
+  fd.canvas.scale(0.9, 0.9);
   
   // overview test
   var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150);
