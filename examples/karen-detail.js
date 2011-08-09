@@ -162,14 +162,18 @@ function init(){
 
   // load JSON data.
   $NetworkMap.Json.load('../public/karen-detail.json', function(json) {
+    var tx = 35, ty = 50, sx = 1.1, sy = 1.1;
+
     fd.loadJSON(json);
     $NetworkMap.Utils.Metrics.initJSON(json);
     $NetworkMap.Utils.Metrics.updateMetrics(fd);
     fd.refresh();
-    fd.canvas.scale(0.9, 0.9);
+    fd.canvas.scale(sx, sy);
+    fd.canvas.translate(tx, ty);
     
     // overview test
-    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150);
+    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, tx, ty);
+
 
     // debug test
     //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);

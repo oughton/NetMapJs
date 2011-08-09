@@ -154,7 +154,7 @@ $NetworkMap.Debug = (function() {
 $NetworkMap.Views = (function() {
 
   return {
-    Overview: function(viz, mapOpts, level) {
+    Overview: function(viz, mapOpts, level, tx, ty) {
       var _opts = jQuery.extend(true, {
         bgAlpha: 0.25,
         groupLvls: [ 0, 1, 2],
@@ -239,6 +239,8 @@ $NetworkMap.Views = (function() {
         // adjust zoom offset to match the level
         if (_level != 0) {
           _over.canvas.scale(levelScale, levelScale);
+        } else {
+          if (tx && ty) _over.canvas.translate(tx, ty);
         }
         
         jQuery(viz.canvas.getElement()).bind('redraw', function() {
@@ -279,7 +281,7 @@ $NetworkMap.Views = (function() {
       };
     },
 
-    OverviewManager: function(viz, container, width, height) {
+    OverviewManager: function(viz, container, width, height, tx, ty) {
       var _overviews = {};
       
       var createOverview = function(level) {
@@ -287,7 +289,7 @@ $NetworkMap.Views = (function() {
         
         container.append('<hr />');
         jQuery('<div id="' + id + '"></div>').css({ width: width, height: height }).appendTo(container);
-        return new $NetworkMap.Views.Overview(viz, { injectInto: id }, level);
+        return new $NetworkMap.Views.Overview(viz, { injectInto: id }, level, tx, ty);
       }
 
       var updateLevel = function() {
