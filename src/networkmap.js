@@ -923,6 +923,9 @@ $jit.NetworkMap.$extend = true;
           opt = opt || this.viz.controller;
       
       opt.clearCanvas && canvas.clear();
+      
+      // fire plot begin event
+      jQuery(canvas.getElement()).trigger('plotbegin', [viz, canvas, ctx]);
         
       var root = aGraph.getNode(id);
       if(!root) return;
@@ -1566,6 +1569,9 @@ $jit.NetworkMap.$extend = true;
           if (metrics.to == undefined) {
             metrics.to = new $NetworkMap.Utils.Metrics.data(0, 1000, 0, 0);
           }
+
+          // TODO: this fixes both directions capacity to be the same
+          metrics.from.capacity = metrics.to.capacity;
 
           h1 = (metrics.from.capacity / 1500) * 10 / canvas.scaleOffsetY;
           h2 = (metrics.to.capacity / 1500) * 10 / canvas.scaleOffsetY;
