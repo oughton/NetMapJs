@@ -6,6 +6,16 @@ $NetworkMap.Json = {};
 $NetworkMap.Json = (function() {
 
   return {
+    save: function(path, json, filename) {
+      jQuery.post(path + '?filename=' + filename, { json: json });
+    },
+
+    load: function(path, callback) {
+      jQuery.getJSON(path, function(data) {
+        callback(data);
+      });
+    },
+
     setStartPositions: function(json, positions) {
       jQuery.each(positions, function(index, val1) {
         jQuery.each(json, function(index, val2) {
@@ -264,7 +274,8 @@ $NetworkMap.Views = (function() {
       return {
         level: function() { return _level; },
         hide: function() { hideOver(); },
-        show: function() { showOver(); }
+        show: function() { showOver(); },
+        refresh: function() { _over.refresh(); }
       };
     },
 
@@ -304,6 +315,14 @@ $NetworkMap.Views = (function() {
       };
 
       init();
+
+      return {
+        refresh: function() { 
+          jQuery.each(_overviews, function(l, over) {
+            over.refresh();
+          });
+        }
+      };
     }
   };
 })({});
