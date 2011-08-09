@@ -1572,7 +1572,14 @@ $jit.NetworkMap.$extend = true;
 
           // TODO: this fixes both directions capacity to be the same
           metrics.from.capacity = metrics.to.capacity;
-          if (metrics.from.bandwidth > metrics.from.capacity) metrics.from.bandwidth = metrics.from.capacity;
+
+          // make sure the bandwidth is not over the capacity
+          if (metrics.from.bandwidth > metrics.from.capacity) {
+            metrics.from.bandwidth = metrics.from.capacity;
+          }
+          if (metrics.to.bandwidth > metrics.to.capacity) {
+            metrics.to.bandwidth = metrics.to.capacity;
+          }
 
           h1 = (metrics.from.capacity / 1500) * 10 / canvas.scaleOffsetY;
           h2 = (metrics.to.capacity / 1500) * 10 / canvas.scaleOffsetY;
