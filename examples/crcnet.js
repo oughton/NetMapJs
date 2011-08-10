@@ -21,7 +21,7 @@ function init(){
     var json = [];
     
     jQuery.each(data, function(index, obj) {
-      var host = {};
+      var host = {}, parents;
 
       jQuery.each(obj, function(key, val) {
         switch(key) {
@@ -35,7 +35,11 @@ function init(){
             host['name'] = val;
             break;
           case 'parents':
-            host['adjacencies'] = [{ nodeTo: val }];
+            parents = val.split(',');
+            host['adjacencies'] = [];
+            jQuery.each(parents, function(index, p) {
+              host['adjacencies'].push({ nodeTo: p });
+            });
             break;
           default:
         }
@@ -135,7 +139,7 @@ function init(){
         }
       },
       //Number of iterations for the FD algorithm
-      iterations: 5000,
+      iterations: 20000,
       layout: 'ForceDirected',
       levelDistance: 20,
       bgAlpha: 0.25,
@@ -157,11 +161,8 @@ function init(){
       }
     });
     
-    $NetworkMap.Utils.Metrics.initJSON(json);
-
     // load JSON data.
     fd.loadJSON(json);
-    $NetworkMap.Utils.Metrics.updateMetrics(fd);
     
     // debug test
     var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
@@ -184,5 +185,16 @@ function init(){
 
     // overview test
     var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150);
+    
+    var button = jQuery('<input id="btnSave" type="button" value="save" />').click(function() {
+      jQuery.each(fd.json, function(index, node) {
+        var pos = fd.graph.getNode(node.id).getPos('current');
+        if (!node.data) node.data = {};
+        node.data.pos = { x: pos.x, y: pos.y };
+      });
+
+      $NetworkMap.Json.save('../src/save.php', fd.json, 'crcnet.json');
+    });
+    jQuery(document.body).append(button);
   }
 }
