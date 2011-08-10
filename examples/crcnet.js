@@ -32,7 +32,6 @@ function init(){
             break;
           case 'host_name':
             host['id'] = val.split('-');
-            console.log(val);
             break;
           case 'parents':
             host['adjacencies'] = [{ nodeTo: val }];
