@@ -656,11 +656,13 @@ $jit.NetworkMap = new Class( {
   */
   refresh: function() {
     this.computeLayouts();
+    jQuery(this.canvas.getElement()).trigger('computePositions', [this, this.graph]);
     this.plot();
   },
 
   reposition: function() {
     this.computeLayouts('end');
+    jQuery(this.canvas.getElement()).trigger('computePositions', [this, this.graph]);
   },
 
   end: function() {
@@ -670,6 +672,7 @@ $jit.NetworkMap = new Class( {
         n.setPos(pos, prop);
       });
     });
+    jQuery(this.canvas.getElement()).trigger('computePositions', [this, this.graph]);
     this.plot();
   },
 
@@ -747,6 +750,7 @@ $jit.NetworkMap = new Class( {
 
     this.config.onBeforeCompute(this.graph.getNode(this.root));
     this.computeLayouts(opt.property, opt);
+    jQuery(this.canvas.getElement()).trigger('computePositions', [this, this.graph]);
   },
 
   /*
