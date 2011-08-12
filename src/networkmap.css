@@ -6,3 +6,8 @@
   -o-user-select: none;
   user-select: none;
 }
+
+/* Overview Styles */
+hr {
+  margin: 1px 0 1px 0;
+}

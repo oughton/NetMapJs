@@ -196,8 +196,8 @@ $NetworkMap.Views = (function() {
         _rect.attr({ x: p1.x, y: p1.y, width: w, height: h });
         _cross && _cross.remove();
         _cross = _svg.path(
-          'M' + x + ' 0L' + x + ' ' + size.height +
-          'M0 ' + y + 'L' + size.width + ' ' + y
+          'M' + x + ' 0L' + x + ' ' + _svg.height +
+          'M0 ' + y + 'L' + _svg.width + ' ' + y
         ).attr(attr);
         _over.loadPositions(viz.getPositions());
       };      
