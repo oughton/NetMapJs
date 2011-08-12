@@ -176,7 +176,7 @@ $NetworkMap.Views = (function() {
 
       var _over = new $jit.NetworkMap(_opts),
           _container = jQuery('#' + _opts.injectInto).css({ position: 'relative' }),
-          _svg, _rect, _path,
+          _svg, _rect, _cross,
           _mouse = null,
           _level = level || 0;
 
@@ -194,8 +194,8 @@ $NetworkMap.Views = (function() {
         }
           
         _rect.attr({ x: p1.x, y: p1.y, width: w, height: h });
-        _path && _path.remove();
-        _path = _svg.path(
+        _cross && _cross.remove();
+        _cross = _svg.path(
           'M' + x + ' 0L' + x + ' ' + size.height +
           'M0 ' + y + 'L' + size.width + ' ' + y
         ).attr(attr);
