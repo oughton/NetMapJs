@@ -139,7 +139,7 @@ function init(){
         }
       },
       //Number of iterations for the FD algorithm
-      iterations: 20000,
+      iterations: 100000,
       layout: 'ForceDirected',
       levelDistance: 20,
       bgAlpha: 0.25,

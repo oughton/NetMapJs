@@ -239,7 +239,7 @@
         "address": "10.1.128.45", 
         "alias": "Kessels Pole", 
         "host_name": "kes-p", 
-        "parents": "htb,pws", 
+        "parents": "htb", 
         "use": "generic-host"
     }, 
     {

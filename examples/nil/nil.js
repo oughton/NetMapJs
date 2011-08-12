@@ -333,8 +333,8 @@ function init(){
       }
     },
     //Number of iterations for the FD algorithm
-    iterations: 500,
-    layout: 'Static',
+    iterations: 50000,
+    layout: 'ForceDirected',
     levelDistance: 130,
     bgAlpha: 0.25,
     onCreateLabel: function(domElement, node){
@@ -364,26 +364,21 @@ function init(){
   $NetworkMap.Utils.Metrics.updateMetrics(fd);
   
   // debug test
-  //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-  //debug.enable();
+  var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+  debug.enable();
 
-  /*fd.computeIncremental({
+  fd.computeIncremental({
     iter: 40,
     property: 'end',
     onStep: function(perc){
       debug.logWrite(perc + '% loaded...');
+      fd.end();
     },
     onComplete: function(){
       debug.logWrite('done');
-      fd.animate({
-        modes: ['linear'],
-        transition: $jit.Trans.Elastic.easeOut,
-        duration: 2500
-      });
+      fd.end();
     }
-  });*/
-
-  fd.refresh();
+  });
   
   // overview test
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });

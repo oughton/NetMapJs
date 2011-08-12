@@ -161,7 +161,7 @@ function init(){
   });
 
   // load JSON data.
-  $NetworkMap.Json.load('../public/karen-detail.json', function(json) {
+  $NetworkMap.Json.load('data/karen-detail.json', function(json) {
     var tx = 35, ty = 50, sx = 1.1, sy = 1.1;
 
     fd.loadJSON(json);
