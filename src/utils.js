@@ -176,7 +176,7 @@ $NetworkMap.Views = (function() {
 
       var _over = new $jit.NetworkMap(_opts),
           _container = jQuery('#' + _opts.injectInto).css({ position: 'relative' }),
-          _svg, _rect,
+          _svg, _rect, _path,
           _mouse = null,
           _level = level || 0;
 
@@ -184,13 +184,21 @@ $NetworkMap.Views = (function() {
       var redraw = function() {
         var size = viz.canvas.getSize(), 
             p1 = _over.p2c(viz.c2p({ x: 0, y: 0 })),
-            p2 = _over.p2c(viz.c2p({ x: size.width, y: size.height }));
+            p2 = _over.p2c(viz.c2p({ x: size.width, y: size.height })),
+            w = Math.abs(p2.x - p1.x), h = Math.abs(p2.y - p1.y),
+            x = p1.x + w / 2, y = p1.y + h / 2,
+            attr = { stroke: 'rgb(255,255,0)' };
 
         if (!_rect) {
-          _rect = _svg.rect(0, 0, 0, 0).attr({ stroke: 'rgb(255,255,0)' });
+          _rect = _svg.rect(0, 0, 0, 0).attr(attr);
         }
           
-        _rect.attr({ x: p1.x, y: p1.y, width: Math.abs(p2.x - p1.x), height: Math.abs(p2.y - p1.y) });
+        _rect.attr({ x: p1.x, y: p1.y, width: w, height: h });
+        _path && _path.remove();
+        _path = _svg.path(
+          'M' + x + ' 0L' + x + ' ' + size.height +
+          'M0 ' + y + 'L' + size.width + ' ' + y
+        ).attr(attr);
         _over.loadPositions(viz.getPositions());
       };      
       
