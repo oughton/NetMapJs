@@ -338,12 +338,10 @@ function init(){
     levelDistance: 130,
     bgAlpha: 0.25,
     onCreateLabel: function(domElement, node){
-      var _preventDefault = function(evt) { evt.preventDefault(); };
       var style = domElement.style;
       domElement.innerHTML = node.name;
       style.fontSize = "0.8em";
       style.color = "#ddd";
-      jQuery(domElement).bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
     },
     onPlaceLabel: function(domElement, node){
       var style = domElement.style;

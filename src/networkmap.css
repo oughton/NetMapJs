@@ -1,0 +1,8 @@
+/* Stop node labels from being able to be selected */
+.node {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
