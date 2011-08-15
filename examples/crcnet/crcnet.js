@@ -17,7 +17,7 @@ var labelType, useGradients, nativeTextSupport, animate;
 
 function init(){
   // init data
-  jQuery.getJSON('crc.json', function(data) {
+  jQuery.getJSON('data/crc.json', function(data) {
     var json = [];
     
     jQuery.each(data, function(index, obj) {
@@ -140,7 +140,7 @@ function init(){
       },
       //Number of iterations for the FD algorithm
       iterations: 100000,
-      layout: 'Arbor',
+      layout: 'Static',
       levelDistance: 20,
       bgAlpha: 0.25,
       onCreateLabel: function(domElement, node){
@@ -159,27 +159,30 @@ function init(){
       }
     });
     
-    // load JSON data.
-    fd.loadJSON(json);
-    
-    // debug test
-    var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-    debug.enable();
+    $NetworkMap.Json.load('data/crcnet.json', function(json) {
+      // load JSON data.
+      fd.loadJSON(json);
+      
+      // debug test
+      var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+      debug.enable();
 
-    fd.refresh();
+      fd.refresh();
+      fd.canvas.scale(1.1, 1.1);
 
-    // overview test
-    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, { Node: { dim: 5 } });
-    
-    var button = jQuery('<input id="btnSave" type="button" value="save" />').click(function() {
-      jQuery.each(fd.json, function(index, node) {
-        var pos = fd.graph.getNode(node.id).getPos('current');
-        if (!node.data) node.data = {};
-        node.data.pos = { x: pos.x, y: pos.y };
-      });
+      // overview test
+      var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, { Node: { dim: 5 } });
+      
+      /*var button = jQuery('<input id="btnSave" type="button" value="save" />').click(function() {
+        jQuery.each(fd.json, function(index, node) {
+          var pos = fd.graph.getNode(node.id).getPos('current');
+          if (!node.data) node.data = {};
+          node.data.pos = { x: pos.x, y: pos.y };
+        });
 
-      $NetworkMap.Json.save('../../src/save.php', fd.json, 'crcnet.json');
-    });
-    jQuery(document.body).append(button);
+        $NetworkMap.Json.save('../../src/save.php', fd.json, 'crcnet.json');
+      });*/
+      jQuery(document.body).append(button);
+    });  
   }
 }
