@@ -166,21 +166,10 @@ function init(){
     var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
     debug.enable();
 
-    fd.computeIncremental({
-      iter: 40,
-      property: 'end',
-      onStep: function(perc){
-        debug.logWrite(perc + '% loaded...');
-        fd.end();
-      },
-      onComplete: function(){
-        debug.logWrite('done');
-        fd.end();
-      }
-    });
+    fd.refresh();
 
     // overview test
-    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150);
+    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, { Node: { dim: 5 } });
     
     var button = jQuery('<input id="btnSave" type="button" value="save" />').click(function() {
       jQuery.each(fd.json, function(index, node) {

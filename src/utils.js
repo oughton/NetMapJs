@@ -294,15 +294,16 @@ $NetworkMap.Views = (function() {
       };
     },
 
-    OverviewManager: function(viz, container, width, height, tx, ty) {
+    OverviewManager: function(viz, container, width, height, overOpts, tx, ty) {
       var _overviews = {};
       
       var createOverview = function(level) {
         var id = viz.config.injectInto + '-overviewManager-over' + Math.round(level);
         
+        overOpts.injectInto = id;
         container.append('<hr />');
         jQuery('<div id="' + id + '"></div>').css({ width: width, height: height }).appendTo(container);
-        return new $NetworkMap.Views.Overview(viz, { injectInto: id }, level, tx, ty);
+        return new $NetworkMap.Views.Overview(viz, overOpts, level, tx, ty);
       }
 
       var updateLevel = function() {

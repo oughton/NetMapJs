@@ -172,7 +172,7 @@ function init(){
     fd.canvas.translate(tx, ty);
     
     // overview test
-    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, tx, ty);
+    var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, {}, tx, ty);
 
 
     // debug test
