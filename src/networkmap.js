@@ -35,6 +35,8 @@ Layouts.NetworkMap.Arbor = new Class({
 
       return that;
     })();
+
+    this.sys.stop();
   },
   
   getOptions: function(group, width, height, random) {
