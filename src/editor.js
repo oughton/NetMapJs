@@ -26,7 +26,7 @@ function init(){
     },
     Node: {
       overridable: true,
-      dim: 20
+      dim: 5
     },
     Edge: {
       overridable: true,

@@ -140,7 +140,7 @@ function init(){
       },
       //Number of iterations for the FD algorithm
       iterations: 100000,
-      layout: 'ForceDirected',
+      layout: 'Arbor',
       levelDistance: 20,
       bgAlpha: 0.25,
       onCreateLabel: function(domElement, node){
@@ -166,8 +166,6 @@ function init(){
     var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
     debug.enable();
 
-    fd.canvas.scale(0.25, 0.25);
-
     fd.computeIncremental({
       iter: 40,
       property: 'end',
@@ -191,7 +189,7 @@ function init(){
         node.data.pos = { x: pos.x, y: pos.y };
       });
 
-      $NetworkMap.Json.save('../src/save.php', fd.json, 'crcnet.json');
+      $NetworkMap.Json.save('../../src/save.php', fd.json, 'crcnet.json');
     });
     jQuery(document.body).append(button);
   }

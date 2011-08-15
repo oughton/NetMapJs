@@ -3,6 +3,95 @@ $NetworkMap = {};
 Layouts.NetworkMap = {};
 
 /*
+ * Class: Layouts.NetworkMap.Arbor
+ */
+Layouts.NetworkMap.Arbor = new Class({
+
+  initialize: function(viz) {
+    this.viz = viz;
+
+    var canvas = viz.canvas,
+        size = canvas.getSize();
+
+    this.sys = arbor.ParticleSystem(1000, 600, 0.5);
+    this.sys.parameters({ gravity:true });
+    this.sys.renderer = (function() {
+      var particleSystem;
+      
+      var that = {
+        init: function(system) {
+          particleSystem = system;
+          particleSystem.screenSize(size.width, size.height);
+          particleSystem.screenPadding(80);
+        },
+
+        redraw: function() {
+          particleSystem.eachNode(function(node, pt) {
+            viz.graph.getNode(node.name).setPos(new Complex(pt.x - size.width / 2, pt.y - size.height / 2), 'current');
+          });
+          viz.plot();
+        }
+      };
+
+      return that;
+    })();
+  },
+  
+  getOptions: function(group, width, height, random) {
+    var s = this.viz.canvas.getSize();
+    var w = s.width, h = s.height;
+    var count = group.nodes.length;
+    var k2 = w * h / count, k = Math.sqrt(k2);
+    var l = this.viz.config.levelDistance;
+    var root = group.root ? group.root : group.nodes[0]; 
+    var maxDim = 0;
+    
+    // adjust width and height to include node dims
+    $.each(group.nodes, function(n) {
+      maxDim = Math.max(n.getData('dim'), maxDim);
+    });
+    
+    w -= maxDim * 4;
+    h -= maxDim * 4;
+    
+    return {
+      width: w,
+      height: h,
+      tstart: w * 0.1,
+      nodef: function(x) { return k2 / (x || 1); },
+      edgef: function(x) { return /* x * x / k; */ k * (x - l); },
+      root: root.id
+    };
+  },
+  
+  compute: function(group, property, incremental) {
+    var prop = $.splat(property || ['current', 'start', 'end']);
+    var opt = this.getOptions(group, 300, 300);
+    var graph = this.viz.graph;
+    var sys = this.sys;
+    
+    NodeDim.compute(this.viz.graph, prop, this.viz.config);
+   
+    jQuery.each(group.nodes, function(index, n) {
+      n.eachAdjacency(function(adj) {
+        var nodeFrom = adj.nodeFrom, nodeTo = adj.nodeTo;
+        if (nodeFrom.data.depth == nodeTo.data.depth) {
+          sys.addEdge(nodeFrom.id, nodeTo.id);
+        }
+      });
+    });
+  },
+  
+  computePositions: function(group, property, opt, incremental) {
+  
+  },
+  
+  computePositionStep: function(group, property, opt) {
+
+  }
+});
+
+/*
  * Class: Layouts.NetworkMap.ForceDirected
  */
 Layouts.NetworkMap.ForceDirected = new Class({
@@ -590,6 +679,7 @@ $jit.NetworkMap = new Class( {
     this.layouts = {
       'Static': new Layouts.NetworkMap.Static(this),
       'ForceDirected': new Layouts.NetworkMap.ForceDirected(this),
+      'Arbor': new Layouts.NetworkMap.Arbor(this),
       'Star': new Layouts.NetworkMap.Star(this)
     };
 
