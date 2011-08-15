@@ -199,7 +199,6 @@ $NetworkMap.Views = (function() {
           'M' + x + ' 0L' + x + ' ' + _svg.height +
           'M0 ' + y + 'L' + _svg.width + ' ' + y
         ).attr(attr);
-        _over.loadPositions(viz.getPositions());
       };      
       
       // translate a main canvas in sync with overview box
@@ -250,7 +249,7 @@ $NetworkMap.Views = (function() {
         } else {
           if (tx && ty) _over.canvas.translate(tx, ty);
         }
-        
+       
         jQuery(viz.canvas.getElement()).bind('redraw', function() {
           var vizSize = viz.canvas.getSize(), overSize = _over.canvas.getSize(),
               vizCp = viz.c2p({ x: vizSize.width / 2, y: vizSize.height / 2 }),
@@ -261,6 +260,12 @@ $NetworkMap.Views = (function() {
           }
           
           redraw();
+        });
+
+        // reload positions when they change in the main plot
+        jQuery(viz.canvas.getElement()).bind('computePositions', function() {
+          _over.loadPositions(viz.getPositions());
+          _over.end();
         });
 
         // setup mouse events
