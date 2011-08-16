@@ -81,7 +81,6 @@ Layouts.NetworkMap.Arbor = new Class({
           sys.addEdge(nodeFrom.id, nodeTo.id);
         }
       });
-
     });
     
     // Add in artificial edges for interconnecting groups.
@@ -89,7 +88,8 @@ Layouts.NetworkMap.Arbor = new Class({
       if (g.depth == depth + 1 && g.root) {
         g.root.eachAdjacency(function(adj) {
           var from = adj.nodeFrom.data.parentID, to = adj.nodeTo.data.parentID;
-          if (from && from != to) {
+
+          if (from && from != to && graph.getNode(from).data.depth == graph.getNode(to).data.depth) {
             sys.addEdge(from, to);
           }
         });
@@ -712,7 +712,7 @@ $jit.NetworkMap = new Class( {
           // By calling setPos on all group nodes, this will recursively cover
           // all of the sub groups.
           this.group && jQuery.each(this.group.nodes, function(index, node) {
-            var p = node.getPos(type);
+            var p = node.getPos(type).clone();
             p.x += posDelta.x;
             p.y += posDelta.y;
             node.setPos(p, type);
