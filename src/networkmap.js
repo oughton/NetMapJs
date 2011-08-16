@@ -67,13 +67,13 @@ Layouts.NetworkMap.Arbor = new Class({
   },
   
   compute: function(group, property, incremental) {
-    var prop = $.splat(property || ['current', 'start', 'end']);
-    var opt = this.getOptions(group, 300, 300);
-    var graph = this.viz.graph;
-    var sys = this.sys;
+    var prop = $.splat(property || ['current', 'start', 'end']),
+        graph = this.viz.graph,
+        sys = this.sys,
+        depth = group.depth;
     
     NodeDim.compute(this.viz.graph, prop, this.viz.config);
-   
+
     jQuery.each(group.nodes, function(index, n) {
       n.eachAdjacency(function(adj) {
         var nodeFrom = adj.nodeFrom, nodeTo = adj.nodeTo;
@@ -81,6 +81,19 @@ Layouts.NetworkMap.Arbor = new Class({
           sys.addEdge(nodeFrom.id, nodeTo.id);
         }
       });
+
+    });
+    
+    // Add in artificial edges for interconnecting groups.
+    jQuery.each(graph.groups, function(index, g) {
+      if (g.depth == depth + 1 && g.root) {
+        g.root.eachAdjacency(function(adj) {
+          var from = adj.nodeFrom.data.parentID, to = adj.nodeTo.data.parentID;
+          if (from && from != to) {
+            sys.addEdge(from, to);
+          }
+        });
+      }
     });
   },
   
@@ -421,7 +434,8 @@ var Groups = new Class({
   },
 
   buildGroups: function() {
-    var raw = {}, groups = {}, nodes = [], flat = [], flatten, that = this;
+    var raw = {}, groups = {}, nodes = [], flat = [], flatten, that = this,
+        graph = this.graph;
 
     var computeLevels = function(groups, nodes, parentID, depth) {
       var group = { id: parentID, nodes: [], depth: depth, subgroups: {} };
@@ -454,7 +468,7 @@ var Groups = new Class({
       return group;
     };
 
-    this.graph.eachNode(function(n) {
+    graph.eachNode(function(n) {
       var group = n.data.parentID || '_TOP';
       nodes.push(n);
       if (!groups[group]) groups[group] = {};
@@ -463,7 +477,7 @@ var Groups = new Class({
     raw = computeLevels(groups, nodes, '_TOP', 0);
 
     // fill in adjacencies
-    this.graph.eachNode(function(n) {
+    graph.eachNode(function(n) {
       n.eachAdjacency(function(adj) {
         var from = adj.nodeFrom, to = adj.nodeTo;
         adj.data.depth = Math.max(from.data.depth, to.data.depth);
@@ -475,8 +489,18 @@ var Groups = new Class({
 
     // create flat array of groups
     flatten = function(obj, arr) {
+      var owner = graph.getNode(obj.id);
+          group = { depth: obj.depth, id: obj.id, nodes: obj.nodes, owner: owner, subgroups: obj.subgroups };
+
       if (obj.subgroups.length < 1) return;
-      arr.push({ depth: obj.depth, id: obj.id, nodes: obj.nodes, owner: that.graph.getNode(obj.id) });
+      arr.push(group);
+      
+      // set the nodes' subgroups and group
+      if (owner) {
+        owner.subgroups = obj.subgroups;
+        owner.group = group;
+      }
+
       jQuery.each(obj.subgroups, function(key, val) {
         flatten(val, arr);
       });
@@ -491,7 +515,7 @@ var Groups = new Class({
       else return 1;
     });
     
-    this.graph.groups = flat;
+    graph.groups = flat;
   },
 
   computeLayouts: function(property, incremental) {
@@ -661,11 +685,41 @@ $jit.NetworkMap = new Class( {
     }
 
     this.graphOptions = {
-      'complex': true,
-      'Node': {
-        'selected': false,
-        'exist': true,
-        'drawn': true
+      complex: true,
+      Node: {
+        selected: false,
+        exist: true,
+        drawn: true,
+        group: false,
+        subgroups: {},
+        
+        // Custom setPos method that updates child groups
+        setPos: function(value, type) { 
+          type = type || "current";
+          var pos, posDelta;
+
+          if(type == "current") {
+            pos = this.pos;
+          } else if(type == "end") {
+            pos = this.endPos;
+          } else if(type == "start") {
+            pos = this.startPos;
+          }
+          
+          posDelta = new Complex(value.x - pos.x, value.y - pos.y);
+          
+          // Need to recalculate all child node positions.
+          // By calling setPos on all group nodes, this will recursively cover
+          // all of the sub groups.
+          this.group && jQuery.each(this.group.nodes, function(index, node) {
+            var p = node.getPos(type);
+            p.x += posDelta.x;
+            p.y += posDelta.y;
+            node.setPos(p, type);
+          });
+
+          pos.set(value);
+        }
       }
     };
     this.graph = new Graph(this.graphOptions, this.config.Node,
