@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script language="javascript" type="text/javascript" src="../../jit.js"></script>
+  <script language="javascript" type="text/javascript" src="../../../src/networkmap.js"></script>
+  <script language="javascript" type="text/javascript" src="../../../src/utils.js"></script>
+  
+</head>
+<body>
+<script>
+jQuery(document).ready(function() {
+  jQuery.getJSON('crc.json', function(loadin) {
+    jQuery.getJSON('crcnet.json', function(json) {
+      var db = {};
+
+      jQuery.each(loadin, function(index, node) {
+        if (node['alias'] && node['host_name']) {
+          db[node['host_name']] = node['alias'];
+        }
+      });
+
+      jQuery.each(json, function(index, node) {
+        if (db[node.id]) {
+          node.name = db[node.id];
+        }
+      });
+      
+      $NetworkMap.Json.save('../../../src/save.php', json, 'c.json');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
+

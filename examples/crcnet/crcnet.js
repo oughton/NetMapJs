@@ -76,13 +76,13 @@ function init(){
       },
       Node: {
         overridable: true,
-        dim: 2
+        dim: 4
       },
       Edge: {
         overridable: true,
         color: '#23A4FF',
         lineWidth: 1,
-        type: 'line'
+        //type: 'arrowpipe'
       },
       //Native canvas text styling
       Label: {
@@ -96,6 +96,26 @@ function init(){
         enable: true,
         type: 'Native', // use the default events system
         onMouseMove: function(node, eventInfo, e) {
+          var edge = eventInfo.getEdge();
+
+          if (this.current) this.current.remove();
+          if (!edge) return;
+
+          var n1 = edge.nodeFrom,
+              n2 = edge.nodeTo,
+              n1f = fd.fitsInCanvas(fd.p2c(n1.getPos())),
+              n2f = fd.fitsInCanvas(fd.p2c(n2.getPos()));
+          
+          if (n1f && n2f || !n1f && !n2f) {
+            return;
+          }
+
+          var to = n1f ? n2 : n1;
+          var from = n1f ? n1 : n2;
+
+          this.current = jQuery('<div>To ' + to.name + '</div>')
+            .css({ position: 'absolute', left: e.clientX, top: e.clientY - 30, color: '#ddd' })
+            .appendTo(document.body);
         },
         onMouseWheel: function() {
         },
@@ -122,6 +142,10 @@ function init(){
           var edge = eventInfo.getEdge();
           
           if (edge) {
+            var edge = eventInfo.getEdge();
+            
+            if (!edge) return;
+
             var n1 = edge.nodeFrom,
                 n2 = edge.nodeTo,
                 n1f = fd.fitsInCanvas(fd.p2c(n1.getPos())),
@@ -135,19 +159,19 @@ function init(){
             var to = n1f ? n2 : n1;
 
             fd.followEdge(from, to, 2);
-          }
+            }
         }
       },
       //Number of iterations for the FD algorithm
-      iterations: 100000,
       layout: 'Static',
-      levelDistance: 20,
       bgAlpha: 0.25,
+      groupLvls: [ 0 ],
       onCreateLabel: function(domElement, node){
         var style = domElement.style;
-        domElement.innerHTML = node.name;
+        domElement.innerHTML = node.id;
         style.fontSize = "0.8em";
         style.color = "#ddd";
+        style.whiteSpace= "nowrap";
       },
       onPlaceLabel: function(domElement, node){
         var style = domElement.style;
@@ -164,11 +188,11 @@ function init(){
       fd.loadJSON(json);
       
       // debug test
-      var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-      debug.enable();
+      //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+      //debug.enable();
 
       fd.refresh();
-      fd.canvas.scale(1.1, 1.1);
+      fd.canvas.scale(2.5, 2.5);
 
       // overview test
       var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, { Node: { dim: 5 } });
@@ -181,8 +205,8 @@ function init(){
         });
 
         $NetworkMap.Json.save('../../src/save.php', fd.json, 'crcnet.json');
-      });*/
-      jQuery(document.body).append(button);
+      });
+      jQuery(document.body).append(button);*/
     });  
   }
 }

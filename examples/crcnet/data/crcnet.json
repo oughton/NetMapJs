@@ -1,7 +1,7 @@
 [
   {
     "id": "gtw",
-    "name": "gtw",
+    "name": "CRCnet Gateway",
     "adjacencies": [
       {
         "nodeTo": "orwell"
@@ -17,7 +17,7 @@
   },
   {
     "id": "orwell",
-    "name": "orwell",
+    "name": "CRCnet Monitoring Server",
     "data": {
       "$dim": 8,
       "pos": {
@@ -28,7 +28,7 @@
   },
   {
     "id": "ether",
-    "name": "ether",
+    "name": "CRCnet AMP Collector",
     "adjacencies": [
       {
         "nodeTo": "orwell"
@@ -43,7 +43,7 @@
   },
   {
     "id": "aegis",
-    "name": "aegis",
+    "name": "CRCnet Proxy Server",
     "adjacencies": [
       {
         "nodeTo": "orwell"
@@ -58,7 +58,7 @@
   },
   {
     "id": "peon",
-    "name": "peon",
+    "name": "Peon",
     "adjacencies": [
       {
         "nodeTo": "orwell"
@@ -73,7 +73,7 @@
   },
   {
     "id": "vault",
-    "name": "vault",
+    "name": "CRCnet Backup Server",
     "adjacencies": [
       {
         "nodeTo": "rsc"
@@ -88,7 +88,7 @@
   },
   {
     "id": "squalor",
-    "name": "squalor",
+    "name": "Squalor",
     "adjacencies": [
       {
         "nodeTo": "orwell"
@@ -103,7 +103,7 @@
   },
   {
     "id": "msb",
-    "name": "msb",
+    "name": "MSB HostAP",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -118,7 +118,7 @@
   },
   {
     "id": "mph",
-    "name": "mph",
+    "name": "MWP Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -133,7 +133,7 @@
   },
   {
     "id": "mfr",
-    "name": "mfr",
+    "name": "Murray Frith\\'s Repeater - Soekris",
     "adjacencies": [
       {
         "nodeTo": "mxx"
@@ -148,7 +148,7 @@
   },
   {
     "id": "dav",
-    "name": "dav",
+    "name": "DAV Repeater - Ngahinapouri",
     "adjacencies": [
       {
         "nodeTo": "mwp"
@@ -163,7 +163,7 @@
   },
   {
     "id": "wht",
-    "name": "wht",
+    "name": "Whatawhata School Repeater",
     "adjacencies": [
       {
         "nodeTo": "mar"
@@ -178,7 +178,7 @@
   },
   {
     "id": "rch",
-    "name": "rch",
+    "name": "Richardson Rd Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "kki"
@@ -193,7 +193,7 @@
   },
   {
     "id": "pws",
-    "name": "pws",
+    "name": "Pirongia South Woolshed",
     "adjacencies": [
       {
         "nodeTo": "mwp"
@@ -208,7 +208,7 @@
   },
   {
     "id": "mwp",
-    "name": "mwp",
+    "name": "MWP Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "mph"
@@ -223,7 +223,7 @@
   },
   {
     "id": "nga",
-    "name": "nga",
+    "name": "Ngahinapouri School",
     "adjacencies": [
       {
         "nodeTo": "dav"
@@ -238,7 +238,7 @@
   },
   {
     "id": "psc",
-    "name": "psc",
+    "name": "Pirongia School",
     "adjacencies": [
       {
         "nodeTo": "pws"
@@ -253,7 +253,7 @@
   },
   {
     "id": "ohp",
-    "name": "ohp",
+    "name": "Ohaupo School",
     "adjacencies": [
       {
         "nodeTo": "mil"
@@ -268,7 +268,7 @@
   },
   {
     "id": "pir",
-    "name": "pir",
+    "name": "Mt. Pirongia Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "pir2"
@@ -283,7 +283,7 @@
   },
   {
     "id": "tph",
-    "name": "tph",
+    "name": "Te Pahu School",
     "adjacencies": [
       {
         "nodeTo": "pir3"
@@ -298,7 +298,7 @@
   },
   {
     "id": "mcg",
-    "name": "mcg",
+    "name": "MCG Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "pir3"
@@ -313,7 +313,7 @@
   },
   {
     "id": "hsk",
-    "name": "hsk",
+    "name": "HSK Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "mcg"
@@ -328,7 +328,7 @@
   },
   {
     "id": "wtu",
-    "name": "wtu",
+    "name": "Waitetuna School",
     "adjacencies": [
       {
         "nodeTo": "hsk"
@@ -343,7 +343,7 @@
   },
   {
     "id": "mar",
-    "name": "mar",
+    "name": "Marwood Rd Repeater Station",
     "adjacencies": [
       {
         "nodeTo": "rch"
@@ -358,7 +358,7 @@
   },
   {
     "id": "wde",
-    "name": "wde",
+    "name": "wade household repeater station",
     "adjacencies": [
       {
         "nodeTo": "mfr2"
@@ -373,7 +373,7 @@
   },
   {
     "id": "kor",
-    "name": "kor",
+    "name": "Koromatua School",
     "adjacencies": [
       {
         "nodeTo": "wde"
@@ -388,7 +388,7 @@
   },
   {
     "id": "kua",
-    "name": "kua",
+    "name": "Te Kura Kaupapa...",
     "adjacencies": [
       {
         "nodeTo": "msb"
@@ -403,7 +403,7 @@
   },
   {
     "id": "nrd",
-    "name": "nrd",
+    "name": "Ngahinapouri Rd East",
     "adjacencies": [
       {
         "nodeTo": "gad"
@@ -418,7 +418,7 @@
   },
   {
     "id": "mms",
-    "name": "mms",
+    "name": "Murray Vicker\\'s Milking Shed",
     "adjacencies": [
       {
         "nodeTo": "mfr"
@@ -433,7 +433,7 @@
   },
   {
     "id": "mxx",
-    "name": "mxx",
+    "name": "Murray\\'s House Wirless",
     "adjacencies": [
       {
         "nodeTo": "mph"
@@ -448,7 +448,7 @@
   },
   {
     "id": "gad",
-    "name": "gad",
+    "name": "Gaddes Site",
     "adjacencies": [
       {
         "nodeTo": "mxx"
@@ -463,7 +463,7 @@
   },
   {
     "id": "nvd",
-    "name": "nvd",
+    "name": "Nevada",
     "adjacencies": [
       {
         "nodeTo": "msb"
@@ -478,7 +478,7 @@
   },
   {
     "id": "mfr2",
-    "name": "mfr2",
+    "name": "Murray Frith\\'s Repeater",
     "adjacencies": [
       {
         "nodeTo": "mfr"
@@ -493,7 +493,7 @@
   },
   {
     "id": "kes-p",
-    "name": "kes-p",
+    "name": "Kessels Pole",
     "adjacencies": [
       {
         "nodeTo": "htb"
@@ -508,7 +508,7 @@
   },
   {
     "id": "kes-h",
-    "name": "kes-h",
+    "name": "Kessels House",
     "adjacencies": [
       {
         "nodeTo": "htb"
@@ -523,7 +523,7 @@
   },
   {
     "id": "bax",
-    "name": "bax",
+    "name": "Baxter",
     "adjacencies": [
       {
         "nodeTo": "kes-h"
@@ -538,7 +538,7 @@
   },
   {
     "id": "htb",
-    "name": "htb",
+    "name": "Hamilton Tower Building - Kordia",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -553,7 +553,7 @@
   },
   {
     "id": "ttk",
-    "name": "ttk",
+    "name": "Te Taka Keegan\\'s House",
     "adjacencies": [
       {
         "nodeTo": "msb"
@@ -568,7 +568,7 @@
   },
   {
     "id": "pws2",
-    "name": "pws2",
+    "name": "Pirongia South 2nd Device",
     "adjacencies": [
       {
         "nodeTo": "pws"
@@ -583,7 +583,7 @@
   },
   {
     "id": "fitz",
-    "name": "fitz",
+    "name": "FITZ Repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "pws2"
@@ -598,7 +598,7 @@
   },
   {
     "id": "fitz2",
-    "name": "fitz2",
+    "name": "FITZ Repeater2 - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "fitz"
@@ -613,7 +613,7 @@
   },
   {
     "id": "tay",
-    "name": "tay",
+    "name": "TAY Repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "fitz2"
@@ -628,7 +628,7 @@
   },
   {
     "id": "wks",
-    "name": "wks",
+    "name": "Kessels Pole",
     "adjacencies": [
       {
         "nodeTo": "kes-p"
@@ -643,7 +643,7 @@
   },
   {
     "id": "lsa",
-    "name": "lsa",
+    "name": "Leisa, Waitetuna",
     "adjacencies": [
       {
         "nodeTo": "mcg"
@@ -658,7 +658,7 @@
   },
   {
     "id": "tay2",
-    "name": "tay2",
+    "name": "TAY Repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "tay"
@@ -673,7 +673,7 @@
   },
   {
     "id": "hui",
-    "name": "hui",
+    "name": "Huirimu - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "tay2"
@@ -688,7 +688,7 @@
   },
   {
     "id": "wha",
-    "name": "wha",
+    "name": "Wharepuhunga - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "tay2"
@@ -703,7 +703,7 @@
   },
   {
     "id": "hui2",
-    "name": "hui2",
+    "name": "Huirimu 2 - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "hui"
@@ -718,7 +718,7 @@
   },
   {
     "id": "kaa",
-    "name": "kaa",
+    "name": "Kaahu - Whakamaru",
     "adjacencies": [
       {
         "nodeTo": "hui2"
@@ -733,7 +733,7 @@
   },
   {
     "id": "prt",
-    "name": "prt",
+    "name": "Ports CPE Repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "wha"
@@ -748,7 +748,7 @@
   },
   {
     "id": "iwl",
-    "name": "iwl",
+    "name": "Innovation Waikato Router",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -763,7 +763,7 @@
   },
   {
     "id": "pku",
-    "name": "pku",
+    "name": "Pokeru Factory Road CPE Repeater - Te Awamutu",
     "adjacencies": [
       {
         "nodeTo": "pws"
@@ -778,7 +778,7 @@
   },
   {
     "id": "mil",
-    "name": "mil",
+    "name": "Mill Road CPE Repeater - Ohaupo",
     "adjacencies": [
       {
         "nodeTo": "pws"
@@ -793,7 +793,7 @@
   },
   {
     "id": "hau",
-    "name": "hau",
+    "name": "Hau CPE Repeater - Ngahinapouri",
     "adjacencies": [
       {
         "nodeTo": "mfr"
@@ -808,7 +808,7 @@
   },
   {
     "id": "pgs",
-    "name": "pgs",
+    "name": "Prendergast AP repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "wha"
@@ -823,7 +823,7 @@
   },
   {
     "id": "wha2",
-    "name": "wha2",
+    "name": "Wharepuhunga 2 - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "wha"
@@ -838,7 +838,7 @@
   },
   {
     "id": "bkr",
-    "name": "bkr",
+    "name": "Barkers Repeater - Tirau",
     "adjacencies": [
       {
         "nodeTo": "bkr2"
@@ -856,7 +856,7 @@
   },
   {
     "id": "bkr2",
-    "name": "bkr2",
+    "name": "Barkers Repeater 2 - Tirau",
     "adjacencies": [
       {
         "nodeTo": "olvr"
@@ -871,7 +871,7 @@
   },
   {
     "id": "olvr",
-    "name": "olvr",
+    "name": "Oliver Road Repeater - Whitehall",
     "adjacencies": [
       {
         "nodeTo": "olvr2"
@@ -886,7 +886,7 @@
   },
   {
     "id": "olvr2",
-    "name": "olvr2",
+    "name": "Oliver Road Repeater 2 - Whitehall",
     "adjacencies": [
       {
         "nodeTo": "frp"
@@ -901,7 +901,7 @@
   },
   {
     "id": "kai",
-    "name": "kai",
+    "name": "Kaimai Repeater",
     "adjacencies": [
       {
         "nodeTo": "bkr"
@@ -916,7 +916,7 @@
   },
   {
     "id": "kai2",
-    "name": "kai2",
+    "name": "Kaimai Repeater 2",
     "adjacencies": [
       {
         "nodeTo": "kai"
@@ -931,7 +931,7 @@
   },
   {
     "id": "crs",
-    "name": "crs",
+    "name": "Crystal Springs, Matamata",
     "adjacencies": [
       {
         "nodeTo": "kai"
@@ -946,7 +946,7 @@
   },
   {
     "id": "tts",
-    "name": "tts",
+    "name": "Totara Springs, Matamata",
     "adjacencies": [
       {
         "nodeTo": "kai"
@@ -961,7 +961,7 @@
   },
   {
     "id": "col",
-    "name": "col",
+    "name": "Clothier Road, Te Pahu",
     "adjacencies": [
       {
         "nodeTo": "kes-h"
@@ -976,7 +976,7 @@
   },
   {
     "id": "kki",
-    "name": "kki",
+    "name": "Karakiriki Repeater",
     "adjacencies": [
       {
         "nodeTo": "kki2"
@@ -991,7 +991,7 @@
   },
   {
     "id": "rsc",
-    "name": "rsc",
+    "name": "Router in RS3",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -1006,7 +1006,7 @@
   },
   {
     "id": "frp",
-    "name": "frp",
+    "name": "French Pass, Cambridge",
     "adjacencies": [
       {
         "nodeTo": "cbk"
@@ -1021,7 +1021,7 @@
   },
   {
     "id": "frp2",
-    "name": "frp2",
+    "name": "French Pass 2, Cambridge",
     "adjacencies": [
       {
         "nodeTo": "frp"
@@ -1036,7 +1036,7 @@
   },
   {
     "id": "tmw",
-    "name": "tmw",
+    "name": "Te Miro West, Cambridge",
     "adjacencies": [
       {
         "nodeTo": "cbk2"
@@ -1051,7 +1051,7 @@
   },
   {
     "id": "tmw2",
-    "name": "tmw2",
+    "name": "Te Miro West2 , Cambridge",
     "adjacencies": [
       {
         "nodeTo": "tmw"
@@ -1066,7 +1066,7 @@
   },
   {
     "id": "cbk",
-    "name": "cbk",
+    "name": "C Block Repeater - University of Waikato",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -1081,7 +1081,7 @@
   },
   {
     "id": "cbk2",
-    "name": "cbk2",
+    "name": "C Block Repeater 2 - University of Waikato",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -1096,7 +1096,7 @@
   },
   {
     "id": "shf",
-    "name": "shf",
+    "name": "Sheriff\\'s CPE Repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "wha"
@@ -1111,7 +1111,7 @@
   },
   {
     "id": "cnw",
-    "name": "cnw",
+    "name": "Curnow\\'s CPE Repeater - Ngaroma",
     "adjacencies": [
       {
         "nodeTo": "fitz2"
@@ -1126,7 +1126,7 @@
   },
   {
     "id": "bkr3",
-    "name": "bkr3",
+    "name": "Barkers Repeater 3 - Tirau",
     "adjacencies": [
       {
         "nodeTo": "bkr2"
@@ -1141,7 +1141,7 @@
   },
   {
     "id": "pkk",
-    "name": "pkk",
+    "name": "Pakaraka Road - Tapapa",
     "adjacencies": [
       {
         "nodeTo": "bkr3"
@@ -1156,7 +1156,7 @@
   },
   {
     "id": "pkk2",
-    "name": "pkk2",
+    "name": "Pakaraka Road 2 - Tapapa",
     "adjacencies": [
       {
         "nodeTo": "pkk"
@@ -1171,7 +1171,7 @@
   },
   {
     "id": "tmro",
-    "name": "tmro",
+    "name": "Te Miro - Cambridge",
     "adjacencies": [
       {
         "nodeTo": "frp2"
@@ -1186,7 +1186,7 @@
   },
   {
     "id": "tmro2",
-    "name": "tmro2",
+    "name": "Te Miro 2 - Cambridge",
     "adjacencies": [
       {
         "nodeTo": "tmro"
@@ -1201,7 +1201,7 @@
   },
   {
     "id": "kki2",
-    "name": "kki2",
+    "name": "Karakiriki Repeater 2",
     "adjacencies": [
       {
         "nodeTo": "mfr2"
@@ -1216,7 +1216,7 @@
   },
   {
     "id": "wde2",
-    "name": "wde2",
+    "name": "Wade Repeater 2",
     "adjacencies": [
       {
         "nodeTo": "wde"
@@ -1231,7 +1231,7 @@
   },
   {
     "id": "pir2",
-    "name": "pir2",
+    "name": "Pirongia Repeater 2",
     "adjacencies": [
       {
         "nodeTo": "mwp"
@@ -1246,7 +1246,7 @@
   },
   {
     "id": "tku",
-    "name": "tku",
+    "name": "Te Uku Repeater",
     "adjacencies": [
       {
         "nodeTo": "pir2"
@@ -1261,7 +1261,7 @@
   },
   {
     "id": "pir3",
-    "name": "pir3",
+    "name": "Pirongia Repeater 3",
     "adjacencies": [
       {
         "nodeTo": "pir2"
@@ -1276,7 +1276,7 @@
   },
   {
     "id": "gtw-mph-qb20",
-    "name": "gtw-mph-qb20",
+    "name": "QuickBridge 20 attached to GTW -> MPH",
     "adjacencies": [
       {
         "nodeTo": "gtw"
@@ -1291,7 +1291,7 @@
   },
   {
     "id": "mph-gtw-qb20",
-    "name": "mph-gtw-qb20",
+    "name": "QuickBridge 20 attached to MPH -> GTW",
     "adjacencies": [
       {
         "nodeTo": "gtw-mph-qb20"
@@ -1306,7 +1306,7 @@
   },
   {
     "id": "mwp-pws-qb20",
-    "name": "mwp-pws-qb20",
+    "name": "QuickBridge 20 attached to MWP -> PWS",
     "adjacencies": [
       {
         "nodeTo": "mwp"
@@ -1321,7 +1321,7 @@
   },
   {
     "id": "pws-mwp-qb20",
-    "name": "pws-mwp-qb20",
+    "name": "QuickBridge 20 attached to PWS -> MWP",
     "adjacencies": [
       {
         "nodeTo": "mwp-pws-qb20"
@@ -1336,7 +1336,7 @@
   },
   {
     "id": "htb-kes-atlas",
-    "name": "htb-kes-atlas",
+    "name": "Trango Atlas attached to HTB -> KES",
     "adjacencies": [
       {
         "nodeTo": "htb"
@@ -1351,7 +1351,7 @@
   },
   {
     "id": "kes-htb-atlas",
-    "name": "kes-htb-atlas",
+    "name": "Trango Atlas attached to KES -> HTB",
     "adjacencies": [
       {
         "nodeTo": "htb-kes-atlas"
@@ -1366,7 +1366,7 @@
   },
   {
     "id": "mhs",
-    "name": "mhs",
+    "name": "Murray Vicker\\'s House",
     "adjacencies": [
       {
         "nodeTo": "mms"
@@ -1381,7 +1381,7 @@
   },
   {
     "id": "hol",
-    "name": "hol",
+    "name": "Holmes\\' Household",
     "adjacencies": [
       {
         "nodeTo": "mhs"
@@ -1396,7 +1396,7 @@
   },
   {
     "id": "speedie",
-    "name": "speedie",
+    "name": "MCG Network Gateway",
     "adjacencies": [
       {
         "nodeTo": "mcg"
@@ -1411,7 +1411,7 @@
   },
   {
     "id": "tol-lns",
-    "name": "tol-lns",
+    "name": "Tuhoe Online LNS (tol)",
     "adjacencies": [
       {
         "nodeTo": "htb"
@@ -1426,7 +1426,7 @@
   },
   {
     "id": "ssm",
-    "name": "ssm",
+    "name": "ssm - Sisam Taneatua (tol)",
     "adjacencies": [
       {
         "nodeTo": "putu"
@@ -1441,7 +1441,7 @@
   },
   {
     "id": "ssm2",
-    "name": "ssm2",
+    "name": "ssm - Sisam Taneatua (tol)",
     "adjacencies": [
       {
         "nodeTo": "ssm"
@@ -1456,7 +1456,7 @@
   },
   {
     "id": "yman",
-    "name": "yman",
+    "name": "yman - Yeoman Repeater (tol)",
     "adjacencies": [
       {
         "nodeTo": "putu2"
@@ -1471,7 +1471,7 @@
   },
   {
     "id": "yman2",
-    "name": "yman2",
+    "name": "yman - Yeoman Repeater (tol)",
     "adjacencies": [
       {
         "nodeTo": "yman"
@@ -1486,7 +1486,7 @@
   },
   {
     "id": "yman3",
-    "name": "yman3",
+    "name": "yman - Yeoman Repeater (tol)",
     "adjacencies": [
       {
         "nodeTo": "yman"
@@ -1501,7 +1501,7 @@
   },
   {
     "id": "mtku",
-    "name": "mtku",
+    "name": "mtku - Matakerepu (tol)",
     "adjacencies": [
       {
         "nodeTo": "yman"
@@ -1516,7 +1516,7 @@
   },
   {
     "id": "mtku2",
-    "name": "mtku2",
+    "name": "mtku - Matakerepu (tol)",
     "adjacencies": [
       {
         "nodeTo": "mtku"
@@ -1531,7 +1531,7 @@
   },
   {
     "id": "tane",
-    "name": "tane",
+    "name": "tane - Taneatua Central (tol)",
     "adjacencies": [
       {
         "nodeTo": "ssm"
@@ -1546,7 +1546,7 @@
   },
   {
     "id": "tane2",
-    "name": "tane2",
+    "name": "tane - Taneatua Central (tol)",
     "adjacencies": [
       {
         "nodeTo": "tane"
@@ -1561,7 +1561,7 @@
   },
   {
     "id": "tane3",
-    "name": "tane3",
+    "name": "tane - Taneatua Central (tol)",
     "adjacencies": [
       {
         "nodeTo": "tane"
@@ -1576,7 +1576,7 @@
   },
   {
     "id": "rtkmis",
-    "name": "rtkmis",
+    "name": "rtkmis - Ruatoki Mission House (tol)",
     "adjacencies": [
       {
         "nodeTo": "ssm2"
@@ -1591,7 +1591,7 @@
   },
   {
     "id": "rtkmis2",
-    "name": "rtkmis2",
+    "name": "rtkmis - Ruatoki Mission House (tol)",
     "adjacencies": [
       {
         "nodeTo": "rtkmis"
@@ -1606,7 +1606,7 @@
   },
   {
     "id": "rtkmis3",
-    "name": "rtkmis3",
+    "name": "rtkmis - Ruatoki Mission House (tol)",
     "adjacencies": [
       {
         "nodeTo": "rtkmis"
@@ -1621,7 +1621,7 @@
   },
   {
     "id": "wmkura",
-    "name": "wmkura",
+    "name": "wmkura - Waimana Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "yman2"
@@ -1636,7 +1636,7 @@
   },
   {
     "id": "kutre",
-    "name": "kutre",
+    "name": "kutre - Kutarere Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "mtku2"
@@ -1651,7 +1651,7 @@
   },
   {
     "id": "wthe",
-    "name": "wthe",
+    "name": "wthe - Waiotahe Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "mtku2"
@@ -1666,7 +1666,7 @@
   },
   {
     "id": "twra-k",
-    "name": "twra-k",
+    "name": "twra-k - Tawera Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "rtkmis2"
@@ -1681,7 +1681,7 @@
   },
   {
     "id": "tane-k",
-    "name": "tane-k",
+    "name": "tane-k - Taneatua Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "tane2"
@@ -1696,7 +1696,7 @@
   },
   {
     "id": "rtk-k",
-    "name": "rtk-k",
+    "name": "rtk-k - Ruatoki Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "rtkmis3"
@@ -1711,7 +1711,7 @@
   },
   {
     "id": "ngrpo",
-    "name": "ngrpo",
+    "name": "ngrpo - Ngarepo(tol)",
     "adjacencies": [
       {
         "nodeTo": "yman3"
@@ -1726,7 +1726,7 @@
   },
   {
     "id": "ngrpo2",
-    "name": "ngrpo2",
+    "name": "ngrpo - Ngarepo(tol)",
     "adjacencies": [
       {
         "nodeTo": "ngrpo"
@@ -1741,7 +1741,7 @@
   },
   {
     "id": "putu",
-    "name": "putu",
+    "name": "putu - Mount Putauaki Radio Club (tol)",
     "adjacencies": [
       {
         "nodeTo": "tol-lns"
@@ -1756,7 +1756,7 @@
   },
   {
     "id": "putu2",
-    "name": "putu2",
+    "name": "putu - Mount Putauaki Radio Club (tol)",
     "adjacencies": [
       {
         "nodeTo": "tol-lns"
@@ -1771,7 +1771,7 @@
   },
   {
     "id": "putu3",
-    "name": "putu3",
+    "name": "putu - Mount Putauaki Radio Club (tol)",
     "adjacencies": [
       {
         "nodeTo": "tol-lns"
@@ -1786,7 +1786,7 @@
   },
   {
     "id": "whau",
-    "name": "whau",
+    "name": "whau - Waiohau Repeater (tol)",
     "adjacencies": [
       {
         "nodeTo": "putu3"
@@ -1801,7 +1801,7 @@
   },
   {
     "id": "whau2",
-    "name": "whau2",
+    "name": "whau - Waiohau Repeater (tol)",
     "adjacencies": [
       {
         "nodeTo": "whau"
@@ -1816,7 +1816,7 @@
   },
   {
     "id": "whau-k",
-    "name": "whau-k",
+    "name": "whau - Waiohau School (tol)",
     "adjacencies": [
       {
         "nodeTo": "whau2"
@@ -1831,7 +1831,7 @@
   },
   {
     "id": "tawh",
-    "name": "tawh",
+    "name": "tawh - Tawhiuau (tol)",
     "adjacencies": [
       {
         "nodeTo": "whau2"
@@ -1846,7 +1846,7 @@
   },
   {
     "id": "tawh2",
-    "name": "tawh2",
+    "name": "tawh - Tawhiuau (tol)",
     "adjacencies": [
       {
         "nodeTo": "tawh"
@@ -1861,7 +1861,7 @@
   },
   {
     "id": "rua",
-    "name": "rua",
+    "name": "rua - Ruatahuna (tol)",
     "adjacencies": [
       {
         "nodeTo": "tawh2"
@@ -1876,7 +1876,7 @@
   },
   {
     "id": "tewh",
-    "name": "tewh",
+    "name": "tewh - TeWhaiti (tol)",
     "adjacencies": [
       {
         "nodeTo": "tawh2"
@@ -1891,7 +1891,7 @@
   },
   {
     "id": "tewh2",
-    "name": "tewh2",
+    "name": "tewh - TeWhaiti (tol)",
     "adjacencies": [
       {
         "nodeTo": "tewh"
@@ -1906,7 +1906,7 @@
   },
   {
     "id": "tewh-k",
-    "name": "tewh-k",
+    "name": "tewh-k - TeWhaiti Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "tewh"
@@ -1921,7 +1921,7 @@
   },
   {
     "id": "rua2",
-    "name": "rua2",
+    "name": "rua - Ruatahuna (tol)",
     "adjacencies": [
       {
         "nodeTo": "rua"
@@ -1936,7 +1936,7 @@
   },
   {
     "id": "ming-k",
-    "name": "ming-k",
+    "name": "ming-k - Minginui Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "ming"
@@ -1951,7 +1951,7 @@
   },
   {
     "id": "ming",
-    "name": "ming",
+    "name": "ming - Minginui (tol)",
     "adjacencies": [
       {
         "nodeTo": "tewh-k"
@@ -1966,7 +1966,7 @@
   },
   {
     "id": "rua-k",
-    "name": "rua-k",
+    "name": "rua-k - Huiaru Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "rua"
@@ -1981,7 +1981,7 @@
   },
   {
     "id": "ming-c",
-    "name": "ming-c",
+    "name": "ming-c - Minginui Central (tol)",
     "adjacencies": [
       {
         "nodeTo": "ming2"
@@ -1996,7 +1996,7 @@
   },
   {
     "id": "ming2",
-    "name": "ming2",
+    "name": "ming - Minginui (tol)",
     "adjacencies": [
       {
         "nodeTo": "ming"
@@ -2011,7 +2011,7 @@
   },
   {
     "id": "muru",
-    "name": "muru",
+    "name": "muru - Murupara (tol)",
     "adjacencies": [
       {
         "nodeTo": "tawh"
@@ -2026,7 +2026,7 @@
   },
   {
     "id": "glta-k",
-    "name": "glta-k",
+    "name": "glta-k - Galatea Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "glta2"
@@ -2041,7 +2041,7 @@
   },
   {
     "id": "glta",
-    "name": "glta",
+    "name": "glta - Galatea (tol)",
     "adjacencies": [
       {
         "nodeTo": "muru"
@@ -2056,7 +2056,7 @@
   },
   {
     "id": "glta2",
-    "name": "glta2",
+    "name": "glta2 - Galatea 2 (tol)",
     "adjacencies": [
       {
         "nodeTo": "glta"
@@ -2071,7 +2071,7 @@
   },
   {
     "id": "mthi",
-    "name": "mthi",
+    "name": "mthi - Matahi (tol)",
     "adjacencies": [
       {
         "nodeTo": "yman3"
@@ -2086,7 +2086,7 @@
   },
   {
     "id": "mthi2",
-    "name": "mthi2",
+    "name": "mthi2 - Matahi 2 (tol)",
     "adjacencies": [
       {
         "nodeTo": "mthi"
@@ -2101,7 +2101,7 @@
   },
   {
     "id": "mthi-k",
-    "name": "mthi-k",
+    "name": "mthi-k - Matahi Kura (tol)",
     "adjacencies": [
       {
         "nodeTo": "mthi2"
@@ -2116,7 +2116,7 @@
   },
   {
     "id": "mgtwha",
-    "name": "mgtwha",
+    "name": "Mangitaniwha (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "htb"
@@ -2131,7 +2131,7 @@
   },
   {
     "id": "lee",
-    "name": "lee",
+    "name": "LEE ICONZ Tower (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "mgtwha"
@@ -2146,7 +2146,7 @@
   },
   {
     "id": "lee2",
-    "name": "lee2",
+    "name": "LEE ICONZ Tower (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "lee"
@@ -2161,7 +2161,7 @@
   },
   {
     "id": "cook",
-    "name": "cook",
+    "name": "Cook (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "lee2"
@@ -2176,7 +2176,7 @@
   },
   {
     "id": "pkt",
-    "name": "pkt",
+    "name": "Pkt (FIX ME) (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "cook"
@@ -2191,7 +2191,7 @@
   },
   {
     "id": "khukhu",
-    "name": "khukhu",
+    "name": "Kohukohu Library (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "lee2"
@@ -2206,7 +2206,7 @@
   },
   {
     "id": "horeke",
-    "name": "horeke",
+    "name": "Horeke (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "lee"
@@ -2221,7 +2221,7 @@
   },
   {
     "id": "cook2",
-    "name": "cook2",
+    "name": "Cook 2 (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "cook"
@@ -2236,7 +2236,7 @@
   },
   {
     "id": "oku",
-    "name": "oku",
+    "name": "Okaihau College (Hokianga)",
     "adjacencies": [
       {
         "nodeTo": "cook2"
