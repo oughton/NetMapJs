@@ -1,3 +1,5 @@
+/* Network Map Styles */
+
 /* Stop node labels from being able to be selected */
 .node {
   -webkit-user-select: none;
@@ -8,6 +10,13 @@
 }
 
 /* Overview Styles */
-hr {
+.NetworkMap-Views-OverviewManager > hr {
   margin: 1px 0 1px 0;
+}
+
+.NetworkMap-Views-OverviewManager {
+  cursor: move;
+}
+
+.NetworkMap-Views-Overview {
 }

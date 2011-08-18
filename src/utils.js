@@ -296,13 +296,20 @@ $NetworkMap.Views = (function() {
 
     OverviewManager: function(viz, container, width, height, overOpts, tx, ty) {
       var _overviews = {};
+      container = jQuery('<div class="NetworkMap-Views-OverviewManager"></div>').appendTo(container);
       
       var createOverview = function(level) {
         var id = viz.config.injectInto + '-overviewManager-over' + Math.round(level);
         
         overOpts.injectInto = id;
         container.append('<hr />');
-        jQuery('<div id="' + id + '"></div>').css({ width: width, height: height }).appendTo(container);
+        jQuery('<div class="NetworkMap-Views-Overview" id="' + id + '"></div>')
+          .css({ width: width, height: height }).appendTo(container)
+          .each(function() {
+            // disable text selection on overviews
+            this.onselectstart = function() { return false; };
+          });
+          
         return new $NetworkMap.Views.Overview(viz, overOpts, level, tx, ty);
       }
 
