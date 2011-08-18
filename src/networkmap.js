@@ -658,9 +658,6 @@ $jit.NetworkMap = new Class( {
     var that = this;
 
     var config = {
-      debug: false,
-      iterations: 50,
-      levelDistance: 50,
       layout: 'Static',
       groupLvls: [ 0, 6.5, 130 ],
       detailLvls: [ 0, 1.8 ],
