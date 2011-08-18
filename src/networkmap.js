@@ -1670,6 +1670,7 @@ $jit.NetworkMap.$extend = true;
             ctx.closePath();
         };
 
+        // decide on dim's
         if (adj.nodeFrom.data.parentID == adj.nodeTo.data.parentID) {
           dimFrom = adj.nodeFrom.getData('dim');
           dimTo = adj.nodeTo.getData('dim');
@@ -1688,7 +1689,7 @@ $jit.NetworkMap.$extend = true;
           }
         }
 
-        // check if there is another adj in the ther direction
+        // check if there is another adj in the other direction
         if (otherAdj) {
           midpt = new Complex((to.x + from.x) / 2, (to.y + from.y) / 2);
           var cp = $C((from.x + to.x) / 2, (from.y + to.y) / 2);
@@ -1719,6 +1720,11 @@ $jit.NetworkMap.$extend = true;
                 offset = -dimFrom;
               }
             }
+          }
+          
+          // flip the pipe offset around so it is always from left to right
+          if (from.x > to.x) {
+            offset *= -1
           }
 
           // make sure we have metrics
