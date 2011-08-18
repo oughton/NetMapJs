@@ -2,6 +2,7 @@ $NetworkMap.Utils = {};
 $NetworkMap.Views = {};
 $NetworkMap.Debug = {};
 $NetworkMap.Json = {};
+$NetworkMap.Overlays = {};
 
 $NetworkMap.Json = (function() {
 
@@ -297,6 +298,7 @@ $NetworkMap.Views = (function() {
     OverviewManager: function(viz, container, width, height, overOpts, tx, ty) {
       var _overviews = {};
       container = jQuery('<div class="NetworkMap-Views-OverviewManager"></div>').appendTo(container);
+      if (!overOpts) overOpts = {};
       
       var createOverview = function(level) {
         var id = viz.config.injectInto + '-overviewManager-over' + Math.round(level);
@@ -425,4 +427,61 @@ $NetworkMap.Utils.Metrics = (function() {
     }
   };
 
+})();
+
+$NetworkMap.Overlays = (function() {
+  
+  return {
+    Overlay: function(id, update) {
+      if (arguments.length < 2 || typeof(arguments[0]) != 'string' || typeof(arguments[1]) != 'function') {
+        throw 'Require string id and an update function';
+      }
+
+      var _id = id;
+      var _enabled = true;
+      var _update = update;
+
+      return {
+        start: function() { _enabled = true; },
+        stop: function() { _enabled = false; },
+        getID: function() { return _id; },
+        update: function(viz, graph, canvas) { _enabled && _update(viz, graph, canvas); }
+      };
+    },
+
+    OverlayManager: function(viz) {
+      if (arguments.length < 1) {
+        throw 'Require a visualisation to overlay onto';
+      }
+      
+      var _overlays = {};
+      var _viz = viz;
+
+      var _refresh = function() {
+        jQuery.each(_overlays, function(key, o) {
+          o.update(_viz, _viz.graph, _viz.canvas);
+        });
+      };
+
+      _viz.canvas && jQuery(_viz.canvas.getElement()).bind('redraw', function() {
+        _refresh();
+      });
+
+      return {
+        add: function(o) {
+          var id = o.getID();
+          if (_overlays[id]) _overlays[id].stop();
+          _overlays[id] = o;
+        },
+
+        get: function(id) {
+          return _overlays[id];
+        },
+
+        refresh: function() {
+          _refresh();
+        }
+      };
+    }
+  };
 })();
