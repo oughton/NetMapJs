@@ -1023,27 +1023,6 @@ $jit.NetworkMap = new Class( {
         });
       }
     });
-  },
-
-  getSave: function() {
-    var save = [],
-        copy = jQuery.extend(true, [], this.json);
-
-    jQuery.each(copy, function(index, node) {
-
-      // delete any non immediate data
-      node.data && jQuery.each(node.data, function(key, val) {
-        if (typeof(val) == 'object') delete node.data[key];
-      });
-
-      node.adjacencies && jQuery.each(node.adjacencies, function(index, adj) {
-        adj.data && jQuery.each(adj.data, function(key, val) {
-          if (typeof(val) == 'object') delete adj.data[key];
-        });
-      });
-    });
-    
-    return copy;
   }
 });
 
