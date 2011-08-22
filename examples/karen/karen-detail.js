@@ -76,7 +76,6 @@ function init(){
         this.current = jQuery('<div>To ' + to.name + '</div>')
           .css({ position: 'absolute', left: e.clientX, top: e.clientY - 30, color: '#ddd' })
           .appendTo(document.body);
-        
       },
       onMouseWheel: function() {
       },
@@ -117,22 +116,11 @@ function init(){
         var to = n1f ? n2 : n1;
 
         fd.followEdge(from, to, 2);
-
-        if(!node) return;
-        
-        var positions = [];
-        fd.graph.eachNode(function(node) {
-            positions.push({ id: node.id, x: node.pos.x, y: node.pos.y });
-        });
-        jQuery.post('../src/networkmap.php?method=savePositions', { positions: positions });
       },
       onRightClick: function(node, eventInfo, e) {
         if (node) fd.zoomNode(node);
       }
     },
-    iterations: 200,
-    debug: true,
-    levelDistance: 130,
     bgAlpha: 0.25,
     onCreateLabel: function(domElement, node){
       if (node.data.parentID) {
@@ -164,8 +152,8 @@ function init(){
   $NetworkMap.Json.load('data/karen-detail.json', function(json) {
     var tx = 35, ty = 50, sx = 1.1, sy = 1.1;
 
-    fd.loadJSON(json);
     $NetworkMap.Utils.Metrics.initJSON(json);
+    fd.loadJSON(json);
     $NetworkMap.Utils.Metrics.updateMetrics(fd);
     fd.refresh();
     fd.canvas.scale(sx, sy);
@@ -186,8 +174,8 @@ function init(){
     //}, 1000);
     
     //var button = jQuery('<input id="btnSave" type="button" value="save" />').click(function() {
-    //  $NetworkMap.Json.save('../src/save.php', json, 'karen-detail.json');
-    ///});
+    //  $NetworkMap.Json.save('../../src/save.php', json, 'karen-detail.json');
+    //});
     //jQuery(document.body).append(button);
   });
 }

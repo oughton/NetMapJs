@@ -3105,6 +3105,9 @@
       "root": "true"
     },
     "adjacencies": [
+      { "nodeTo": "Ecast" },
+      { "nodeTo": "Diocesan School" },
+      { "nodeTo": "NEN Content and Service Providers" },
       {
         "nodeTo": "Te Wananaga o Raukawa",
         "data": {
@@ -3762,5 +3765,27 @@
     "data": {
       "parentID": "POP_AKL.AUCKLANDDISTRIBUTION"
     }
+  },
+  {
+    "id": "Ecast",
+    "name": "Ecast",
+    "data": {
+      "parentID": "POP_AKL.AUCKLANDDISTRIBUTION"
+    }
+  },
+  {
+    "id": "Diocesan School",
+    "name": "Diocesan School",
+    "data": {
+      "parentID": "POP_AKL.AUCKLANDDISTRIBUTION"
+    }
+  },
+  {
+    "id": "NEN Content and Service Providers",
+    "name": "NEN Content and Service Providers",
+    "data": {
+      "parentID": "POP_AKL.AUCKLANDDISTRIBUTION"
+    }
   }
+
 ]
