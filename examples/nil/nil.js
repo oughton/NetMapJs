@@ -21,7 +21,7 @@ function init(){
       {
         id: 'TSWF DSLAM 03', 
         name: 'TSWF DSLAM 03',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'TSWF DSLAM 04' },
           { nodeTo: 'StageETH11' }
@@ -30,7 +30,7 @@ function init(){
       {
         id: 'TSWF DSLAM 04', 
         name: 'TSWF DSLAM 04',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'TSWF DSLAM 03' },
           { nodeTo: 'TSWF DSLAM 07' },
@@ -41,7 +41,7 @@ function init(){
       {
         id: 'TSWF DSLAM 07', 
         name: 'TSWF DSLAM 07',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'TSWF DSLAM 04' },
           { nodeTo: 'StageETH11' }
@@ -50,7 +50,7 @@ function init(){
       {
         id: 'StageETH11', 
         name: 'StageETH11',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'TSWF DSLAM 03' },
           { nodeTo: 'TSWF DSLAM 07' },
@@ -60,7 +60,7 @@ function init(){
       {
         id: 'StagETH10', 
         name: 'StagETH10',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'StageETH11' },
           { nodeTo: 'StagETH12' },
@@ -71,7 +71,7 @@ function init(){
       {
         id: 'StagETH12', 
         name: 'StagETH12',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'StagETH10' },
           { nodeTo: 'Active Probe #2' }
@@ -80,7 +80,7 @@ function init(){
       {
         id: 'StagePE01-IP01', 
         name: 'StagePE01-IP01',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #2', data: { layers: [1] } },
           { nodeTo: 'StagETH10' },
@@ -92,7 +92,7 @@ function init(){
       {
         id: 'StagRAN03-21', 
         name: 'StagRAN03-21',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'StagETH10' },
           { nodeTo: 'stagP01-IP04' },
@@ -102,7 +102,7 @@ function init(){
       {
         id: 'stagP01-IP04', 
         name: 'stagP01-IP04',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'StagePE01-IP01' },
           { nodeTo: 'StagRAN03-21' },
@@ -112,7 +112,7 @@ function init(){
       {
         id: 'stagP02-IP04', 
         name: 'stagP02-IP04',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'StagePE01-IP01' },
           { nodeTo: 'StagRAN03-21' },
@@ -122,7 +122,7 @@ function init(){
       {
         id: 'Active Probe #2', 
         name: 'Active Probe #2',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'StagETH12' }
         ]
@@ -130,7 +130,7 @@ function init(){
       {
         id: 'Cisco Switch #2', 
         name: 'Cisco Switch #2',
-        data: { '$type': 'circle', layers: [1] },
+        data: { '$type': 'cisco-router', layers: [1] },
         adjacencies: [
           { nodeTo: 'StagePE01-IP01', data: { layers: [1] } },
           { nodeTo: 'Active Probe #3', data: { layers: [1] } }
@@ -139,7 +139,7 @@ function init(){
       {
         id: 'Active Probe #3', 
         name: 'Active Probe #3',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #2', data: { layers: [1] } },
           { nodeTo: 'StagePE01-IP01', data: { layers: [0] } }
@@ -148,7 +148,7 @@ function init(){
       {
         id: 'stagPE21', 
         name: 'stagPE21',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #3', data: { layers: [1] } },
           { nodeTo: 'stagP02-IP04' },
@@ -158,7 +158,7 @@ function init(){
       {
         id: 'Cisco Switch #3', 
         name: 'Cisco Switch #3',
-        data: { '$type': 'circle', layers: [1] },
+        data: { '$type': 'cisco-router', layers: [1] },
         adjacencies: [
           { nodeTo: 'Active Probe #4', data: { layers: [1] } },
           { nodeTo: 'stagPE21', data: { layers: [1] } }
@@ -167,7 +167,7 @@ function init(){
       {
         id: 'Active Probe #4', 
         name: 'Active Probe #4',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #3', data: { layers: [1] } },
           { nodeTo: 'stagPE21', data: { layers: [0] } },
@@ -176,7 +176,7 @@ function init(){
       {
         id: 'stagPE20', 
         name: 'stagPE20',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #4', data: { layers: [1] } },
           { nodeTo: 'stagP01-IP04' },
@@ -188,7 +188,7 @@ function init(){
       {
         id: 'Cisco Switch #4', 
         name: 'Cisco Switch #4',
-        data: { '$type': 'circle', layers: [1] },
+        data: { '$type': 'cisco-router', layers: [1] },
         adjacencies: [
           { nodeTo: 'stagPE20', data: { layers: [1] } },
           { nodeTo: 'IPERF Server', data: { layers: [1] } },
@@ -199,7 +199,7 @@ function init(){
       {
         id: 'IPERF Server', 
         name: 'IPERF Server',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #4' }
         ]
@@ -207,7 +207,7 @@ function init(){
       {
         id: 'Active Probe #5', 
         name: 'Active Probe #5',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #4' }
         ]
@@ -215,7 +215,7 @@ function init(){
       {
         id: 'Brix Server', 
         name: 'Brix Server',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Cisco Switch #4' }
         ]
@@ -223,7 +223,7 @@ function init(){
       {
         id: 'Vrfnet', 
         name: 'Vrfnet',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'TSWF DSLAM 04' },
           { nodeTo: 'DSL Modem #1' }
@@ -232,7 +232,7 @@ function init(){
       {
         id: 'DSL Modem #1', 
         name: 'DSL Modem #1',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'Vrfnet' }
         ]
@@ -240,21 +240,26 @@ function init(){
       {
         id: 'Active Probe #1', 
         name: 'Active Probe #1',
-        data: { '$type': 'circle' },
+        data: { '$type': 'cisco-router' },
         adjacencies: [
           { nodeTo: 'TSWF DSLAM 04' }
         ]
       }
   ];
 
-  //implement a new node type  
+  // test out that I can draw device symbols
   $jit.NetworkMap.Plot.NodeTypes.implement({  
-    'groups': {  
+    'cisco-router': {  
       'render': function(node, canvas) {  
-        this.nodeHelper.circle.render 
+        //this.nodeHelper.circle.render;
+        var ctx = canvas.getCtx(),
+            image = new Image(),
+            pos = node.getPos();
+        image.src = '../symbols/router.png';
+        ctx.drawImage(image, pos.x - 20, pos.y - 20, 40, 40);
       },  
       'contains': function(node, pos) {  
-        this.nodeHelper.circle.contains
+        this.nodeHelper.circle.contains;
       }  
     }  
   });  
@@ -334,7 +339,7 @@ function init(){
     },
     //Number of iterations for the FD algorithm
     iterations: 50000,
-    layout: 'ForceDirected',
+    layout: 'Arbor',
     levelDistance: 130,
     bgAlpha: 0.25,
     onCreateLabel: function(domElement, node){
@@ -362,25 +367,14 @@ function init(){
   $NetworkMap.Utils.Metrics.updateMetrics(fd);
   
   // debug test
-  var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
-  debug.enable();
+  //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
+  //debug.enable();
 
-  fd.computeIncremental({
-    iter: 40,
-    property: 'end',
-    onStep: function(perc){
-      debug.logWrite(perc + '% loaded...');
-      fd.end();
-    },
-    onComplete: function(){
-      debug.logWrite('done');
-      fd.end();
-    }
-  });
-  
+  fd.refresh();
+
   // overview test
   var over = new $NetworkMap.Views.Overview(fd, { injectInto: 'overview' });
-  
+
   var btnSave = jQuery('<button>Save</button>').click(function() {
     var positions = [];
     fd.graph.eachNode(function(node) {
