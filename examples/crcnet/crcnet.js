@@ -82,7 +82,7 @@ function init(){
         overridable: true,
         color: '#23A4FF',
         lineWidth: 1,
-        //type: 'arrowpipe'
+        type: 'arrowpipe'
       },
       //Native canvas text styling
       Label: {
@@ -184,8 +184,9 @@ function init(){
     });
     
     $NetworkMap.Json.load('data/crcnet.json', function(json) {
-      // load JSON data.
+      $NetworkMap.Utils.Metrics.initJSON(json);
       fd.loadJSON(json);
+      $NetworkMap.Utils.Metrics.updateMetrics(fd);
       
       // debug test
       //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);
