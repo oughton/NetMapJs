@@ -118,7 +118,7 @@ function init(){
         fd.followEdge(from, to, 2);
       },
       onRightClick: function(node, eventInfo, e) {
-        if (node) fd.zoomNode(node);
+        if (node) fd.zoomNode(node, 1, 30);
       }
     },
     bgAlpha: 0.25,

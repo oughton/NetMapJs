@@ -915,15 +915,49 @@ $jit.NetworkMap = new Class( {
     }, opt || {}));
   },
 
-  zoomNode: function(node) {
-    var dim = node.getData('dim'),
+  zoomNode: function(node, t, fps) {
+    var that = this,
+        dim = node.getData('dim'),
         pos = node.getPos(),
         size = this.canvas.getSize(),
-        oz = this.canvas.scaleOffsetX;
-        cp = this.c2p(new Complex(size.width / 2, size.height / 2));
+        oz = this.canvas.scaleOffsetX,
+        cp = this.c2p(new Complex(size.width / 2, size.height / 2)),
+        ms, steps, 
+        zf = size.width / (oz * dim * 4), zd,
+        tdx = cp.x - pos.x, tdy = cp.y - pos.y,
+        interval, zoom;
 
-    this.canvas.scale(size.width / (oz * dim * 4), size.width / (oz * dim * 4));
-    this.canvas.translate(cp.x - pos.x, cp.y - pos.y);
+    if (t) {
+      fps = fps ? fps : 40;
+      ms = 1000 / fps;
+      steps = Math.round(fps * 0.2);
+      tdx = tdx / steps;
+      tdy = tdy / steps;
+     
+      interval = setInterval(function() {
+        steps = steps - 1;
+        if (steps < 1) {
+          clearInterval(interval);
+          zoom();
+        }
+        that.canvas.translate(tdx, tdy);
+
+      }, ms);
+
+      zoom = function() {
+        interval = setInterval(function() {
+          if (that.canvas.scaleOffsetX < zf * oz) {
+            that.canvas.scale(1.1, 1.1);
+          } else {
+            that.canvas.scaleOffsetX >= zf * oz && clearInterval(interval);
+          }
+        }, ms);
+      }
+
+    } else {
+      this.canvas.scale(zf, zf);
+      this.canvas.translate(tdx, tdy);
+    }
   },
 
   followEdge: function(fromNode, toNode, t, fps, center) {
