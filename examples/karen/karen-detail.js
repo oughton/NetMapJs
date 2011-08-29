@@ -161,7 +161,43 @@ function init(){
     
     // overview test
     var over = new $NetworkMap.Views.OverviewManager(fd, jQuery('#overview'), 180, 150, {}, tx, ty);
+    
+    // overlay test
+    var m = new $NetworkMap.Overlays.OverlayManager(fd);
+    
+    jQuery.getJSON('data/vlan910.json', function(vlans) {
+      var vlan = vlans[0];
+      console.log(vlan);
 
+      var o = new $NetworkMap.Overlays.Overlay('vlans', function(viz, graph, canvas) {
+        var ctx = canvas.getCtx();
+        console.log(ctx);
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 1 / canvas.scaleOffsetX;
+
+        graph.eachNode(function(n) {
+          n.eachAdjacency(function(adj) {
+            var nodeFrom = adj.nodeFrom, nodeTo = adj.nodeTo,
+                posFrom = nodeFrom.getPos(), posTo = nodeTo.getPos();
+
+            if (vlan.devices[nodeFrom.id]) {
+              if (vlan.devices[nodeFrom.id].links.indexOf(nodeTo.id) != -1) {
+                ctx.beginPath();
+                ctx.moveTo(posFrom.x, posFrom.y);
+                ctx.lineTo(posTo.x, posTo.y);
+                ctx.closePath();
+                ctx.stroke();
+              }
+            }
+          });
+        });
+        
+        ctx.restore();
+      });
+      m.add(o);
+      m.refresh();
+    });
 
     // debug test
     //var debug = new $NetworkMap.Debug.GraphicalOutput(fd);

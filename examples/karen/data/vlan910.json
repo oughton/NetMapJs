@@ -1,0 +1,15 @@
+[
+  {
+    "id": "VLAN910",
+    "devices": {
+      "WLG": { "links": [ "ANR2-WLG", "WELLINGTON LOOP", "DUD", "AVL", "WELLINGTON DISTRIBUTION", "PMR", "CHC" ] },
+      "NSH": { "links": [ "//TODO: and23-wrk", "AKL" ] },
+      "PMR": { "links": [ "INSPIRE NET", "NPL", "WAG", "AKL", "MUP", "WLG" ] },
+      "AVL": { "links": [ "POR", "MUP", "WLG" ] },
+      "LCN": { "links": [ "CHC", "DUD" ] },
+      "ROT": { "links": [ "HLZ", "NPE", "TRG" ] },
+      "HLZ": { "links": [ "WINTEC", "AKL", "ROT" ] },
+      "DUD": { "links": [ "IVC", "WLG", "LCN", "DUD" ] }
+    }
+  }
+]
