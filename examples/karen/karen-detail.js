@@ -167,14 +167,13 @@ function init(){
     
     jQuery.getJSON('data/vlan910.json', function(vlans) {
       var vlan = vlans[0];
-      console.log(vlan);
+      var select = jQuery('#selectVLAN'); 
 
       var o = new $NetworkMap.Overlays.Overlay('vlans', function(viz, graph, canvas) {
         var ctx = canvas.getCtx();
-        console.log(ctx);
         ctx.save();
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 1 / canvas.scaleOffsetX;
+        ctx.strokeStyle = 'fuchsia';
+        ctx.lineWidth = 2 / canvas.scaleOffsetX;
 
         graph.eachNode(function(n) {
           n.eachAdjacency(function(adj) {
@@ -196,7 +195,19 @@ function init(){
         ctx.restore();
       });
       m.add(o);
-      m.refresh();
+      o.stop();
+      
+      select.append(
+        jQuery('<option></option')
+          .attr('value', vlan.id)
+          .text(vlan.id));
+
+      select.change(function() {
+        if (jQuery(this).val() == 'VLAN910') o.start();
+        else o.stop();
+        fd.refresh();
+        m.refresh();
+      });
     });
 
     // debug test
