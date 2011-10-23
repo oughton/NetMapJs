@@ -489,7 +489,7 @@ var Groups = new Class({
 
     // create flat array of groups
     flatten = function(obj, arr) {
-      var owner = graph.getNode(obj.id);
+      var owner = graph.getNode(obj.id),
           group = { depth: obj.depth, id: obj.id, nodes: obj.nodes, owner: owner, subgroups: obj.subgroups };
 
       if (obj.subgroups.length < 1) return;
