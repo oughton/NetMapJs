@@ -709,7 +709,9 @@ var Groups = new Class({
 });
 
 /*
-  Network Map
+  Class: NetworkMap
+
+  Network Map (NetMapJs)
 
   Implements:
   
@@ -738,7 +740,6 @@ var Groups = new Class({
    labels - Access a <ForceDirected.Label> interface implementation.
 
 */
-
 $jit.NetworkMap = new Class( {
 
   Implements: [ Loader, Extras, Groups, CanvasHelper ],
@@ -819,6 +820,7 @@ $jit.NetworkMap = new Class( {
     // initialize extras
     this.initializeExtras();
 
+    // the layouts object contains all of the layout types as properties
     this.layouts = {
       'Static': new Layouts.NetworkMap.Static(this),
       'ForceDirected': new Layouts.NetworkMap.ForceDirected(this),
@@ -827,6 +829,16 @@ $jit.NetworkMap = new Class( {
     };
   },
 
+  /*
+    Method: loadLayers
+
+    Loads layer functionality. This supports nodes being assigned to layers such
+    that they only become visible when a specified depth is reached.
+
+    Parameters:
+
+      json - the network map json structure
+  */
   loadLayers: function(json) {
     var useLayers = false,
         layers = {}, layersArr = [],
@@ -880,18 +892,28 @@ $jit.NetworkMap = new Class( {
   /* 
     Method: refresh 
     
-    Computes positions and plots the tree.
+    Computes positions and plots the map.
   */
   refresh: function() {
     this.computeLayouts();
     this.plot();
   },
 
+  /*
+    Method: reposition
+
+    Computes positions and sets them to their end property
+  */
   reposition: function() {
     this.computeLayouts('end');
     jQuery(this.canvas.getElement()).trigger('computePositions', [this, this.graph]);
   },
 
+  /*
+    Method: end
+
+    Draws the map in its end position state
+  */
   end: function() {
     this.graph.eachNode(function(n) {
       var pos = n.getPos('end');
@@ -1000,6 +1022,18 @@ $jit.NetworkMap = new Class( {
     }, opt || {}));
   },
 
+  /*
+    Method: zoomNode
+
+    Moves the canvas view port such that a given node is centered on the screen
+    and zoomed in on.
+
+    Parameters:
+
+      node  - the node to center the canvas around
+      t     - the time to take for the centering
+      fps   - the fps rate to attempt to achieve
+  */
   zoomNode: function(node, t, fps) {
     var that = this,
         dim = node.getData('dim'),
@@ -1045,6 +1079,19 @@ $jit.NetworkMap = new Class( {
     }
   },
 
+  /*
+    Method: followEdge
+
+    Follows an edge from a given node to another.
+
+    Parameters:
+      
+      fromNode  - the from node
+      toNode    - the to node
+      t         - the time to take for the movement
+      fps       - the attempted frame rate
+      center    - true if the destination node should be centered on the screen
+  */
   followEdge: function(fromNode, toNode, t, fps, center) {
     var that = this,
         interval,
@@ -1107,12 +1154,28 @@ $jit.NetworkMap = new Class( {
     }, ms);
   },
 
+  /*
+    Method: renderFactory
+
+    Decides what map entities should be shown and with what alpha.
+
+    Parameters:
+
+      entity    - the entity that wants to be drawn
+      canvas    - the canvas that the entity is to be drawn onto
+      animating - whether or not the entity is to be animated in
+
+    Returns:
+
+      True if the entity should be drawn (ie it is visible) or false otherwise.
+  */
   renderFactory: function(entity, canvas, animating) {
     var ctx = canvas.getCtx(),
         zo = canvas.scaleOffsetX;
 
     if (entity.data.depth >= this.detailLevel(zo, this.config.groupLvls)) {
 
+    // reduce the alpha level if the entity is in the background
     } else {
       ctx.globalAlpha = this.config.bgAlpha;
     }
@@ -1125,6 +1188,15 @@ $jit.NetworkMap = new Class( {
     return true;
   },
 
+  /*
+    Method: getPositions
+
+    Gets all of the node's x,y positions
+
+    Returns:
+
+      An object populated with node ids pointing to their positions.
+  */
   getPositions: function() {
     var pos = {};
     $.each(this.graph.nodes, function(n) {
@@ -1134,6 +1206,15 @@ $jit.NetworkMap = new Class( {
     return pos;
   },
 
+  /*
+    Method: loadPositions
+
+    Loads in node positions.
+
+    Parameters:
+      
+      positions - an object with key = ids and value = position
+  */
   loadPositions: function(positions) {
     $.each(this.graph.nodes, function(n) {
       if (positions[n.id]) {
@@ -1150,7 +1231,7 @@ $jit.NetworkMap.$extend = true;
 (function(NetworkMap) {
 
   /*
-     Class: ForceDirected.Op
+     Class: NetworkMap.Op
      
      Custom extension of <Graph.Op>.
 
@@ -1170,7 +1251,7 @@ $jit.NetworkMap.$extend = true;
   });
 
   /*
-    Class: ForceDirected.Plot
+    Class: NetworkMap.Plot
     
     Custom extension of <Graph.Plot>.
   
@@ -1231,15 +1312,6 @@ $jit.NetworkMap.$extend = true;
         }
         node.visited = !T;
       });
-
-      // TODO: dirty hack to draw edges under nodes
-      /*aGraph.eachNode(function(node) {
-        if(node.drawn) {
-          !animating && opt.onBeforePlotNode(node);
-          that.plotNode(node, canvas, animating);
-          !animating && opt.onAfterPlotNode(node);
-        }
-      });*/
       
       // fire redraw event
       jQuery(canvas.getElement()).trigger('redraw');
@@ -1336,7 +1408,7 @@ $jit.NetworkMap.$extend = true;
   NetworkMap.Label = {};
 
   /*
-     ForceDirected.Label.Native
+     NetworkMap.Label.Native
      
      Custom extension of <Graph.Label.Native>.
 
@@ -1369,7 +1441,7 @@ $jit.NetworkMap.$extend = true;
   });
 
   /*
-    ForceDirected.Label.SVG
+    NetworkMap.Label.SVG
     
     Custom extension of <Graph.Label.SVG>.
   
@@ -1390,14 +1462,14 @@ $jit.NetworkMap.$extend = true;
     },
 
     /* 
-       placeLabel
+       Method: placeLabel
 
        Overrides abstract method placeLabel in <Graph.Label>.
 
        Parameters:
 
-       tag - A DOM label element.
-       node - A <Graph.Node>.
+       tag        - A DOM label element.
+       node       - A <Graph.Node>.
        controller - A configuration/controller object passed to the visualization.
       
      */
@@ -1421,7 +1493,7 @@ $jit.NetworkMap.$extend = true;
   });
 
   /*
-     ForceDirected.Label.HTML
+     NetworkMap.Label.HTML
      
      Custom extension of <Graph.Label.HTML>.
 
@@ -1459,14 +1531,14 @@ $jit.NetworkMap.$extend = true;
     },
 
     /* 
-       placeLabel
+       Method: placeLabel
 
        Overrides abstract method placeLabel in <Graph.Plot>.
 
        Parameters:
 
-       tag - A DOM label element.
-       node - A <Graph.Node>.
+       tag        - A DOM label element.
+       node       - A <Graph.Node>.
        controller - A configuration/controller object passed to the visualization.
       
      */
@@ -1489,7 +1561,7 @@ $jit.NetworkMap.$extend = true;
       if (this.fitsInCanvas(labelPos, canvas)) {
         style.display = '';
         
-        // use % of screen realestate to decide when to show labels
+        // use % of screen real estate to decide when to show labels
         if (!this.viz.showAtLevel(sx, node.data.depth, this.viz.config.groupLvls)) {
           style.display = 'none';
         }
@@ -1510,7 +1582,7 @@ $jit.NetworkMap.$extend = true;
   });
 
   /*
-    Class: ForceDirected.Plot.NodeTypes
+    Class: NetworkMap.Plot.NodeTypes
 
     This class contains a list of <Graph.Node> built-in types. 
     Node types implemented are 'none', 'circle', 'triangle', 'rectangle', 'star', 'ellipse' and 'square'.
@@ -1520,7 +1592,7 @@ $jit.NetworkMap.$extend = true;
     Example:
 
     (start code js)
-      ForceDirected.Plot.NodeTypes.implement({
+      NetworkMap.Plot.NodeTypes.implement({
         'mySpecialType': {
           'render': function(node, canvas) {
             //print your custom node to canvas
@@ -1551,10 +1623,8 @@ $jit.NetworkMap.$extend = true;
       ctx.fillStyle = "rgba(0,0,0,1)";
       ctx.arc(pos.x, pos.y, dim, 0, Math.PI * 2, true);
       ctx.closePath();
-      //ctx.fill();
       ctx.stroke();
       ctx.restore();
-        //this.nodeHelper.circle.render('stroke', pos, dim, canvas);
       },
       'contains': function(node, pos){
         var npos = node.pos.getc(true), 
@@ -1581,7 +1651,6 @@ $jit.NetworkMap.$extend = true;
             height = node.getData('height');
         this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
         },
-      // TODO(nico): be more precise...
       'contains': function(node, pos){
         var npos = node.pos.getc(true), 
             width = node.getData('width'), 
@@ -1642,7 +1711,7 @@ $jit.NetworkMap.$extend = true;
   });
 
   /*
-    Class: ForceDirected.Plot.EdgeTypes
+    Class: NetworkMap.Plot.EdgeTypes
   
     This class contains a list of <Graph.Adjacence> built-in types. 
     Edge types implemented are 'none', 'line' and 'arrow'.
@@ -1652,7 +1721,7 @@ $jit.NetworkMap.$extend = true;
     Example:
   
     (start code js)
-      ForceDirected.Plot.EdgeTypes.implement({
+      NetworkMap.Plot.EdgeTypes.implement({
         'mySpecialType': {
           'render': function(adj, canvas) {
             //print your custom edge to canvas
