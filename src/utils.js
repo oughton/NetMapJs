@@ -1,22 +1,72 @@
+/*
+ * NetMapJs utility functions.
+ *
+ * All functions are added to the global object and anonymous functions are used
+ * to keep the global scope clean.
+ *
+ * author Joel Oughton
+ */
+
 $NetworkMap.Utils = {};
 $NetworkMap.Views = {};
 $NetworkMap.Debug = {};
 $NetworkMap.Json = {};
 $NetworkMap.Overlays = {};
 
+/*
+ * Object: Json
+ *
+ * JSON helper methods
+ *
+ * Extra functionality not provided by thejit such as saving/loading JSON.
+ */
 $NetworkMap.Json = (function() {
 
   return {
+
+    /*
+      Method: Save
+
+      Saves JSON, by sending it to a server side script.
+     
+      Parameters:
+
+        path      - the path to the server side script that does the saving
+        json      - the json data to save
+        filename  - the filename to store on the server side
+    */
     save: function(path, json, filename) {
       jQuery.post(path + '?filename=' + filename, { json: json });
     },
 
+    /*
+      Method: Load
+
+      Loads JSON and passes it to a callback function.
+
+      Parameters:
+
+        path      - server side path of JSON data
+        callback  - function to receive data
+    */
     load: function(path, callback) {
       jQuery.getJSON(path, function(data) {
         callback(data);
       });
     },
 
+    /*
+      Method: setStartPositions
+
+      Takes an array of positions and sets internal node positions to match.
+      Used for static node positioning.
+
+      Parameters:
+  
+        json      - the map json structure
+        positions - positions is an array of position objects like { x: x1, y: y1}
+
+    */
     setStartPositions: function(json, positions) {
       jQuery.each(positions, function(index, val1) {
         jQuery.each(json, function(index, val2) {
@@ -29,9 +79,29 @@ $NetworkMap.Json = (function() {
   };
 })();
 
+/*
+  Object: Debug
+
+  Adds debugging functionality.
+*/
 $NetworkMap.Debug = (function() {
 
   return {
+    
+    /*
+      Object: Debug.GraphicalOutput
+
+      Draws debugging information to the screen as a div overlay.
+      Useful for outputting information such as current depth level, frame rate etc.
+      
+      Parameters:
+
+        viz - visualisation instance to debug
+
+      Return:
+        
+        An object used to enable/disable the overlay and to write to the log.
+    */
     GraphicalOutput: function(viz) {
       var _enabled = false;
       var _redraw = true;
@@ -152,9 +222,33 @@ $NetworkMap.Debug = (function() {
   };
 })();
 
+/*
+  Object: Views
+
+  Defines additional network map views to go along with the main map
+*/
 $NetworkMap.Views = (function() {
 
   return {
+    
+    /*
+      Object: Views.Overview
+
+      An overview plot that provides a smaller overview of the main map. It is
+      an instance of a network map, just with different options.
+
+      Parameters:
+
+        viz     - the network map to be an overview for
+        mapOpts - options to pass to the overview network map
+        level   - the level (depth into the map) that this map is showing
+        tx      - x translation offset of the overview
+        ty      - y translation offset of the overview
+
+      Returns:
+        
+        An object that can be used to hide/show and refresh the overview.
+    */
     Overview: function(viz, mapOpts, level, tx, ty) {
       var _opts = jQuery.extend(true, {
         bgAlpha: 0.25,
@@ -295,6 +389,25 @@ $NetworkMap.Views = (function() {
       };
     },
 
+    /*
+      Object: Views.OverviewManager
+
+      Manages the adding and removing of overlays to a multi-overlay system.
+
+      Parameters:
+
+        viz       - the network map to base overlays on
+        container - the container to put overlays into
+        width     - the width of the overlays
+        height    - the height of the overlays
+        overOpts  - overlay network map options object
+        tx        - x translation canvas offset
+        ty        - y translation canvas offset
+
+      Returns:
+
+        An object that allows the OverviewManager to refresh all of its overlays
+    */
     OverviewManager: function(viz, container, width, height, overOpts, tx, ty) {
       var _overviews = {};
       container = jQuery('<div class="NetworkMap-Views-OverviewManager"></div>').appendTo(container);
@@ -352,6 +465,11 @@ $NetworkMap.Views = (function() {
   };
 })({});
 
+/*
+  Object: Utils.Links
+
+  A link is used for the edge pipe graphics to store metrics.
+*/
 $NetworkMap.Utils.Links = (function() {
   return {
     link: function(nf, nt, id, m) {
@@ -363,8 +481,14 @@ $NetworkMap.Utils.Links = (function() {
   }
 })();
 
+/*
+  Object: Utils.Metrics
+
+  An object to manage network metrics for a link
+*/
 $NetworkMap.Utils.Metrics = (function() {
   return {
+    
     data: function(bandwidth, capacity, loss, latency) {
       this.bandwidth = bandwidth;
       this.capacity = capacity;
@@ -372,6 +496,15 @@ $NetworkMap.Utils.Metrics = (function() {
       this.latency = latency;
     },
 
+    /*
+      Method: initJSON
+
+      Initialise the network map JSON structure to support metrics
+
+      Parameters:
+
+        json - the JSON structure to initialise
+    */
     initJSON: function(json) {
       // create links in both ways
       jQuery.each(json, function(index, n) {
@@ -386,6 +519,19 @@ $NetworkMap.Utils.Metrics = (function() {
       });
     },
 
+    /*
+      Method: updateMetrics
+
+      Updates metric values. Should be used as part of poller to automatically
+      update values.
+      It loops through all of the edges that have metrics data and calls the
+      callback function, which should get updated data for that link.
+
+      Parameters:
+        
+        viz       - the network map to update metrics for
+        callback  - function to call for each edge, to get new data
+    */
     updateMetrics: function(viz, callback) {
       //TODO: get real data?
       var that = this;
@@ -429,9 +575,32 @@ $NetworkMap.Utils.Metrics = (function() {
 
 })();
 
+/*
+  Object: Overlays
+
+  An object containing the overlay functionality. Overlays allow graphics to be
+  drawn over the network map after it has been drawn. They are given access to
+  the network maps node-edge object and Canvas.
+*/
 $NetworkMap.Overlays = (function() {
-  
+ 
   return {
+
+    /*
+      Object: Overlays.Overlay
+
+      An overlay has a unique id and an update method that is run every time
+      that the main network map is redrawn.
+
+      Parameters:
+        
+        id      - a unique id for the overlay
+        update  - a function to be run each time the network map is redraw
+
+      Returns:
+
+        An object that controls starting/stopping the overlay and updating it.
+    */
     Overlay: function(id, update) {
       if (arguments.length < 2 || typeof(arguments[0]) != 'string' || typeof(arguments[1]) != 'function') {
         throw 'Require string id and an update function';
@@ -449,6 +618,21 @@ $NetworkMap.Overlays = (function() {
       };
     },
 
+    /*
+      Object: Overlays.OverlayManager
+
+      Handles adding new overlays and refreshing them when the main network map
+      is redraw.
+
+      Parameters:
+        
+        viz - the network map to listen for redrawn events from
+
+      Returns:
+
+        An object that allows adding new overlays, getting an overlay based on
+        the id and manually refreshing all of the overlays.
+    */
     OverlayManager: function(viz) {
       if (arguments.length < 1) {
         throw 'Require a visualisation to overlay onto';
