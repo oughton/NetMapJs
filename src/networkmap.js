@@ -3,12 +3,17 @@ $NetworkMap = {};
 Layouts.NetworkMap = {};
 
 /*
- * Class: Layouts.NetworkMap.Arbor
- */
+  Class: Layouts.NetworkMap.Arbor
+
+  Force directed layout type. This class requires the arbor library (arborjs).
+*/
 Layouts.NetworkMap.Arbor = new Class({
 
   initialize: function(viz) {
     this.viz = viz;
+
+    // make sure that the arbor library has been included
+    if (typeof(arbor) == 'undefined') return;
 
     var canvas = viz.canvas,
         size = canvas.getSize();
@@ -1387,7 +1392,7 @@ $jit.NetworkMap.$extend = true;
      */
     placeLabel: function(tag, node, controller) {
       var pos = node.pos.getc(true), 
-          height = node.getData('height');
+          height = node.getData('height'),
           canvas = this.viz.canvas,
           ctx = canvas.getCtx(),
           ox = canvas.translateOffsetX,
