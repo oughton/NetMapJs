@@ -112,8 +112,10 @@ Layouts.NetworkMap.Arbor = new Class({
 });
 
 /*
- * Class: Layouts.NetworkMap.ForceDirected
- */
+  Class: Layouts.NetworkMap.ForceDirected
+  
+  Force directed layout based on thejit's implementation
+*/
 Layouts.NetworkMap.ForceDirected = new Class({
 
   initialize: function(viz) {
@@ -268,8 +270,10 @@ Layouts.NetworkMap.ForceDirected = new Class({
 });
 
 /*
- * Class: Layouts.NetworkMap.Star
- */
+  Class: Layouts.NetworkMap.Star
+
+  Star layout type
+*/
 Layouts.NetworkMap.Star = new Class({
 
   initialize: function(viz) {
@@ -286,7 +290,6 @@ Layouts.NetworkMap.Star = new Class({
 
     circlePoints = this.getPointsOnCircle(group.owner.pos, group.owner.getData('dim') / 2, n);
 
-    //NodeDim.compute(that.vis.graph, prop, that.vis.config);
     $.each(group.nodes, function(n) {
       var pt;
 
@@ -319,8 +322,10 @@ Layouts.NetworkMap.Star = new Class({
 });
 
 /*
- * Class: Layouts.NetworkMap.Static
- */
+  Class: Layouts.NetworkMap.Static
+
+  A static layout type that loads in positions from nodes data attribute.
+*/
 Layouts.NetworkMap.Static = new Class({
 
   initialize: function(viz) {
@@ -331,7 +336,6 @@ Layouts.NetworkMap.Static = new Class({
     var prop = property || ['current', 'start', 'end'];
     var that = this;
 
-    //NodeDim.compute(that.vis.graph, prop, that.vis.config);
     $.each(group.nodes, function(n) {
       // fill in the nodes position for each property
       $.each(prop, function(p) {
@@ -342,10 +346,25 @@ Layouts.NetworkMap.Static = new Class({
 });
 
 /*
- * Canvas Helper Class
- */
+  Class: Canvas Helper Class
+
+  Canvas helper methods that support using the Canvas in code.
+*/
 var CanvasHelper = new Class({
   
+  /*
+    Method: p2c
+
+    Converts a position from network map space to screen space.
+
+    Parameters:
+
+      pos - x and y coordinate object
+
+    Returns:
+
+      A new x and y coordinate object in screen space.
+  */
   p2c: function(pos) {
     var canvas = this.canvas,
         ctx = canvas.getCtx(),
@@ -361,6 +380,19 @@ var CanvasHelper = new Class({
     );
   },
 
+  /*
+    Method: c2p
+
+    Converts a position from screen space to network map space.
+    
+    Parameters:
+
+      pos - x and y coordinate object
+
+    Returns:
+
+      A new x and y coordinate object in network map space.
+  */
   c2p: function(pos) {
     var canvas = this.canvas,
         ctx = canvas.getCtx(),
@@ -376,6 +408,19 @@ var CanvasHelper = new Class({
     );
   },
 
+  /*
+    Method: fitsInCanvas
+
+    Check if a given point in within the bounds of the Canvas.
+
+    Parameters:
+
+      pos - x and y coordinate object
+
+    Returns:
+      
+      True if the point is within the Canvas bounds, false otherwise.
+  */
   fitsInCanvas: function(pos) {
     var size = this.canvas.getSize();
     if(pos.x >= size.width || pos.x < 0
@@ -386,21 +431,65 @@ var CanvasHelper = new Class({
 });
 
 /*
- * Node groups interface
- *
- * Mixes in group handling functionality.
- */
+  Class: Groups
+  
+  Mixes in group handling functionality.
+
+  TODO: use scale factor instead of scale offset (as this is not linear and not
+  trivial). Eg 1.5x zoom, 2.0x zoom
+*/
 var Groups = new Class({
+  
+  /*
+    Method: detailLevel
+
+    Decides what detail level a given zoom offset is in. 
+
+    Parameters:
+      
+      zoom    - the zoom offset
+      levels  - an array of zoom offsets that define level boundaries
+
+    Returns:
+
+      An integer that is directly related to the detail level.
+  */
   detailLevel: function(zoom, levels) {
     for (var i = 0; i < levels.length; i++) {
       if (!levels[i + 1] || zoom < levels[i + 1]) return i;
     }
   },
 
+  /*
+    Method: showAtLevel
+
+    Determines whether or not something should be visible at the given level.
+
+    Parameters:
+      
+      zoom    - the zoom offset
+      level   - the given zoom level
+      levels  - an array of zoom offsets that define level boundaries
+
+    Returns:
+
+      True if the given level is less than or equal to the current detail level,
+      false otherwise.
+  */
   showAtLevel: function(zoom, level, levels) {
     return this.detailLevel(zoom, levels) >= level;
   },
 
+  /*
+    Method: computeDimensions
+
+    Set the sizes of map items to reflect the depth level that they fall in.
+    This method change nodes dimensions.
+
+    Parameters:
+
+      group - the group of nodes
+  */
   computeDimensions: function(group) {
     // group is not the top group
     if (group.owner) {
@@ -438,6 +527,13 @@ var Groups = new Class({
     }
   },
 
+  /*
+    Method: buildGroups
+
+    Creates groups of nodes based on what nodes have what parents. Each group is
+    assigned a depth so that it can be later match to a depth level of the
+    network map.
+  */
   buildGroups: function() {
     var raw = {}, groups = {}, nodes = [], flat = [], flatten, that = this,
         graph = this.graph;
@@ -523,6 +619,17 @@ var Groups = new Class({
     graph.groups = flat;
   },
 
+  /*
+    Method: computeLayouts
+
+    Applies layout algorithms to all of the groups individually. Group roots are
+    also set.
+
+    Parameters:
+      
+      property    - what position property of the node to set in the laying out
+      incremental - the number of incremental iterations to perform
+  */
   computeLayouts: function(property, incremental) {
     var groups, that = this;
     
@@ -552,6 +659,11 @@ var Groups = new Class({
     });
   },
 
+  /*
+    Method: showGroups
+
+    Show or hide the children of group nodes in an animated way based on levels.
+  */
   showGroups: function() {
     var that = this,
         groups = this.graph.groups,
@@ -593,33 +705,6 @@ var Groups = new Class({
     });
 
     return changed;
-  }
-});
-
-var Loop = new Class({
-  initialize: function(viz, delay) {
-    this.viz = viz;
-    this.delay = delay;
-  },
-
-  start: function() {
-    var that = this;
-    setInterval(function() {
-      that.run();
-    }, this.delay);
-  }
-});
-
-var Loops = {};
-Loops.NetworkMap = {};
-
-Loops.NetworkMap.Detail = new Class({
-  Implements: [ Loop ],
-
-  run: function() {
-    if (this.viz.showGroups()) {
-      this.viz.animate();
-    }
   }
 });
 
@@ -740,11 +825,6 @@ $jit.NetworkMap = new Class( {
       'Arbor': new Layouts.NetworkMap.Arbor(this),
       'Star': new Layouts.NetworkMap.Star(this)
     };
-
-    // setup update loop
-    this.loops = [new Loops.NetworkMap.Detail(this, 100)];
-    
-    jQuery.each(that.loops, function(index, val) { val.start(val.delay); });
   },
 
   loadLayers: function(json) {
