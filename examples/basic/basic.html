@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Basic Network Map</title>
+
+    <!-- Style Sheet -->
+    <link rel="stylesheet" type="text/css" href="../../src/networkmap.css" />
+
+    <!-- jQuery Library -->
+    <script language="javascript" type="text/javascript" src="../../src/lib/jquery-1.5.2.js"></script>
+
+    <!-- Required JIT, Arbor and Raphael Libraries -->
+    <script language="javascript" type="text/javascript" src="../jit.js"></script>
+    <script language="javascript" type="text/javascript" src="../../src/lib/arbor.js"></script>
+    <script language="javascript" type="text/javascript" src="../../src/lib/raphael.js"></script>
+
+    <!-- NetMapJs Scripts -->
+    <script language="javascript" type="text/javascript" src="../../src/networkmap.js"></script>
+    <script language="javascript" type="text/javascript" src="../../src/utils.js"></script>
+
+    <!-- Example View -->
+    <script language="javascript" type="text/javascript" src="basic.js"></script>
+  </head>
+
+  <body style="background-color:#000;">
+    <p style="color:#fff;font-size:18px">
+      Use mouse wheel to zoom in / out. Click and drag to pan. Right click on node to zoom and center.
+    </P>
+
+    <!-- Network Map Container Divs -->
+    <div style="width:1200px;">
+      <div style="float:left;border-style:solid;border-color:white">
+        <div id="infovis" style="width:1000px;height:600px;"></div>
+      </div>
+      <div id="overview" style="float:right;border-style:solid;border-color:white"></div>
+    </div>
+
+    <script language="javascript" type="text/javascript">
+      jQuery(document).ready(function() {
+        
+        // Run the network map script when the document is loaded
+        init();
+      });
+    </script>
+  </body>
+</html>
